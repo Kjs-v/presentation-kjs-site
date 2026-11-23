@@ -11,16 +11,27 @@
     "check:types": "tsc --noEmit",
     "check:content": "tsx scripts/check-content.ts",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "db:generate": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs generate",
+    "db:migrate": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs migrate",
+    "db:seed": "tsx --env-file=.env scripts/db-seed.ts",
+    "db:export": "tsx --env-file=.env scripts/db-export.ts"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.1",
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "^0.45.4",
+    "jose": "^6.2.18",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^22.18.0",
+    "drizzle-kit": "^0.31.11",
     "prettier": "^3.6.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
-    "vite": "^7.1.5"
+    "vite": "^7.1.5",
+    "vitest": "^5.1.1"
   }
 }

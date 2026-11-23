@@ -3,6 +3,17 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Backend phase 1: database)
+
+- **Did:** backend phase 1, following `docs/BACKEND-PLAN.md`.
+  - Created a separate Neon database `kjs_dev` for development and tests. The production database `db-02` is still empty and untouched.
+  - Defined 7 tables in `server/db/schema.ts` (users, sections, versions, media, pitches, login_attempts, notes) and applied the first migration (`server/db/migrations/`).
+  - `npm run db:seed` loads content.json and is safe to run twice. `npm run db:export` writes the database back to content.json, in a stable order.
+  - Images can now also be Vercel Blob links; look-alike domains are rejected.
+  - First tests: `npm test` (9 passing).
+- **Next:** phase 2, the API (login, save with version check, publish, history, media tokens, users).
+- **Waiting on:** the first admin email (`ADMIN_EMAIL` in .env) and the Vercel Blob store.
+
 ## 2026-11-23 (Mayora pitch on the site)
 
 - **Did:** rebuilt the Mayora India pitch as a page of the site: `public/pitches/mayora/index.html`, served at `/pitches/mayora/`.

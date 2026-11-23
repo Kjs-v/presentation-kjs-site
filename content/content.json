@@ -44,6 +44,10 @@
         "path": "/gallery"
       }
     ],
+    "menu": {
+      "notesLabel": "Notes",
+      "themeToggleLabel": "Switch colours (white / royal blue)"
+    },
     "theme": {
       "default": "white",
       "fontHeading": "\"Segoe UI Black\", \"Arial Black\", \"Segoe UI\", sans-serif",
@@ -107,10 +111,6 @@
           }
         }
       ]
-    },
-    "menu": {
-      "notesLabel": "Notes",
-      "themeToggleLabel": "Switch colours (white / royal blue)"
     }
   },
   "home": {
@@ -210,28 +210,28 @@
     "timeline": [
       {
         "title": "Our beginning",
-        "subtitle": "2020",
-        "body": "KJS India has operated since 2020 from IDA Pashamylaram, Telangana."
+        "body": "KJS India has operated since 2020 from IDA Pashamylaram, Telangana.",
+        "subtitle": "2020"
       },
       {
         "title": "Growth",
-        "subtitle": "Brand partners",
-        "body": "Co-manufacturing and co-packing for Nestlé, Hindustan Unilever, Mayora and Dr. Reddy’s Laboratories."
+        "body": "Co-manufacturing and co-packing for Nestlé, Hindustan Unilever, Mayora and Dr. Reddy’s Laboratories.",
+        "subtitle": "Brand partners"
       },
       {
         "title": "Today",
-        "subtitle": "Processing and packaging",
-        "body": "Dry powder blending, confectionery ball milling, stick packs, pouch and carton packaging, and warehousing."
+        "body": "Dry powder blending, confectionery ball milling, stick packs, pouch and carton packaging, and warehousing.",
+        "subtitle": "Processing and packaging"
       },
       {
         "title": "New journey",
-        "subtitle": "2025",
-        "body": "MoU signed for Unit 2, with new lines for chocolate, biscuits, wafers and cakes."
+        "body": "MoU signed for Unit 2, with new lines for chocolate, biscuits, wafers and cakes.",
+        "subtitle": "2025"
       },
       {
         "title": "Future",
-        "subtitle": "Unit 2",
-        "body": "Unit 2 groundbreaking at Thogarpally, announced by Invest Telangana in May 2026: ₹651 crore planned investment on 44 acres."
+        "body": "Unit 2 groundbreaking at Thogarpally, announced by Invest Telangana in May 2026: ₹651 crore planned investment on 44 acres.",
+        "subtitle": "Unit 2"
       }
     ],
     "stats": [
@@ -268,6 +268,25 @@
       "subtitle": "Stick packs, coffee, beverages and chocolate",
       "summary": "KJS India’s facility in IDA Pashamylaram, Telangana.",
       "photo": "/media/units/unit-1-front.jpg",
+      "mapUrl": "https://maps.app.goo.gl/J1KAM9J2N9mt2NRMA",
+      "tabs": [
+        {
+          "id": "products",
+          "label": "Products"
+        },
+        {
+          "id": "clients",
+          "label": "Clients"
+        },
+        {
+          "id": "about",
+          "label": "About"
+        },
+        {
+          "id": "machinery",
+          "label": "Machinery"
+        }
+      ],
       "stats": [
         {
           "value": "0.9–3 g",
@@ -303,26 +322,7 @@
           "title": "RVL machines",
           "body": "Packing machines designed and developed in-house by KJS India for high efficiency, reliable performance and precision."
         }
-      ],
-      "tabs": [
-        {
-          "id": "products",
-          "label": "Products"
-        },
-        {
-          "id": "clients",
-          "label": "Clients"
-        },
-        {
-          "id": "about",
-          "label": "About"
-        },
-        {
-          "id": "machinery",
-          "label": "Machinery"
-        }
-      ],
-      "mapUrl": "https://maps.app.goo.gl/J1KAM9J2N9mt2NRMA"
+      ]
     },
     {
       "id": "unit-2",
@@ -330,6 +330,18 @@
       "subtitle": "Chocolate, biscuits, wafers and cakes",
       "summary": "Our new facility, with production lines for chocolate, biscuits, wafers, cakes and more.",
       "photo": "/media/units/unit-2-render.jpg",
+      "photoCaption": "Architect's render",
+      "mapUrl": "https://maps.app.goo.gl/GwRwJjr43Kw8SSiF9",
+      "tabs": [
+        {
+          "id": "products",
+          "label": "Products"
+        },
+        {
+          "id": "about",
+          "label": "About"
+        }
+      ],
       "stats": [
         {
           "value": "39,068 m²",
@@ -357,19 +369,7 @@
           "title": "One base for partners",
           "body": "A single, reliable manufacturing base for several confectionery and bakery categories."
         }
-      ],
-      "tabs": [
-        {
-          "id": "products",
-          "label": "Products"
-        },
-        {
-          "id": "about",
-          "label": "About"
-        }
-      ],
-      "photoCaption": "Architect's render",
-      "mapUrl": "https://maps.app.goo.gl/GwRwJjr43Kw8SSiF9"
+      ]
     }
   ],
   "products": [
@@ -381,8 +381,8 @@
       "description": "",
       "image": "/media/products/agglomerated-instant-coffee.jpg",
       "featured": false,
-      "order": 1,
-      "specs": []
+      "specs": [],
+      "order": 1
     },
     {
       "id": "banchetto-chocolate-bar",
@@ -392,8 +392,8 @@
       "description": "",
       "image": "/media/products/banchetto-chocolate-bar.jpg",
       "featured": false,
-      "order": 2,
-      "specs": []
+      "specs": [],
+      "order": 2
     },
     {
       "id": "bigy-mellow",
@@ -403,8 +403,8 @@
       "description": "",
       "image": "/media/products/bigy-mellow.jpg",
       "featured": false,
-      "order": 3,
-      "specs": []
+      "specs": [],
+      "order": 3
     },
     {
       "id": "black-wafer",
@@ -414,8 +414,8 @@
       "description": "",
       "image": "/media/products/black-wafer.jpg",
       "featured": false,
-      "order": 4,
-      "specs": []
+      "specs": [],
+      "order": 4
     },
     {
       "id": "brandon-dark",
@@ -425,8 +425,8 @@
       "description": "",
       "image": "/media/products/brandon-dark.jpg",
       "featured": false,
-      "order": 5,
-      "specs": []
+      "specs": [],
+      "order": 5
     },
     {
       "id": "brandon-white",
@@ -437,7 +437,6 @@
       "image": "/media/products/brandon-white.jpg",
       "featured": true,
       "featuredImage": "/media/featured/brandon-white.webp",
-      "order": 6,
       "specs": [
         {
           "label": "Item no.",
@@ -451,7 +450,8 @@
           "label": "Pack",
           "value": "24 pcs × 6 boxes"
         }
-      ]
+      ],
+      "order": 6
     },
     {
       "id": "cocolay-coconut-bar",
@@ -461,8 +461,8 @@
       "description": "",
       "image": "/media/products/cocolay-coconut-bar.jpg",
       "featured": false,
-      "order": 7,
-      "specs": []
+      "specs": [],
+      "order": 7
     },
     {
       "id": "coffee-3-in-1-premix",
@@ -472,8 +472,8 @@
       "description": "",
       "image": "/media/products/coffee-3-in-1-premix.jpg",
       "featured": false,
-      "order": 8,
-      "specs": []
+      "specs": [],
+      "order": 8
     },
     {
       "id": "dark-wafer",
@@ -483,8 +483,8 @@
       "description": "",
       "image": "/media/products/dark-wafer.jpg",
       "featured": false,
-      "order": 9,
-      "specs": []
+      "specs": [],
+      "order": 9
     },
     {
       "id": "extreme-extra-wafer",
@@ -494,8 +494,8 @@
       "description": "",
       "image": "/media/products/extreme-extra-wafer.jpg",
       "featured": false,
-      "order": 10,
-      "specs": []
+      "specs": [],
+      "order": 10
     },
     {
       "id": "extreme4-dark",
@@ -506,7 +506,6 @@
       "image": "/media/products/extreme4-dark.jpg",
       "featured": true,
       "featuredImage": "/media/featured/extreme4-dark.webp",
-      "order": 11,
       "specs": [
         {
           "label": "Item no.",
@@ -520,7 +519,8 @@
           "label": "Pack",
           "value": "24 pcs × 6 boxes"
         }
-      ]
+      ],
+      "order": 11
     },
     {
       "id": "extreme4-white",
@@ -530,8 +530,8 @@
       "description": "",
       "image": "/media/products/extreme4-white.jpg",
       "featured": false,
-      "order": 12,
-      "specs": []
+      "specs": [],
+      "order": 12
     },
     {
       "id": "finger-biscuits",
@@ -541,8 +541,8 @@
       "description": "",
       "image": "/media/products/finger-biscuits.jpg",
       "featured": false,
-      "order": 13,
-      "specs": []
+      "specs": [],
+      "order": 13
     },
     {
       "id": "first-dark-wafers",
@@ -552,8 +552,8 @@
       "description": "",
       "image": "/media/products/first-dark-wafers.jpg",
       "featured": false,
-      "order": 14,
-      "specs": []
+      "specs": [],
+      "order": 14
     },
     {
       "id": "flavoured-wafers-35g",
@@ -563,8 +563,8 @@
       "description": "",
       "image": "/media/products/flavoured-wafers-35g.jpg",
       "featured": false,
-      "order": 15,
-      "specs": []
+      "specs": [],
+      "order": 15
     },
     {
       "id": "freeze-dried-instant-coffee",
@@ -574,8 +574,8 @@
       "description": "",
       "image": "/media/products/freeze-dried-instant-coffee.jpg",
       "featured": false,
-      "order": 16,
-      "specs": []
+      "specs": [],
+      "order": 16
     },
     {
       "id": "fundo-sandwich-biscuits",
@@ -586,7 +586,6 @@
       "image": "/media/products/fundo-sandwich-biscuits.jpg",
       "featured": true,
       "featuredImage": "/media/featured/fundo-sandwich-biscuits.webp",
-      "order": 17,
       "specs": [
         {
           "label": "Item no.",
@@ -604,7 +603,8 @@
           "label": "Pack",
           "value": "24 pcs × 6 boxes"
         }
-      ]
+      ],
+      "order": 17
     },
     {
       "id": "gofrey-black-white",
@@ -614,8 +614,8 @@
       "description": "",
       "image": "/media/products/gofrey-black-white.jpg",
       "featured": false,
-      "order": 18,
-      "specs": []
+      "specs": [],
+      "order": 18
     },
     {
       "id": "gofrey-cocoa-cream-wafer",
@@ -625,8 +625,8 @@
       "description": "",
       "image": "/media/products/gofrey-cocoa-cream-wafer.jpg",
       "featured": false,
-      "order": 19,
-      "specs": []
+      "specs": [],
+      "order": 19
     },
     {
       "id": "gofrey-cocoa",
@@ -637,7 +637,6 @@
       "image": "/media/products/gofrey-cocoa.jpg",
       "featured": true,
       "featuredImage": "/media/featured/gofrey-cocoa.webp",
-      "order": 20,
       "specs": [
         {
           "label": "Item no.",
@@ -651,7 +650,8 @@
           "label": "Pack",
           "value": "24 pcs × 6 boxes"
         }
-      ]
+      ],
+      "order": 20
     },
     {
       "id": "gofrey-crispy-x2",
@@ -661,8 +661,8 @@
       "description": "",
       "image": "/media/products/gofrey-crispy-x2.jpg",
       "featured": false,
-      "order": 21,
-      "specs": []
+      "specs": [],
+      "order": 21
     },
     {
       "id": "gofrey-crispy",
@@ -672,8 +672,8 @@
       "description": "",
       "image": "/media/products/gofrey-crispy.jpg",
       "featured": false,
-      "order": 22,
-      "specs": []
+      "specs": [],
+      "order": 22
     },
     {
       "id": "gofrey-hazelnut",
@@ -684,7 +684,6 @@
       "image": "/media/products/gofrey-hazelnut.jpg",
       "featured": true,
       "featuredImage": "/media/featured/gofrey-hazelnut.webp",
-      "order": 23,
       "specs": [
         {
           "label": "Item no.",
@@ -698,7 +697,8 @@
           "label": "Pack",
           "value": "24 pcs × 6 boxes"
         }
-      ]
+      ],
+      "order": 23
     },
     {
       "id": "gofrey-milk",
@@ -708,8 +708,8 @@
       "description": "",
       "image": "/media/products/gofrey-milk.jpg",
       "featured": false,
-      "order": 24,
-      "specs": []
+      "specs": [],
+      "order": 24
     },
     {
       "id": "grandy-chocolate-bar",
@@ -720,7 +720,6 @@
       "image": "/media/products/grandy-chocolate-bar.jpg",
       "featured": true,
       "featuredImage": "/media/featured/grandy-chocolate-bar.webp",
-      "order": 25,
       "specs": [
         {
           "label": "Item no.",
@@ -734,7 +733,8 @@
           "label": "Pack",
           "value": "24 pcs × 6 boxes"
         }
-      ]
+      ],
+      "order": 25
     },
     {
       "id": "hadiye-cocoa",
@@ -744,8 +744,8 @@
       "description": "",
       "image": "/media/products/hadiye-cocoa.jpg",
       "featured": false,
-      "order": 26,
-      "specs": []
+      "specs": [],
+      "order": 26
     },
     {
       "id": "hadiye-milk",
@@ -755,8 +755,8 @@
       "description": "",
       "image": "/media/products/hadiye-milk.jpg",
       "featured": false,
-      "order": 27,
-      "specs": []
+      "specs": [],
+      "order": 27
     },
     {
       "id": "hello-coconut-wafer",
@@ -766,8 +766,8 @@
       "description": "",
       "image": "/media/products/hello-coconut-wafer.jpg",
       "featured": false,
-      "order": 28,
-      "specs": []
+      "specs": [],
+      "order": 28
     },
     {
       "id": "hot-chocolate-powder",
@@ -777,8 +777,8 @@
       "description": "",
       "image": "/media/products/hot-chocolate-powder.jpg",
       "featured": false,
-      "order": 29,
-      "specs": []
+      "specs": [],
+      "order": 29
     },
     {
       "id": "instant-guava-drink-powder",
@@ -788,8 +788,8 @@
       "description": "",
       "image": "/media/products/instant-guava-drink-powder.jpg",
       "featured": false,
-      "order": 30,
-      "specs": []
+      "specs": [],
+      "order": 30
     },
     {
       "id": "instant-lime-drink-powder",
@@ -799,8 +799,8 @@
       "description": "",
       "image": "/media/products/instant-lime-drink-powder.jpg",
       "featured": false,
-      "order": 31,
-      "specs": []
+      "specs": [],
+      "order": 31
     },
     {
       "id": "instant-mango-drink-powder",
@@ -810,8 +810,8 @@
       "description": "",
       "image": "/media/products/instant-mango-drink-powder.jpg",
       "featured": false,
-      "order": 32,
-      "specs": []
+      "specs": [],
+      "order": 32
     },
     {
       "id": "instant-orange-drink-powder",
@@ -821,8 +821,8 @@
       "description": "",
       "image": "/media/products/instant-orange-drink-powder.jpg",
       "featured": false,
-      "order": 33,
-      "specs": []
+      "specs": [],
+      "order": 33
     },
     {
       "id": "instant-passion-fruit-drink-powder",
@@ -832,8 +832,8 @@
       "description": "",
       "image": "/media/products/instant-passion-fruit-drink-powder.jpg",
       "featured": false,
-      "order": 34,
-      "specs": []
+      "specs": [],
+      "order": 34
     },
     {
       "id": "instant-peach-drink-powder",
@@ -843,8 +843,8 @@
       "description": "",
       "image": "/media/products/instant-peach-drink-powder.jpg",
       "featured": false,
-      "order": 35,
-      "specs": []
+      "specs": [],
+      "order": 35
     },
     {
       "id": "instant-pineapple-drink-powder",
@@ -854,8 +854,8 @@
       "description": "",
       "image": "/media/products/instant-pineapple-drink-powder.jpg",
       "featured": false,
-      "order": 36,
-      "specs": []
+      "specs": [],
+      "order": 36
     },
     {
       "id": "instant-strawberry-drink-powder",
@@ -865,8 +865,8 @@
       "description": "",
       "image": "/media/products/instant-strawberry-drink-powder.jpg",
       "featured": false,
-      "order": 37,
-      "specs": []
+      "specs": [],
+      "order": 37
     },
     {
       "id": "instant-watermelon-drink-powder",
@@ -876,8 +876,8 @@
       "description": "",
       "image": "/media/products/instant-watermelon-drink-powder.jpg",
       "featured": false,
-      "order": 38,
-      "specs": []
+      "specs": [],
+      "order": 38
     },
     {
       "id": "karamilo-cocoa",
@@ -887,8 +887,8 @@
       "description": "",
       "image": "/media/products/karamilo-cocoa.jpg",
       "featured": false,
-      "order": 39,
-      "specs": []
+      "specs": [],
+      "order": 39
     },
     {
       "id": "keky-latte",
@@ -898,8 +898,8 @@
       "description": "",
       "image": "/media/products/keky-latte.jpg",
       "featured": false,
-      "order": 40,
-      "specs": []
+      "specs": [],
+      "order": 40
     },
     {
       "id": "kremali-sandwich-biscuits",
@@ -909,8 +909,8 @@
       "description": "",
       "image": "/media/products/kremali-sandwich-biscuits.jpg",
       "featured": false,
-      "order": 41,
-      "specs": []
+      "specs": [],
+      "order": 41
     },
     {
       "id": "lupita-duble",
@@ -920,8 +920,8 @@
       "description": "",
       "image": "/media/products/lupita-duble.jpg",
       "featured": false,
-      "order": 42,
-      "specs": []
+      "specs": [],
+      "order": 42
     },
     {
       "id": "maria-biscuits",
@@ -931,8 +931,8 @@
       "description": "",
       "image": "/media/products/maria-biscuits.jpg",
       "featured": false,
-      "order": 43,
-      "specs": []
+      "specs": [],
+      "order": 43
     },
     {
       "id": "marshmallow-sandwich-biscuit",
@@ -942,8 +942,8 @@
       "description": "",
       "image": "/media/products/marshmallow-sandwich-biscuit.jpg",
       "featured": false,
-      "order": 44,
-      "specs": []
+      "specs": [],
+      "order": 44
     },
     {
       "id": "marshmoe-sandwich-biscuits",
@@ -953,8 +953,8 @@
       "description": "",
       "image": "/media/products/marshmoe-sandwich-biscuits.jpg",
       "featured": false,
-      "order": 45,
-      "specs": []
+      "specs": [],
+      "order": 45
     },
     {
       "id": "maxi-big-wafers-chocolate",
@@ -964,8 +964,8 @@
       "description": "",
       "image": "/media/products/maxi-big-wafers-chocolate.jpg",
       "featured": false,
-      "order": 46,
-      "specs": []
+      "specs": [],
+      "order": 46
     },
     {
       "id": "maxi-big-wafers-granule",
@@ -975,8 +975,8 @@
       "description": "",
       "image": "/media/products/maxi-big-wafers-granule.jpg",
       "featured": false,
-      "order": 47,
-      "specs": []
+      "specs": [],
+      "order": 47
     },
     {
       "id": "maxi-cream-wafers",
@@ -987,7 +987,6 @@
       "image": "/media/products/maxi-cream-wafers.jpg",
       "featured": true,
       "featuredImage": "/media/featured/maxi-cream-wafers.webp",
-      "order": 48,
       "specs": [
         {
           "label": "Item no.",
@@ -1005,7 +1004,8 @@
           "label": "Pack",
           "value": "24 pcs × 6 boxes"
         }
-      ]
+      ],
+      "order": 48
     },
     {
       "id": "milk-wafer",
@@ -1015,8 +1015,8 @@
       "description": "",
       "image": "/media/products/milk-wafer.jpg",
       "featured": false,
-      "order": 49,
-      "specs": []
+      "specs": [],
+      "order": 49
     },
     {
       "id": "pacho-chocolate-bar",
@@ -1026,8 +1026,8 @@
       "description": "",
       "image": "/media/products/pacho-chocolate-bar.jpg",
       "featured": false,
-      "order": 50,
-      "specs": []
+      "specs": [],
+      "order": 50
     },
     {
       "id": "pacho-cream-biscuits",
@@ -1037,8 +1037,8 @@
       "description": "",
       "image": "/media/products/pacho-cream-biscuits.jpg",
       "featured": false,
-      "order": 51,
-      "specs": []
+      "specs": [],
+      "order": 51
     },
     {
       "id": "pacho-fret",
@@ -1048,8 +1048,8 @@
       "description": "",
       "image": "/media/products/pacho-fret.jpg",
       "featured": false,
-      "order": 52,
-      "specs": []
+      "specs": [],
+      "order": 52
     },
     {
       "id": "pacho-mellow-banana",
@@ -1059,8 +1059,8 @@
       "description": "",
       "image": "/media/products/pacho-mellow-banana.jpg",
       "featured": false,
-      "order": 53,
-      "specs": []
+      "specs": [],
+      "order": 53
     },
     {
       "id": "pacho-mellow",
@@ -1071,7 +1071,6 @@
       "image": "/media/products/pacho-mellow.jpg",
       "featured": true,
       "featuredImage": "/media/featured/pacho-mellow.webp",
-      "order": 54,
       "specs": [
         {
           "label": "Item no.",
@@ -1085,7 +1084,8 @@
           "label": "Pack",
           "value": "24 pcs × 6 boxes"
         }
-      ]
+      ],
+      "order": 54
     },
     {
       "id": "paleyo-chocolate-bar",
@@ -1095,8 +1095,8 @@
       "description": "",
       "image": "/media/products/paleyo-chocolate-bar.jpg",
       "featured": false,
-      "order": 55,
-      "specs": []
+      "specs": [],
+      "order": 55
     },
     {
       "id": "palmix-x2-wafer",
@@ -1106,8 +1106,8 @@
       "description": "",
       "image": "/media/products/palmix-x2-wafer.jpg",
       "featured": false,
-      "order": 56,
-      "specs": []
+      "specs": [],
+      "order": 56
     },
     {
       "id": "peti-honey",
@@ -1117,8 +1117,8 @@
       "description": "",
       "image": "/media/products/peti-honey.jpg",
       "featured": false,
-      "order": 57,
-      "specs": []
+      "specs": [],
+      "order": 57
     },
     {
       "id": "peti-latte-2in1",
@@ -1129,7 +1129,6 @@
       "image": "/media/products/peti-latte-2in1.jpg",
       "featured": true,
       "featuredImage": "/media/featured/peti-latte-2in1.webp",
-      "order": 58,
       "specs": [
         {
           "label": "Item no.",
@@ -1143,7 +1142,8 @@
           "label": "Pack",
           "value": "12 pcs × 1 box"
         }
-      ]
+      ],
+      "order": 58
     },
     {
       "id": "petit-beurre-biscuits",
@@ -1153,8 +1153,8 @@
       "description": "",
       "image": "/media/products/petit-beurre-biscuits.jpg",
       "featured": false,
-      "order": 59,
-      "specs": []
+      "specs": [],
+      "order": 59
     },
     {
       "id": "philo-chocolate-bar",
@@ -1164,8 +1164,8 @@
       "description": "",
       "image": "/media/products/philo-chocolate-bar.jpg",
       "featured": false,
-      "order": 60,
-      "specs": []
+      "specs": [],
+      "order": 60
     },
     {
       "id": "piknik-biscuits",
@@ -1175,8 +1175,8 @@
       "description": "",
       "image": "/media/products/piknik-biscuits.jpg",
       "featured": false,
-      "order": 61,
-      "specs": []
+      "specs": [],
+      "order": 61
     },
     {
       "id": "pitaro-sandwich-biscuits",
@@ -1186,8 +1186,8 @@
       "description": "",
       "image": "/media/products/pitaro-sandwich-biscuits.jpg",
       "featured": false,
-      "order": 62,
-      "specs": []
+      "specs": [],
+      "order": 62
     },
     {
       "id": "prens-sandwich-biscuits",
@@ -1197,8 +1197,8 @@
       "description": "",
       "image": "/media/products/prens-sandwich-biscuits.jpg",
       "featured": false,
-      "order": 63,
-      "specs": []
+      "specs": [],
+      "order": 63
     },
     {
       "id": "ranch-chocolate-bar",
@@ -1208,8 +1208,8 @@
       "description": "",
       "image": "/media/products/ranch-chocolate-bar.jpg",
       "featured": false,
-      "order": 64,
-      "specs": []
+      "specs": [],
+      "order": 64
     },
     {
       "id": "ranch-marshmallow-sandwich",
@@ -1219,8 +1219,8 @@
       "description": "",
       "image": "/media/products/ranch-marshmallow-sandwich.jpg",
       "featured": false,
-      "order": 65,
-      "specs": []
+      "specs": [],
+      "order": 65
     },
     {
       "id": "sandwich-marshmallow-biscuit",
@@ -1230,8 +1230,8 @@
       "description": "",
       "image": "/media/products/sandwich-marshmallow-biscuit.jpg",
       "featured": false,
-      "order": 66,
-      "specs": []
+      "specs": [],
+      "order": 66
     },
     {
       "id": "share-wafer",
@@ -1241,8 +1241,8 @@
       "description": "",
       "image": "/media/products/share-wafer.jpg",
       "featured": false,
-      "order": 67,
-      "specs": []
+      "specs": [],
+      "order": 67
     },
     {
       "id": "spray-dried-instant-coffee",
@@ -1252,8 +1252,8 @@
       "description": "",
       "image": "/media/products/spray-dried-instant-coffee.jpg",
       "featured": false,
-      "order": 68,
-      "specs": []
+      "specs": [],
+      "order": 68
     },
     {
       "id": "susamli-sesame-biscuits",
@@ -1263,8 +1263,8 @@
       "description": "",
       "image": "/media/products/susamli-sesame-biscuits.jpg",
       "featured": false,
-      "order": 69,
-      "specs": []
+      "specs": [],
+      "order": 69
     },
     {
       "id": "wafer-2021-chocolate",
@@ -1274,8 +1274,8 @@
       "description": "",
       "image": "/media/products/wafer-2021-chocolate.jpg",
       "featured": false,
-      "order": 70,
-      "specs": []
+      "specs": [],
+      "order": 70
     },
     {
       "id": "wafer-2021-milk",
@@ -1285,8 +1285,8 @@
       "description": "",
       "image": "/media/products/wafer-2021-milk.jpg",
       "featured": false,
-      "order": 71,
-      "specs": []
+      "specs": [],
+      "order": 71
     },
     {
       "id": "wafer-time",
@@ -1296,8 +1296,8 @@
       "description": "",
       "image": "/media/products/wafer-time.jpg",
       "featured": false,
-      "order": 72,
-      "specs": []
+      "specs": [],
+      "order": 72
     }
   ],
   "clientPacks": [
@@ -1305,241 +1305,241 @@
       "id": "nescafe-all-in-1-cup",
       "name": "Nescafé All in 1 Cup",
       "brand": "Nestlé",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/nescafe-all-in-1-cup.jpg",
-      "order": 1,
-      "unit": "unit-1"
+      "order": 1
     },
     {
       "id": "nescafe-all-in-1-frappe",
       "name": "Nescafé All in 1 Frappe",
       "brand": "Nestlé",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/nescafe-all-in-1-frappe.jpg",
-      "order": 2,
-      "unit": "unit-1"
+      "order": 2
     },
     {
       "id": "nescafe-classic-pouch",
       "name": "Nescafé Classic Pouch",
       "brand": "Nestlé",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/nescafe-classic-pouch.jpg",
-      "order": 3,
-      "unit": "unit-1"
+      "order": 3
     },
     {
       "id": "nescafe-classic-stick",
       "name": "Nescafé Classic Stick",
       "brand": "Nestlé",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/nescafe-classic-stick.jpg",
-      "order": 4,
-      "unit": "unit-1"
+      "order": 4
     },
     {
       "id": "nescafe-sunrise",
       "name": "Nescafé Sunrise",
       "brand": "Nestlé",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/nescafe-sunrise.jpg",
-      "order": 5,
-      "unit": "unit-1"
+      "order": 5
     },
     {
       "id": "nestle-resource-fiber",
       "name": "Nestlé Resource Fiber",
       "brand": "Nestlé",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/nestle-resource-fiber.jpg",
-      "order": 6,
-      "unit": "unit-1"
+      "order": 6
     },
     {
       "id": "boost-box",
       "name": "Boost Box",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/boost-box.jpg",
-      "order": 7,
-      "unit": "unit-1"
+      "order": 7
     },
     {
       "id": "boost-jar",
       "name": "Boost Jar",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/boost-jar.jpg",
-      "order": 8,
-      "unit": "unit-1"
+      "order": 8
     },
     {
       "id": "boost-refill",
       "name": "Boost Refill",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/boost-refill.jpg",
-      "order": 9,
-      "unit": "unit-1"
+      "order": 9
     },
     {
       "id": "horlicks-2kg",
       "name": "Horlicks 2 kg",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/horlicks-2kg.jpg",
-      "order": 10,
-      "unit": "unit-1"
+      "order": 10
     },
     {
       "id": "horlicks-box",
       "name": "Horlicks Box",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/horlicks-box.jpg",
-      "order": 11,
-      "unit": "unit-1"
+      "order": 11
     },
     {
       "id": "horlicks-jar",
       "name": "Horlicks Jar",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/horlicks-jar.jpg",
-      "order": 12,
-      "unit": "unit-1"
+      "order": 12
     },
     {
       "id": "horlicks-pouch-2",
       "name": "Horlicks Pouch 2",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/horlicks-pouch-2.jpg",
-      "order": 13,
-      "unit": "unit-1"
+      "order": 13
     },
     {
       "id": "horlicks-pouch",
       "name": "Horlicks Pouch",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/horlicks-pouch.jpg",
-      "order": 14,
-      "unit": "unit-1"
+      "order": 14
     },
     {
       "id": "horlicks-super-foods-jar",
       "name": "Horlicks Super Foods Jar",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/horlicks-super-foods-jar.jpg",
-      "order": 15,
-      "unit": "unit-1"
+      "order": 15
     },
     {
       "id": "horlicks-super-foods-pouch",
       "name": "Horlicks Super Foods Pouch",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/horlicks-super-foods-pouch.jpg",
-      "order": 16,
-      "unit": "unit-1"
+      "order": 16
     },
     {
       "id": "junior-horlicks",
       "name": "Junior Horlicks",
       "brand": "Unilever",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/junior-horlicks.jpg",
-      "order": 17,
-      "unit": "unit-1"
+      "order": 17
     },
     {
       "id": "choki-choki-jar-40",
       "name": "Choki Choki Jar 40",
       "brand": "Mayora",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/choki-choki-jar-40.jpg",
-      "order": 18,
-      "unit": "unit-1"
+      "order": 18
     },
     {
       "id": "choki-choki-jar",
       "name": "Choki Choki Jar",
       "brand": "Mayora",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/choki-choki-jar.jpg",
-      "order": 19,
-      "unit": "unit-1"
+      "order": 19
     },
     {
       "id": "choki-choki-pack",
       "name": "Choki Choki Pack",
       "brand": "Mayora",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/choki-choki-pack.jpg",
-      "order": 20,
-      "unit": "unit-1"
+      "order": 20
     },
     {
       "id": "choki-choki-xl-box",
       "name": "Choki Choki XL Box",
       "brand": "Mayora",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/choki-choki-xl-box.jpg",
-      "order": 21,
-      "unit": "unit-1"
+      "order": 21
     },
     {
       "id": "choki-choki-xl",
       "name": "Choki Choki XL",
       "brand": "Mayora",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/choki-choki-xl.jpg",
-      "order": 22,
-      "unit": "unit-1"
+      "order": 22
     },
     {
       "id": "ait-coffee",
       "name": "AIT Coffee",
       "brand": "Other",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/ait-coffee.jpg",
-      "order": 23,
-      "unit": "unit-1"
+      "order": 23
     },
     {
       "id": "cafe-niger",
       "name": "Café Niger",
       "brand": "Other",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/cafe-niger.jpg",
-      "order": 24,
-      "unit": "unit-1"
+      "order": 24
     },
     {
       "id": "cafe-soka",
       "name": "Café Soka",
       "brand": "Other",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/cafe-soka.jpg",
-      "order": 25,
-      "unit": "unit-1"
+      "order": 25
     },
     {
       "id": "continental-xtra",
       "name": "Continental Xtra",
       "brand": "Other",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/continental-xtra.jpg",
-      "order": 26,
-      "unit": "unit-1"
+      "order": 26
     },
     {
       "id": "crown-cafe",
       "name": "Crown Café",
       "brand": "Other",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/crown-cafe.jpg",
-      "order": 27,
-      "unit": "unit-1"
+      "order": 27
     },
     {
       "id": "prince-superieur-box",
       "name": "Prince Supérieur Box",
       "brand": "Other",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/prince-superieur-box.jpg",
-      "order": 28,
-      "unit": "unit-1"
+      "order": 28
     },
     {
       "id": "prince-superieur-stick",
       "name": "Prince Supérieur Stick",
       "brand": "Other",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/prince-superieur-stick.jpg",
-      "order": 29,
-      "unit": "unit-1"
+      "order": 29
     },
     {
       "id": "swiss-cafe",
       "name": "Swiss Café",
       "brand": "Other",
+      "unit": "unit-1",
       "image": "/media/unit-1-packs/swiss-cafe.jpg",
-      "order": 30,
-      "unit": "unit-1"
+      "order": 30
     }
   ],
   "machinery": [
@@ -1660,16 +1660,16 @@
   "slides": [
     {
       "id": "cover",
-      "kind": "cover",
       "title": "Your Brand, Our Expertise",
       "summary": "Food processing and contract packaging",
+      "kind": "cover",
       "image": "/media/units/unit-1.jpg"
     },
     {
       "id": "overview",
-      "kind": "facts",
       "title": "KJS India at a glance",
       "summary": "Contract food manufacturing from ingredient preparation to packed goods ready for dispatch.",
+      "kind": "facts",
       "items": [
         {
           "title": "Processing",
@@ -1687,9 +1687,9 @@
     },
     {
       "id": "packaging",
-      "kind": "facts",
       "title": "Packaging formats",
       "summary": "Pack format can be tailored to the product and the customer’s specifications.",
+      "kind": "facts",
       "items": [
         {
           "title": "Pouches",
@@ -1707,9 +1707,9 @@
     },
     {
       "id": "quality",
-      "kind": "facts",
       "title": "Quality and testing",
       "summary": "Process controls, internal checks and external microbiological testing.",
+      "kind": "facts",
       "items": [
         {
           "title": "Process controls",
@@ -1727,15 +1727,15 @@
     },
     {
       "id": "partners",
-      "kind": "logos",
       "title": "Brand partners",
-      "summary": "Unilever, Nestlé, Dr. Reddy’s and Mayora."
+      "summary": "Unilever, Nestlé, Dr. Reddy’s and Mayora.",
+      "kind": "logos"
     },
     {
       "id": "best-sellers",
-      "kind": "products",
       "title": "Best sellers",
       "summary": "A selection from our range.",
+      "kind": "products",
       "productIds": [
         "brandon-white",
         "extreme4-dark",

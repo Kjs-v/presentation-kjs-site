@@ -14,9 +14,16 @@
 import { z } from 'zod';
 
 /** A file under public/, written as a site path, e.g. "/media/products/maria-biscuits.jpg". */
+/**
+ * A picture, video or PDF: either a file in the site (/media/...) or a file uploaded through the admin page
+ * (stored on Vercel Blob, https://<store>.public.blob.vercel-storage.com/...).
+ */
 const mediaPath = z
   .string()
-  .regex(/^\/media\/.+\.(jpe?g|png|webp|svg|gif|mp4|webm|pdf)$/i, 'Must be a /media/... file');
+  .regex(
+    /^(\/media\/|https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/).+\.(jpe?g|png|webp|svg|gif|mp4|webm|pdf)$/i,
+    'Must be a /media/... file or an uploaded file',
+  );
 const sitePath = z.string().regex(/^\//, 'Must start with /');
 const url = z.string().url();
 const slug = z.string().regex(/^[a-z0-9-]+$/, 'Lowercase letters, numbers and dashes only');
@@ -227,50 +234,55 @@ export const slideSchema = z.discriminatedUnion('kind', [
   z.object({ ...slideBase, kind: z.literal('products'), productIds: z.array(slug) }),
 ]);
 
-export const contentSchema = z
-  .object({
-    site: siteSchema,
-    home: homeSchema,
-    about: aboutSchema,
-    productsPage: productsPageSchema,
-    story: storySchema,
-    units: z.array(unitSchema),
-    products: z.array(productSchema),
-    clientPacks: z.array(clientPackSchema),
-    machinery: z.array(machinerySchema),
-    gallery: gallerySchema,
-    slides: z.array(slideSchema),
-  })
-  .superRefine((c, ctx) => {
-    const themeIds = c.site.theme.palettes.map((p) => p.id);
-    if (!themeIds.includes(c.site.theme.default))
-      ctx.addIssue({
-        code: 'custom',
-        path: ['site', 'theme', 'default'],
-        message: `Unknown theme "${c.site.theme.default}"`,
-      });
-    const unitIds = new Set(c.units.map((u) => u.id));
-    const productIds = new Set(c.products.map((p) => p.id));
-    const checkUnit = (list: { unit: string }[], key: string) =>
-      list.forEach((item, i) => {
-        if (!unitIds.has(item.unit))
-          ctx.addIssue({ code: 'custom', path: [key, i, 'unit'], message: `Unknown unit "${item.unit}"` });
-      });
-    checkUnit(c.products, 'products');
-    checkUnit(c.clientPacks, 'clientPacks');
-    checkUnit(c.machinery, 'machinery');
-    c.slides.forEach((s, i) => {
-      if (s.kind === 'products')
-        s.productIds.forEach((id, j) => {
-          if (!productIds.has(id))
-            ctx.addIssue({
-              code: 'custom',
-              path: ['slides', i, 'productIds', j],
-              message: `Unknown product "${id}"`,
-            });
-        });
+/** Every content section. Each key is one row in the database (sections table) and one form in the admin page. */
+export const contentSections = z.object({
+  site: siteSchema,
+  home: homeSchema,
+  about: aboutSchema,
+  productsPage: productsPageSchema,
+  story: storySchema,
+  units: z.array(unitSchema),
+  products: z.array(productSchema),
+  clientPacks: z.array(clientPackSchema),
+  machinery: z.array(machinerySchema),
+  gallery: gallerySchema,
+  slides: z.array(slideSchema),
+});
+
+export type SectionKey = keyof typeof contentSections.shape;
+export const sectionKeys = Object.keys(contentSections.shape) as SectionKey[];
+
+/** The whole site: all sections, plus checks that span sections (e.g. a product must point at a real unit). */
+export const contentSchema = contentSections.superRefine((c, ctx) => {
+  const themeIds = c.site.theme.palettes.map((p) => p.id);
+  if (!themeIds.includes(c.site.theme.default))
+    ctx.addIssue({
+      code: 'custom',
+      path: ['site', 'theme', 'default'],
+      message: `Unknown theme "${c.site.theme.default}"`,
     });
+  const unitIds = new Set(c.units.map((u) => u.id));
+  const productIds = new Set(c.products.map((p) => p.id));
+  const checkUnit = (list: { unit: string }[], key: string) =>
+    list.forEach((item, i) => {
+      if (!unitIds.has(item.unit))
+        ctx.addIssue({ code: 'custom', path: [key, i, 'unit'], message: `Unknown unit "${item.unit}"` });
+    });
+  checkUnit(c.products, 'products');
+  checkUnit(c.clientPacks, 'clientPacks');
+  checkUnit(c.machinery, 'machinery');
+  c.slides.forEach((s, i) => {
+    if (s.kind === 'products')
+      s.productIds.forEach((id, j) => {
+        if (!productIds.has(id))
+          ctx.addIssue({
+            code: 'custom',
+            path: ['slides', i, 'productIds', j],
+            message: `Unknown product "${id}"`,
+          });
+      });
   });
+});
 
 export type Content = z.infer<typeof contentSchema>;
 export type Site = Content['site'];
