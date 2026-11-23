@@ -315,12 +315,39 @@
   .lightbox .x { position: absolute; top: 18px; right: 18px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: #c8102e; color: #fff; font-size: 26px; line-height: 1; }
 
   .black { position: fixed; inset: 0; background: #000; z-index: 50; }
+  .lock { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: radial-gradient(ellipse at 50% 40%, #e4334a, #8e0b20 70%); }
+  .lock-card { width: min(420px, 100%); display: grid; gap: 14px; padding: 30px 28px; border-radius: 20px; background: #fff; color: #231416; box-shadow: 0 30px 80px #0006; text-align: center; }
+  .lock-logos { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 4px; }
+  .lock-logos .kjs { height: 44px; padding: 7px 12px; border-radius: 10px; background: #1d1416; display: grid; place-items: center; }
+  .lock-logos .kjs img { height: 28px; display: block; }
+  .lock-logos .mayora { height: 44px; padding: 4px 8px; border-radius: 10px; border: 1px solid #ecd8d9; }
+  .lock-logos .mayora img { height: 100%; display: block; }
+  .lock-logos .x { color: #6d5558; font-weight: 800; }
+  .lock-card h1 { margin: 0; font-family: var(--font-display); font-size: 26px; letter-spacing: -.03em; color: #c8102e; }
+  .lock-card p { color: #6d5558; font-size: 15px; }
+  .pin { display: flex; justify-content: center; gap: 12px; margin: 6px 0 2px; }
+  .pin input {
+    width: 62px; height: 72px; padding: 0; border: 2px solid #ecd8d9; border-radius: 14px; background: #fbf4f4;
+    color: #231416; caret-color: #c8102e; font: 800 34px var(--font-body); text-align: center;
+    -webkit-text-security: disc; /* show dots without being a password field */
+    transition: border-color .15s, background .15s, transform .15s;
+  }
+  .pin input:focus { outline: none; border-color: #c8102e; background: #fff; transform: translateY(-2px); }
+  .pin input:disabled { opacity: .5; }
+  .pin.ok input { border-color: #1f9d55; background: #eafaf0; }
+  .pin.bad input { border-color: #c8102e; background: #fdecee; }
+  .lock-error { min-height: 1.4em; color: #c8102e !important; font-weight: 700; }
+  .lock-card.shake { animation: shake .35s; }
+  @keyframes shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .splash { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; background: #160709; cursor: pointer; transition: opacity .6s ease; }
-  .splash img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; animation: splash-in 1.2s ease both; }
+  .splash img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .splash.run img { animation: splash-in 1.2s ease both; }
   @keyframes splash-in { from { opacity: 0; transform: scale(1.03); } }
   .splash.done { opacity: 0; pointer-events: none; }
   .splash-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: #ffffff22; }
-  .splash-bar i { display: block; height: 100%; width: 100%; background: #c8102e; transform-origin: left; animation: splash-bar 3s linear both; }
+  .splash-bar i { display: block; height: 100%; width: 100%; background: #c8102e; transform-origin: left; transform: scaleX(0); }
+  .splash.run .splash-bar i { animation: splash-bar 3s linear both; }
   @keyframes splash-bar { from { transform: scaleX(0); } }
   .splash-hint { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); margin: 0; padding: 6px 14px; border-radius: 999px; background: #000a; color: #fff; font-size: 14px; font-weight: 700; white-space: nowrap; }
   .help { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; background: #0008; }
@@ -343,6 +370,26 @@
 </head>
 <body>
 
+
+<!--
+  Passkey screen: four PIN boxes, checked automatically after the 4th digit.
+  Plain text boxes shown as dots, no <form> and no password field, so browsers never offer to save a password.
+  The PIN is checked against its SHA-256 fingerprint (see PASSKEY_HASH).
+-->
+<div class="lock" id="lock">
+  <div class="lock-card" id="lock-card" role="group" aria-labelledby="lock-title">
+    <div class="lock-logos"><span class="kjs"><img src="/media/logos/kjs-india.png" alt="KJS India"></span><span class="x">×</span><span class="mayora"><img src="/media/logos/mayora.png" alt="Mayora"></span></div>
+    <h1 id="lock-title">Partnership presentation</h1>
+    <p>Enter the 4-digit passkey.</p>
+    <div class="pin" id="pin">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore aria-label="Passkey digit 1">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore aria-label="Passkey digit 2">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore aria-label="Passkey digit 3">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore aria-label="Passkey digit 4">
+    </div>
+    <p class="lock-error" id="lock-error" role="alert" aria-live="polite"></p>
+  </div>
+</div>
 
 <!-- Opening screen: the Mayora India Block ribbon cutting. Shows for 3 seconds; click or any key skips it. -->
 <div class="splash" id="splash" role="button" tabindex="0" aria-label="Opening photo. Click or press any key to start the presentation.">
@@ -677,11 +724,128 @@
     splash.classList.add('done');
     setTimeout(() => splash.remove(), 650);
   }
-  const startHash = location.hash.match(/^#slide-(\d+)$/);
-  if (startHash && Number(startHash[1]) > 1) { splashOpen = false; splash.remove(); }
-  else {
-    setTimeout(closeSplash, 3000);
-    splash.addEventListener('click', closeSplash);
+  function startSplash() {
+    const startHash = location.hash.match(/^#slide-(\d+)$/);
+    if (startHash && Number(startHash[1]) > 1) { splashOpen = false; splash.remove(); }
+    else {
+      splash.classList.add('run');
+      setTimeout(closeSplash, 3000);
+      splash.addEventListener('click', closeSplash);
+    }
+  }
+
+  // ---------- Passkey ----------
+  // Only a fingerprint of the passkey is in the page. This is a simple lock for a static page; it moves to the
+  // server (and becomes editable) with the backend. Unlocking is remembered until the browser tab is closed.
+  const PASSKEY_HASH = '2f2662718eb996a31a76118e823c7cbbf18cb482dd872db5c1c52a2d013a8bfb'; // passkey 1305
+  const UNLOCK_KEY = 'kjs-pitch-mayora-unlocked';
+  const lock = $('lock');
+  let locked = true;
+  async function fingerprint(value) {
+    const bytes = new TextEncoder().encode('kjs-mayora:' + value);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+  function unlock() {
+    locked = false;
+    lock.remove();
+    try { sessionStorage.setItem(UNLOCK_KEY, PASSKEY_HASH); } catch (e) {}
+    startSplash();
+  }
+  let remembered = null;
+  try { remembered = sessionStorage.getItem(UNLOCK_KEY); } catch (e) {}
+  if (remembered === PASSKEY_HASH) unlock();
+  else setupPin();
+
+  // Four PIN boxes: typing moves to the next box, Backspace and arrows move back, pasting fills all four,
+  // and the PIN is checked as soon as the 4th digit is in. 5 wrong tries pause input for 30 seconds.
+  function setupPin() {
+    const pin = $('pin');
+    const boxes = [...pin.querySelectorAll('input')];
+    const error = $('lock-error');
+    const card = $('lock-card');
+    const MAX_TRIES = 5;
+    const PAUSE_SECONDS = 30;
+    let wrongTries = 0;
+    let checking = false;
+
+    const focusBox = (i) => { const b = boxes[Math.max(0, Math.min(3, i))]; b.focus(); b.select(); };
+    const clearBoxes = () => { boxes.forEach((b) => (b.value = '')); };
+    const setDisabled = (on) => boxes.forEach((b) => (b.disabled = on));
+
+    async function check() {
+      const value = boxes.map((b) => b.value).join('');
+      if (value.length < 4 || checking) return;
+      checking = true;
+      if ((await fingerprint(value)) === PASSKEY_HASH) {
+        pin.classList.add('ok');
+        setDisabled(true);
+        setTimeout(unlock, 300);
+        return;
+      }
+      wrongTries++;
+      pin.classList.add('bad');
+      card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+      setTimeout(() => {
+        pin.classList.remove('bad');
+        clearBoxes();
+        checking = false;
+        if (wrongTries >= MAX_TRIES) return pause();
+        error.textContent = 'That passkey is not correct. Please try again.';
+        focusBox(0);
+      }, 450);
+    }
+
+    function pause() {
+      setDisabled(true);
+      let left = PAUSE_SECONDS;
+      const tick = () => {
+        if (left <= 0) {
+          wrongTries = 0;
+          error.textContent = '';
+          setDisabled(false);
+          focusBox(0);
+          return;
+        }
+        error.textContent = `Too many wrong tries. Try again in ${left} s.`;
+        left--;
+        setTimeout(tick, 1000);
+      };
+      tick();
+    }
+
+    boxes.forEach((box, i) => {
+      box.addEventListener('input', () => {
+        const digits = box.value.replace(/\D/g, '');
+        if (!digits) { box.value = ''; return; }
+        if (digits.length > 1) {
+          // several digits arrived at once (paste or fast autofill): spread them over the boxes
+          digits.slice(0, 4 - i).split('').forEach((d, k) => (boxes[i + k].value = d));
+          focusBox(Math.min(3, i + digits.length));
+        } else {
+          box.value = digits;
+          if (i < 3) focusBox(i + 1);
+        }
+        if (error.textContent && !error.textContent.startsWith('Too many')) error.textContent = '';
+        check();
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && i > 0) { e.preventDefault(); boxes[i - 1].value = ''; focusBox(i - 1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); focusBox(i - 1); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); focusBox(i + 1); }
+        else if (e.key === 'Enter') { e.preventDefault(); check(); }
+      });
+      box.addEventListener('paste', (e) => {
+        const digits = (e.clipboardData?.getData('text') ?? '').replace(/\D/g, '').slice(0, 4);
+        if (!digits) return;
+        e.preventDefault();
+        digits.split('').forEach((d, k) => (boxes[k].value = d));
+        focusBox(Math.min(3, digits.length));
+        check();
+      });
+      box.addEventListener('focus', () => box.select());
+    });
+    setTimeout(() => focusBox(0), 50);
   }
 
   // ---------- Fit the 1600×900 stage to the window ----------
@@ -831,6 +995,7 @@
 
   // ---------- Keyboard, clicker, touch ----------
   addEventListener('keydown', (e) => {
+    if (locked) return; // the passkey field handles its own typing
     if (splashOpen) { e.preventDefault(); closeSplash(); return; } // a key on the opening screen only skips it
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     const k = e.key;
@@ -860,7 +1025,7 @@
   let touchX = null;
   addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
   addEventListener('touchend', (e) => {
-    if (splashOpen) { touchX = null; return; }
+    if (locked || splashOpen) { touchX = null; return; }
     if (touchX === null || !lightbox.hidden) return;
     const dx = e.changedTouches[0].clientX - touchX;
     if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
