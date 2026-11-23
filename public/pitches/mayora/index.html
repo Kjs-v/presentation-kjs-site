@@ -108,15 +108,14 @@
   .pill.red { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 
   /* ---------- 1. Cover ---------- */
-  .s-cover { grid-template-columns: 1.02fr .98fr; gap: 60px; align-items: center; }
-  .s-cover h1 { font-size: 100px; line-height: .95; }
+  .s-cover { grid-template-columns: .82fr 1.18fr; gap: 50px; align-items: center; }
+  .s-cover h1 { font-size: 88px; line-height: .95; }
   .s-cover h1 .choki { display: block; color: var(--text); }
   :root[data-theme="red"] .s-cover h1 .choki { color: #ffe08a; }
   .s-cover .swoosh { margin-top: 34px; width: 180px; height: 10px; border-radius: 10px; background: var(--accent); }
-  .cover-art { position: relative; height: 640px; }
-  .cover-photo { position: absolute; inset: 0 0 60px 40px; border-radius: 48% 48% 18px 18px / 36% 36% 18px 18px; overflow: hidden; box-shadow: 0 30px 70px var(--shadow); border: 4px solid var(--accent); }
-  .cover-photo img { width: 100%; height: 100%; object-fit: cover; }
-  .cover-pack { position: absolute; left: -10px; bottom: 0; width: 260px; filter: drop-shadow(0 22px 26px #0005); transform: rotate(-8deg); border-radius: 14px; }
+  .cover-art { position: relative; }
+  .cover-photo { width: 100%; aspect-ratio: 4 / 3; border-radius: 22px; overflow: hidden; box-shadow: 0 30px 70px var(--shadow); border: 5px solid var(--accent); }
+  .cover-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   /* ---------- 2. Where we began ---------- */
   .s-began { grid-template-columns: 1fr .82fr; gap: 80px; align-items: center; }
@@ -291,6 +290,14 @@
   .lightbox .x { position: absolute; top: 18px; right: 18px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: #c8102e; color: #fff; font-size: 26px; line-height: 1; }
 
   .black { position: fixed; inset: 0; background: #000; z-index: 50; }
+  .splash { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; background: #160709; cursor: pointer; transition: opacity .6s ease; }
+  .splash img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; animation: splash-in 1.2s ease both; }
+  @keyframes splash-in { from { opacity: 0; transform: scale(1.03); } }
+  .splash.done { opacity: 0; pointer-events: none; }
+  .splash-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: #ffffff22; }
+  .splash-bar i { display: block; height: 100%; width: 100%; background: #c8102e; transform-origin: left; animation: splash-bar 3s linear both; }
+  @keyframes splash-bar { from { transform: scaleX(0); } }
+  .splash-hint { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); margin: 0; padding: 6px 14px; border-radius: 999px; background: #000a; color: #fff; font-size: 14px; font-weight: 700; white-space: nowrap; }
   .help { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; background: #0008; }
   .help .card { width: min(520px, calc(100vw - 32px)); padding: 24px 26px; border-radius: 16px; background: var(--chrome); color: var(--chrome-text); box-shadow: 0 20px 60px #0006; }
   .help h3 { margin: 0 0 12px; }
@@ -312,6 +319,13 @@
 <body>
 
 
+<!-- Opening screen: the Mayora India Block ribbon cutting. Shows for 3 seconds; click or any key skips it. -->
+<div class="splash" id="splash" role="button" tabindex="0" aria-label="Opening photo. Click or press any key to start the presentation.">
+  <img src="/media/events/mayora-block-ribbon-cutting.jpg" alt="Ribbon cutting at the Mayora India Block, KJS India">
+  <div class="splash-bar"><i></i></div>
+  <p class="splash-hint">Click or press any key to continue</p>
+</div>
+
 <div class="progress" id="progress"></div>
 <div class="viewport">
   <div class="stage" id="stage" role="region" aria-roledescription="presentation" aria-label="KJS India and Mayora India partnership">
@@ -323,8 +337,7 @@
         <div class="swoosh rise" style="--d:2"></div>
       </div>
       <div class="cover-art rise" style="--d:2">
-        <div class="cover-photo"><img src="/media/units/unit-1-front.jpg" alt="KJS India Unit 1, Pashamylaram"></div>
-        <img class="cover-pack" src="/media/unit-1-packs/choki-choki-pack.jpg" alt="Choki Choki Chocomilk pack">
+        <div class="cover-photo"><img src="/media/events/mayora-choki-training.jpg" alt="Mayora India and KJS India teams at the Choki Choki line"></div>
       </div>
       <aside class="notes-src" hidden>
         <li>Welcome the Mayora India team and thank them for the partnership.</li>
@@ -607,6 +620,23 @@
   const $ = (id) => document.getElementById(id);
   let index = 0;
 
+  // ---------- Opening screen ----------
+  // Shown when the deck opens at the start (not when a link points to a later slide).
+  const splash = $('splash');
+  let splashOpen = true;
+  function closeSplash() {
+    if (!splashOpen) return;
+    splashOpen = false;
+    splash.classList.add('done');
+    setTimeout(() => splash.remove(), 650);
+  }
+  const startHash = location.hash.match(/^#slide-(\d+)$/);
+  if (startHash && Number(startHash[1]) > 1) { splashOpen = false; splash.remove(); }
+  else {
+    setTimeout(closeSplash, 3000);
+    splash.addEventListener('click', closeSplash);
+  }
+
   // ---------- Fit the 1600×900 stage to the window ----------
   // Scale the 1600×900 slide to the largest size that fits above the control strip, centred.
   const viewport = stage.parentElement;
@@ -754,6 +784,7 @@
 
   // ---------- Keyboard, clicker, touch ----------
   addEventListener('keydown', (e) => {
+    if (splashOpen) { e.preventDefault(); closeSplash(); return; } // a key on the opening screen only skips it
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     const k = e.key;
     if (k === 'Escape') {
@@ -782,6 +813,7 @@
   let touchX = null;
   addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
   addEventListener('touchend', (e) => {
+    if (splashOpen) { touchX = null; return; }
     if (touchX === null || !lightbox.hidden) return;
     const dx = e.changedTouches[0].clientX - touchX;
     if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
