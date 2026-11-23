@@ -325,11 +325,18 @@
   .lock-logos .x { color: #6d5558; font-weight: 800; }
   .lock-card h1 { margin: 0; font-family: var(--font-display); font-size: 26px; letter-spacing: -.03em; color: #c8102e; }
   .lock-card p { color: #6d5558; font-size: 15px; }
-  .lock-card input { width: 100%; padding: 14px 16px; border: 2px solid #ecd8d9; border-radius: 12px; font: 700 22px var(--font-body); letter-spacing: .3em; text-align: center; color: #231416; background: #fbf4f4; }
-  .lock-card input:focus { outline: none; border-color: #c8102e; }
-  .lock-card button { padding: 14px; border: 0; border-radius: 12px; background: #c8102e; color: #fff; font: 800 17px var(--font-body); cursor: pointer; }
-  .lock-card button:hover { filter: brightness(1.08); }
-  .lock-error { color: #c8102e !important; font-weight: 700; }
+  .pin { display: flex; justify-content: center; gap: 12px; margin: 6px 0 2px; }
+  .pin input {
+    width: 62px; height: 72px; padding: 0; border: 2px solid #ecd8d9; border-radius: 14px; background: #fbf4f4;
+    color: #231416; caret-color: #c8102e; font: 800 34px var(--font-body); text-align: center;
+    -webkit-text-security: disc; /* show dots without being a password field */
+    transition: border-color .15s, background .15s, transform .15s;
+  }
+  .pin input:focus { outline: none; border-color: #c8102e; background: #fff; transform: translateY(-2px); }
+  .pin input:disabled { opacity: .5; }
+  .pin.ok input { border-color: #1f9d55; background: #eafaf0; }
+  .pin.bad input { border-color: #c8102e; background: #fdecee; }
+  .lock-error { min-height: 1.4em; color: #c8102e !important; font-weight: 700; }
   .lock-card.shake { animation: shake .35s; }
   @keyframes shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
@@ -364,17 +371,24 @@
 <body>
 
 
-<!-- Passkey screen: shown first. The passkey is checked against its SHA-256 fingerprint (see PASSKEY_HASH). -->
+<!--
+  Passkey screen: four PIN boxes, checked automatically after the 4th digit.
+  Plain text boxes shown as dots, no <form> and no password field, so browsers never offer to save a password.
+  The PIN is checked against its SHA-256 fingerprint (see PASSKEY_HASH).
+-->
 <div class="lock" id="lock">
-  <form class="lock-card" id="lock-form" autocomplete="off">
+  <div class="lock-card" id="lock-card" role="group" aria-labelledby="lock-title">
     <div class="lock-logos"><span class="kjs"><img src="/media/logos/kjs-india.png" alt="KJS India"></span><span class="x">×</span><span class="mayora"><img src="/media/logos/mayora.png" alt="Mayora"></span></div>
-    <h1>Partnership presentation</h1>
-    <p>Enter the passkey to open the presentation.</p>
-    <label for="lock-input" class="sr">Passkey</label>
-    <input id="lock-input" type="password" inputmode="numeric" maxlength="12" placeholder="Passkey" required>
-    <button type="submit">Open presentation</button>
-    <p class="lock-error" id="lock-error" role="alert" hidden>That passkey is not correct. Please try again.</p>
-  </form>
+    <h1 id="lock-title">Partnership presentation</h1>
+    <p>Enter the 4-digit passkey.</p>
+    <div class="pin" id="pin">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore aria-label="Passkey digit 1">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore aria-label="Passkey digit 2">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore aria-label="Passkey digit 3">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore aria-label="Passkey digit 4">
+    </div>
+    <p class="lock-error" id="lock-error" role="alert" aria-live="polite"></p>
+  </div>
 </div>
 
 <!-- Opening screen: the Mayora India Block ribbon cutting. Shows for 3 seconds; click or any key skips it. -->
@@ -741,17 +755,97 @@
   let remembered = null;
   try { remembered = sessionStorage.getItem(UNLOCK_KEY); } catch (e) {}
   if (remembered === PASSKEY_HASH) unlock();
-  else {
-    const input = $('lock-input');
-    setTimeout(() => input.focus(), 50);
-    $('lock-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if ((await fingerprint(input.value.trim())) === PASSKEY_HASH) return unlock();
-      $('lock-error').hidden = false;
-      const card = $('lock-form');
+  else setupPin();
+
+  // Four PIN boxes: typing moves to the next box, Backspace and arrows move back, pasting fills all four,
+  // and the PIN is checked as soon as the 4th digit is in. 5 wrong tries pause input for 30 seconds.
+  function setupPin() {
+    const pin = $('pin');
+    const boxes = [...pin.querySelectorAll('input')];
+    const error = $('lock-error');
+    const card = $('lock-card');
+    const MAX_TRIES = 5;
+    const PAUSE_SECONDS = 30;
+    let wrongTries = 0;
+    let checking = false;
+
+    const focusBox = (i) => { const b = boxes[Math.max(0, Math.min(3, i))]; b.focus(); b.select(); };
+    const clearBoxes = () => { boxes.forEach((b) => (b.value = '')); };
+    const setDisabled = (on) => boxes.forEach((b) => (b.disabled = on));
+
+    async function check() {
+      const value = boxes.map((b) => b.value).join('');
+      if (value.length < 4 || checking) return;
+      checking = true;
+      if ((await fingerprint(value)) === PASSKEY_HASH) {
+        pin.classList.add('ok');
+        setDisabled(true);
+        setTimeout(unlock, 300);
+        return;
+      }
+      wrongTries++;
+      pin.classList.add('bad');
       card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
-      input.select();
+      setTimeout(() => {
+        pin.classList.remove('bad');
+        clearBoxes();
+        checking = false;
+        if (wrongTries >= MAX_TRIES) return pause();
+        error.textContent = 'That passkey is not correct. Please try again.';
+        focusBox(0);
+      }, 450);
+    }
+
+    function pause() {
+      setDisabled(true);
+      let left = PAUSE_SECONDS;
+      const tick = () => {
+        if (left <= 0) {
+          wrongTries = 0;
+          error.textContent = '';
+          setDisabled(false);
+          focusBox(0);
+          return;
+        }
+        error.textContent = `Too many wrong tries. Try again in ${left} s.`;
+        left--;
+        setTimeout(tick, 1000);
+      };
+      tick();
+    }
+
+    boxes.forEach((box, i) => {
+      box.addEventListener('input', () => {
+        const digits = box.value.replace(/\D/g, '');
+        if (!digits) { box.value = ''; return; }
+        if (digits.length > 1) {
+          // several digits arrived at once (paste or fast autofill): spread them over the boxes
+          digits.slice(0, 4 - i).split('').forEach((d, k) => (boxes[i + k].value = d));
+          focusBox(Math.min(3, i + digits.length));
+        } else {
+          box.value = digits;
+          if (i < 3) focusBox(i + 1);
+        }
+        if (error.textContent && !error.textContent.startsWith('Too many')) error.textContent = '';
+        check();
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && i > 0) { e.preventDefault(); boxes[i - 1].value = ''; focusBox(i - 1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); focusBox(i - 1); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); focusBox(i + 1); }
+        else if (e.key === 'Enter') { e.preventDefault(); check(); }
+      });
+      box.addEventListener('paste', (e) => {
+        const digits = (e.clipboardData?.getData('text') ?? '').replace(/\D/g, '').slice(0, 4);
+        if (!digits) return;
+        e.preventDefault();
+        digits.split('').forEach((d, k) => (boxes[k].value = d));
+        focusBox(Math.min(3, digits.length));
+        check();
+      });
+      box.addEventListener('focus', () => box.select());
     });
+    setTimeout(() => focusBox(0), 50);
   }
 
   // ---------- Fit the 1600×900 stage to the window ----------
