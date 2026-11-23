@@ -58,29 +58,38 @@ async function main() {
     console.log('History: first version saved.');
   }
 
-  // First admin
-  const email = (process.env.ADMIN_EMAIL ?? '').trim().toLowerCase();
-  if (!email) {
-    console.log('Admin: ADMIN_EMAIL is empty in .env, so no admin was created.');
-  } else {
+  // First admins: ADMIN_EMAILS is a comma-separated list.
+  // ADMIN_INITIAL_PASSWORD sets their starting password; if empty, a random one is generated and printed.
+  // Either way they must choose their own password at first login.
+  const emails = (process.env.ADMIN_EMAILS ?? process.env.ADMIN_EMAIL ?? '')
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  if (!emails.length) {
+    console.log('Admins: ADMIN_EMAILS is empty in .env, so no admin was created.');
+    return;
+  }
+  const fixedPassword = (process.env.ADMIN_INITIAL_PASSWORD ?? '').trim();
+  for (const email of emails) {
     const existing = await d
       .select({ id: schema.users.id })
       .from(schema.users)
       .where(sql`lower(${schema.users.email}) = ${email}`);
     if (existing.length) {
-      console.log(`Admin: ${email} already exists.`);
-    } else {
-      const password = randomBytes(9).toString('base64url'); // 12 characters
-      await d.insert(schema.users).values({
-        email,
-        name: 'Admin',
-        passwordHash: await bcrypt.hash(password, 12),
-        role: 'admin',
-        mustChangePassword: true,
-      });
-      console.log(`Admin: created ${email}`);
-      console.log(`       Temporary password (shown once, must be changed at first login): ${password}`);
+      console.log(`Admin: ${email} already exists (left unchanged).`);
+      continue;
     }
+    const password = fixedPassword || randomBytes(9).toString('base64url');
+    await d.insert(schema.users).values({
+      email,
+      name: email.split('@')[0],
+      passwordHash: await bcrypt.hash(password, 12),
+      role: 'admin',
+      mustChangePassword: true,
+    });
+    console.log(
+      `Admin: created ${email} with ${fixedPassword ? 'the starting password from .env' : `temporary password ${password}`} (must be changed at first login).`,
+    );
   }
 }
 
