@@ -20,7 +20,6 @@ const mediaPath = z
 const sitePath = z.string().regex(/^\//, 'Must start with /');
 const url = z.string().url();
 const slug = z.string().regex(/^[a-z0-9-]+$/, 'Lowercase letters, numbers and dashes only');
-const color = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Hex colour, e.g. #112d27');
 
 const titleBody = z.object({
   title: z.string().min(1).describe('Title'),
@@ -39,6 +38,51 @@ const button = z.object({
   path: sitePath.describe('Opens page'),
   style: z.enum(['primary', 'secondary']).describe('Style'),
 });
+/** Icons available for menu items (see src/lib/icons.ts). */
+export const navIcons = [
+  'house',
+  'info',
+  'package',
+  'images',
+  'factory',
+  'warehouse',
+  'presentation',
+  'link',
+] as const;
+
+/** One colour theme. Values are CSS colours (hex), or a CSS gradient where the name says so. */
+const palette = z.object({
+  bg: z.string().describe('Page background'),
+  surface: z.string().describe('Cards and panels'),
+  surfaceStrong: z.string().describe('Raised panels'),
+  text: z.string().describe('Text'),
+  muted: z.string().describe('Secondary text'),
+  edge: z.string().describe('Borders'),
+  accent: z.string().describe('Highlight (saffron buttons, current page)'),
+  onAccent: z.string().describe('Text on the highlight colour'),
+  heading: z.string().describe('Section headings'),
+  eyebrow: z.string().describe('Small text above titles'),
+  link: z.string().describe('Links'),
+  headerBg: z.string().describe('Header background'),
+  footerBg: z.string().describe('Footer background'),
+  photoBg: z.string().describe('Background behind product photos'),
+  scrim: z.string().describe('See-through background for labels over photos'),
+  heroOverlay: z.string().describe('Gradient over big photos, so text stays readable'),
+  heroText: z.string().describe('Text over big photos'),
+  heroMuted: z.string().describe('Secondary text over big photos'),
+  heroShadow: z.string().describe('Shadow under big titles (CSS text-shadow, or none)'),
+  menuGlass: z.string().describe('Corner menu disc (gradient)'),
+  menuCoin: z.string().describe('Corner menu item fill'),
+  menuRing: z.string().describe('Corner menu rings and guides'),
+  menuBand: z.string().describe('Corner menu faint ripples'),
+  menuGlow: z.string().describe('Glow behind the corner button and on hover'),
+  shadow: z.string().describe('Shadows'),
+  hoverBg: z.string().describe('Corner menu item on hover'),
+  hoverText: z.string().describe('Corner menu icon on hover'),
+  currentBg: z.string().describe('Corner menu: current page fill'),
+  currentText: z.string().describe('Corner menu: current page icon'),
+});
+
 const partner = z.object({ name: z.string().describe('Name'), logo: mediaPath.describe('Logo') });
 
 export const siteSchema = z.object({
@@ -63,23 +107,29 @@ export const siteSchema = z.object({
       }),
     )
     .describe('Footer links, after phone, email and map'),
-  nav: z.array(z.object({ label: z.string(), path: sitePath })).describe('Header menu (in order)'),
+  nav: z
+    .array(
+      z.object({
+        label: z.string().describe('Text'),
+        path: sitePath.describe('Opens page'),
+        icon: z.enum(navIcons).describe('Icon'),
+      }),
+    )
+    .describe('Corner menu pages (in order: the first four go on the outer arc, the rest on the inner arc)'),
+  menu: z.object({
+    notesLabel: z.string().describe('Notes button text'),
+    rimText: z.string().describe('Text running round the edge of the open menu'),
+    themeToggleLabel: z.string().describe('Colour switch label (read out by screen readers)'),
+  }),
   theme: z.object({
-    colors: z.object({
-      primary: color.describe('Header / dark panels'),
-      background: color.describe('Page background'),
-      surface: color.describe('Cards on dark background'),
-      accent: color.describe('Highlight (buttons, active menu)'),
-      accentSoft: color.describe('Soft highlight'),
-      text: color.describe('Text on dark background'),
-      muted: color.describe('Secondary text'),
-      light: color.describe('Light section background'),
-      lightText: color.describe('Text on light sections'),
-      edge: color.describe('Borders'),
-    }),
+    default: z.string().describe('Theme shown first (id of one of the palettes)'),
     fontHeading: z.string().describe('Heading font'),
     fontBody: z.string().describe('Body font'),
     googleFonts: z.array(z.string()).describe('Google Fonts to load (names), if any'),
+    palettes: z
+      .array(z.object({ id: slug.describe('ID'), label: z.string().describe('Name'), colors: palette }))
+      .min(1)
+      .describe('Colour themes. The corner menu switch cycles through them.'),
   }),
 });
 
@@ -208,6 +258,13 @@ export const contentSchema = z
     slides: z.array(slideSchema),
   })
   .superRefine((c, ctx) => {
+    const themeIds = c.site.theme.palettes.map((p) => p.id);
+    if (!themeIds.includes(c.site.theme.default))
+      ctx.addIssue({
+        code: 'custom',
+        path: ['site', 'theme', 'default'],
+        message: `Unknown theme "${c.site.theme.default}"`,
+      });
     const unitIds = new Set(c.units.map((u) => u.id));
     const productIds = new Set(c.products.map((p) => p.id));
     const checkUnit = (list: { unit: string }[], key: string) =>

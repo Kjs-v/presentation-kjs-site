@@ -17,8 +17,8 @@ Everyone who works on this repo keeps their own notes file here. This avoids mer
 
 ## Who's here
 
-| Name | File | Role |
-|---|---|---|
+| Name   | File                   | Role          |
+| ------ | ---------------------- | ------------- |
 | vineet | [vineet.md](vineet.md) | Project owner |
 
 Add yourself to this table when you create your file. This table is the one shared line you may add to.

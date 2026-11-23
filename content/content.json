@@ -24,42 +24,118 @@
     ],
     "nav": [
       {
+        "label": "Home",
+        "path": "/",
+        "icon": "house"
+      },
+      {
         "label": "About",
-        "path": "/about"
+        "path": "/about",
+        "icon": "info"
       },
       {
         "label": "Products",
-        "path": "/products"
-      },
-      {
-        "label": "Unit 1",
-        "path": "/unit-1"
-      },
-      {
-        "label": "Unit 2",
-        "path": "/unit-2"
+        "path": "/products",
+        "icon": "package"
       },
       {
         "label": "Gallery",
-        "path": "/gallery"
+        "path": "/gallery",
+        "icon": "images"
+      },
+      {
+        "label": "Unit 1",
+        "path": "/unit-1",
+        "icon": "factory"
+      },
+      {
+        "label": "Unit 2",
+        "path": "/unit-2",
+        "icon": "warehouse"
       }
     ],
     "theme": {
-      "colors": {
-        "primary": "#112d27",
-        "background": "#102923",
-        "surface": "#20463a",
-        "accent": "#f4b952",
-        "accentSoft": "#a6dfbb",
-        "text": "#fff8e8",
-        "muted": "#cfdfd4",
-        "light": "#f5eedb",
-        "lightText": "#18382d",
-        "edge": "#517361"
-      },
+      "default": "white",
       "fontHeading": "\"Segoe UI Black\", \"Arial Black\", \"Segoe UI\", sans-serif",
       "fontBody": "\"Segoe UI\", Arial, sans-serif",
-      "googleFonts": []
+      "googleFonts": [],
+      "palettes": [
+        {
+          "id": "white",
+          "label": "White",
+          "colors": {
+            "bg": "#ffffff",
+            "surface": "#f7f8fb",
+            "surfaceStrong": "#eef1f8",
+            "text": "#16213a",
+            "muted": "#505a70",
+            "edge": "#e2e5ee",
+            "accent": "#f4b952",
+            "onAccent": "#16213a",
+            "heading": "#1c3a9e",
+            "eyebrow": "#a86a12",
+            "link": "#1c3a9e",
+            "headerBg": "#fffffff2",
+            "footerBg": "#f5f6fa",
+            "photoBg": "#ffffff",
+            "scrim": "#ffffffe6",
+            "heroOverlay": "linear-gradient(90deg, #fffffff5 0%, #ffffffd9 36%, #ffffff40 66%, #ffffff00)",
+            "heroText": "#16213a",
+            "heroMuted": "#34405a",
+            "heroShadow": "none",
+            "menuGlass": "radial-gradient(circle, #fffffffa 0%, #f3f5fbf5 100%)",
+            "menuCoin": "#ffffff",
+            "menuRing": "#16213a24",
+            "menuBand": "#1c3a9e0b",
+            "menuGlow": "#f4b95259",
+            "shadow": "#16213a2e",
+            "hoverBg": "#1c3a9e",
+            "hoverText": "#ffffff",
+            "currentBg": "#fdf1d6",
+            "currentText": "#a86a12"
+          }
+        },
+        {
+          "id": "royal",
+          "label": "Royal blue",
+          "colors": {
+            "bg": "#1c3a9e",
+            "surface": "#2446b5",
+            "surfaceStrong": "#2a4dbd",
+            "text": "#ffffff",
+            "muted": "#c9d5ff",
+            "edge": "#4d6fe0",
+            "accent": "#f4b952",
+            "onAccent": "#14286e",
+            "heading": "#ffffff",
+            "eyebrow": "#f4b952",
+            "link": "#f4b952",
+            "headerBg": "#18338cf2",
+            "footerBg": "#162f82",
+            "photoBg": "#f5f7ff",
+            "scrim": "#13286ecc",
+            "heroOverlay": "linear-gradient(90deg, #13286ef2 0%, #1a3591cc 36%, #1c3a9e40 68%, #1c3a9e10)",
+            "heroText": "#ffffff",
+            "heroMuted": "#e3e9ff",
+            "heroShadow": "0 3px 0 #0f2366",
+            "menuGlass": "radial-gradient(circle, #2b50c8f7 0%, #1c3a9ef2 100%)",
+            "menuCoin": "#2648bd",
+            "menuRing": "#ffffff38",
+            "menuBand": "#ffffff0f",
+            "menuGlow": "#f4b9526b",
+            "shadow": "#0a174866",
+            "hoverBg": "#ffffff",
+            "hoverText": "#1c3a9e",
+            "currentBg": "#14296f",
+            "currentText": "#f4b952"
+          }
+        }
+      ]
+    },
+    "menu": {
+      "notesLabel": "Notes",
+      "rimText": "KJS India · Your Brand, Our Expertise · Pashamylaram · KJS India · Your Brand, Our Expertise · Pashamylaram ·",
+      "themeToggleLabel": "Switch colours"
     }
   },
   "home": {

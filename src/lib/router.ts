@@ -42,7 +42,6 @@ export function startRouter(outlet: HTMLElement, content: Content, notFound: Pag
     if (section(pathname) !== section(previous)) window.scrollTo(0, 0);
     previous = pathname;
     outlet.dataset.page = pathname;
-    markActive(pathname);
     listeners.forEach((l) => l(pathname));
   };
 
@@ -55,13 +54,4 @@ export function startRouter(outlet: HTMLElement, content: Content, notFound: Pag
   });
   window.addEventListener('popstate', render);
   render();
-}
-
-/** Highlights the menu item for the current section (so /unit-1/products highlights "Unit 1"). */
-function markActive(pathname: string): void {
-  document.querySelectorAll<HTMLAnchorElement>('.topbar nav a[data-route]').forEach((a) => {
-    const active = a.pathname === '/' ? pathname === '/' : section(pathname) === section(a.pathname);
-    if (active) a.setAttribute('aria-current', 'page');
-    else a.removeAttribute('aria-current');
-  });
 }

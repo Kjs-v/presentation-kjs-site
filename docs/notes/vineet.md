@@ -3,6 +3,18 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Navigator + white / royal blue themes)
+
+- **Did:** removed the page links from the header. Navigation is now the gold KJS coin in the bottom-right corner.
+  - The menu is closed by default. It opens on click, and choosing an item closes it.
+  - Outer arc: Home, About, Products, Gallery. Inner arc: Unit 1, Notes, Unit 2.
+  - Notes open as a corner panel with its own full-screen button, saved in the browser.
+  - A two-tone colour switch inside the navigator toggles white / royal blue, remembered per browser. `?theme=royal` forces one.
+- **Themes:** removed all green.
+  - The two palettes live in `site.theme.palettes` in content.json, and every colour in theme.css is a --c-* variable.
+  - Default is white (`site.theme.default`).
+- **Next:** decide which theme is the default for client meetings.
+
 ## 2026-11-23 (Footer + corner menu previews)
 
 - **Did:** updated the footer.

@@ -1,21 +1,15 @@
 /** Header and footer, built from content.site. */
 import type { Site } from '../content/content.schema';
-import { h, routeLink } from './lib/dom';
+import { h } from './lib/dom';
 import { icon } from './lib/icons';
 
+/** Slim header: company name and Full screen. Page links live in the corner menu (src/widgets/corner-menu.ts). */
 export function header(site: Site): HTMLElement {
-  const menu = h('button', { type: 'button', id: 'mobile-menu', 'aria-expanded': 'false' }, 'Menu');
-  menu.addEventListener('click', () => {
-    const open = document.body.classList.toggle('mobile-open');
-    menu.setAttribute('aria-expanded', String(open));
-    menu.textContent = open ? 'Close menu' : 'Menu';
-  });
-
   const label = h('span', {}, 'Full screen');
   const fullscreen = h(
     'button',
-    { type: 'button', 'aria-pressed': 'false' },
-    h('span', { class: 'corners', 'aria-hidden': 'true' }),
+    { type: 'button', class: 'ctrl', 'aria-pressed': 'false' },
+    icon('maximize'),
     label,
   );
   fullscreen.addEventListener('click', () => {
@@ -37,8 +31,7 @@ export function header(site: Site): HTMLElement {
       h('span', { class: 'mark', 'aria-hidden': 'true' }),
       site.name,
     ),
-    h('nav', { 'aria-label': 'Main' }, ...site.nav.map((n) => routeLink(n.path, n.label))),
-    h('div', { class: 'controls' }, menu, fullscreen),
+    fullscreen,
   );
 }
 

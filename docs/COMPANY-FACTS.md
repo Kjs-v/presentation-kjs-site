@@ -22,30 +22,36 @@ Items marked **(confirm)** are not verified. Don't show them to clients until th
 ## Unit 1: stick packs, coffee and instant beverages (assumed split, confirm)
 
 **Stick packs**
+
 - Fills from 0.9 to 3 g, customised to each formulation.
 - Consistent sealing, clean cuts and high-speed lines.
 
 **Coffee**
+
 - Agglomerated and spray-dried coffee, in blends of 10%, 15%, 33% and 100% coffee.
 - Freeze-dried coffee for premium retail.
 - Bulk supply in 20, 50 and 250 kg.
 - Packed in stick packs, tin cans, glass jars, PET jars or stand-up pouches.
 
 **Instant beverages**
+
 - 3-in-1 coffee and hot chocolate.
 - Fruit drink powders: lime, watermelon, pineapple, mango, orange, passion fruit, peach, guava and strawberry.
 
 **Ribbon blending**
+
 - 6 blenders with counter-directional inner and outer ribbons, 10 to 20 minutes per batch.
 - Used for powders, premixes, nutraceutical blends and seasoning mixes.
 
 **Packaging formats**
+
 - Stick FFS pouch, vertical FFS pouch, horizontal FFS pouch and stand-up pouch.
 - Pouch in carton and direct-fill carton.
 - PET jar, glass jar and tin can.
 - Bag in box and master shipper.
 
 **Client brand packs** (`public/media/unit-1-packs/`) **(confirm permission to show them)**
+
 - Nescafé, Boost, Horlicks, Choki Choki, Nestlé Resource Fiber, Continental Xtra, Café Niger, Swiss Café, Prince Supérieur, AIT Coffee, Café Soka and Crown Café.
 
 ## Unit 2: confectionery
@@ -57,21 +63,22 @@ Items marked **(confirm)** are not verified. Don't show them to clients until th
 
 ### Best sellers (catalogue data)
 
-| Product | Item no. | Net weight | Pcs/box × boxes/case |
-|---|---|---|---|
-| Gofrey Cocoa | 600 / 600A / 600B / 600C | 30 / 28 / 32 / 35 g | 24 × 6 |
-| Extreme4 Dark | 615 | 45 g | 24 × 6 |
-| Brandon White | 692 | 80 g | 24 × 6 |
-| Maxi Cream Wafers | 665 / 666 / 667 (cocoa, coconut, coffee cream) | 45 g | 24 × 6 |
-| Fundo Sandwich Biscuits | 301 – 304 (vanilla, strawberry, banana, cocoa) | 40 g | 24 × 6 |
-| Pacho Mellow | 702 / 702A / 702B (+703, 704) | 25 / 20 / 22 g | 24 × 6 |
-| Grandy Chocolate Bar | 805 | 40 g | 24 × 6 |
-| Peti Latte 2in1 | 115 | 400 g | 12 × 1 |
-| Gofrey Hazelnut | 605 / 605A | 32 / 27 g | 24 × 6 |
+| Product                 | Item no.                                       | Net weight          | Pcs/box × boxes/case |
+| ----------------------- | ---------------------------------------------- | ------------------- | -------------------- |
+| Gofrey Cocoa            | 600 / 600A / 600B / 600C                       | 30 / 28 / 32 / 35 g | 24 × 6               |
+| Extreme4 Dark           | 615                                            | 45 g                | 24 × 6               |
+| Brandon White           | 692                                            | 80 g                | 24 × 6               |
+| Maxi Cream Wafers       | 665 / 666 / 667 (cocoa, coconut, coffee cream) | 45 g                | 24 × 6               |
+| Fundo Sandwich Biscuits | 301 – 304 (vanilla, strawberry, banana, cocoa) | 40 g                | 24 × 6               |
+| Pacho Mellow            | 702 / 702A / 702B (+703, 704)                  | 25 / 20 / 22 g      | 24 × 6               |
+| Grandy Chocolate Bar    | 805                                            | 40 g                | 24 × 6               |
+| Peti Latte 2in1         | 115                                            | 400 g               | 12 × 1               |
+| Gofrey Hazelnut         | 605 / 605A                                     | 32 / 27 g           | 24 × 6               |
 
 ## Quality and warehousing (from kjsindia.com)
 
 **Quality**
+
 - HACCP plans with screens, magnets and metal detection.
 - Allergen control, dust collection on each line, sanitation schedules and preventive maintenance.
 - In-house tests: sieve, bulk density, moisture and pH. External microbiological testing.
@@ -79,6 +86,7 @@ Items marked **(confirm)** are not verified. Don't show them to clients until th
 - Clients get updates on quantities, delivery schedules and packaging inventory.
 
 **Warehousing**
+
 - 15 days of free warehousing.
 - Separate storage for raw ingredients, packaging and finished goods.
 - Allergen segregation, labelled locations and dedicated shipping staff.

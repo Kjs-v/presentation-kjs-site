@@ -34,15 +34,16 @@ npm run dev             # http://localhost:5173
 │   ├── main.ts             Entry: loads content, applies theme, registers routes
 │   ├── layout.ts           Header and footer
 │   ├── components.ts       Shared pieces: stats, cards, photo tiles
-│   ├── widgets/            orbit.ts (rotating products), product-dialog.ts (product pop-up)
+│   ├── widgets/            corner-menu.ts (navigation), notes.ts, orbit.ts (rotating products), product-dialog.ts
 │   ├── pages/              One file per page (home, about, unit, gallery, products, show)
 │   ├── lib/
 │   │   ├── content.ts      loadContent(): the ONLY way pages get content
 │   │   ├── router.ts       Small client-side router
-│   │   ├── theme.ts        Turns site.theme into CSS variables
+│   │   ├── theme.ts        Turns site.theme.palettes into --c-* CSS variables; theme switching
+│   │   ├── icons.ts        Inline SVG icons
 │   │   ├── effects.ts      Sparkles, hide-on-scroll header, intro loader
 │   │   └── dom.ts          h() helper for building elements
-│   └── styles/theme.css    Site styles (ported from the design reference). Use the CSS variables, not fixed colours
+│   └── styles/theme.css    Site styles (ported from the design reference). Colours come from the theme palettes as --c-* variables; never hardcode one
 ├── public/favicon.*        Favicon (from the KJS_v1 project)
 ├── public/media/           Our images and videos, served at /media/...
 │   ├── products/           Product photos (72)
@@ -83,7 +84,13 @@ npm run dev             # http://localhost:5173
 
 ## Routes
 
-The header menu is `site.nav` in content.json: About, Products, Unit 1, Unit 2, Gallery.
+**Navigation** is the gold coin in the bottom-right corner (`src/widgets/corner-menu.ts`). Click it to open the menu, and choosing anything closes it.
+
+- **Pages:** `site.nav` in content.json, each with an icon. The first four go on the outer arc, the rest on the inner arc.
+- **Notes:** the gold coin in the middle of the inner arc. It opens a corner panel that can go full screen.
+- **Colour switch:** the two-tone coin next to the button switches between the themes in `site.theme.palettes` (white / royal blue). The choice is remembered per browser.
+  - Add `?theme=royal` or `?theme=white` to a link to force one.
+- **Header:** only the company name and Full screen.
 
 | Path                                                   | Page                                                                                                                                                                                                                    |
 | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

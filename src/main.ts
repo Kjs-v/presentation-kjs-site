@@ -4,6 +4,7 @@ import { applyTheme } from './lib/theme';
 import { onRoute, route, startRouter } from './lib/router';
 import { afterRoute, initEffects, introScreen } from './lib/effects';
 import { header, footer } from './layout';
+import { cornerMenu, markCurrent } from './widgets/corner-menu';
 import { homePage } from './pages/home';
 import { aboutPage } from './pages/about';
 import { productsPage } from './pages/products';
@@ -28,7 +29,7 @@ initEffects();
 const app = document.getElementById('app')!;
 const main = document.createElement('main');
 const siteFooter = footer(content.site);
-app.replaceChildren(header(content.site), main, siteFooter);
+app.replaceChildren(header(content.site), main, siteFooter, cornerMenu(content.site));
 
 const titles: Record<string, string> = Object.fromEntries([
   ...content.site.nav.map((n) => [n.path, n.label]),
@@ -37,6 +38,7 @@ const titles: Record<string, string> = Object.fromEntries([
 ]);
 onRoute((pathname) => {
   afterRoute();
+  markCurrent(pathname);
   // The footer is hidden on the full-screen pages (home and slides), as in the design reference.
   siteFooter.hidden = pathname === '/' || pathname === '/show';
   const sectionPath = '/' + (pathname.split('/')[1] ?? '');
