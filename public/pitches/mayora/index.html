@@ -63,10 +63,11 @@
   p { margin: 0; }
 
   /* ---------- Stage ---------- */
-  .viewport { position: fixed; inset: 0; display: grid; place-items: center; }
+  /* The slide sits in the area above the control strip, so the controls never cover it. */
+  .viewport { position: fixed; left: 0; right: 0; top: 0; bottom: var(--dock-space, 72px); overflow: hidden; }
   .stage {
-    position: relative; width: 1600px; height: 900px; flex: none; overflow: hidden;
-    background: var(--bg); color: var(--text); transform-origin: center center;
+    position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; overflow: hidden;
+    background: var(--bg); color: var(--text); transform-origin: 50% 50%;
     box-shadow: 0 20px 80px var(--shadow); transition: background .3s, color .3s;
   }
   .stage::before { /* thin Mayora-red ribbon along the top */
@@ -244,12 +245,16 @@
   .progress { position: fixed; left: 0; top: 0; height: 4px; background: #c8102e; z-index: 30; transition: width .4s ease; }
   :root[data-theme="red"] .progress { background: #fff; }
   .dock {
-    position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 30;
+    position: fixed; left: 50%; bottom: max(12px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 30; max-width: calc(100vw - 16px); overflow-x: auto;
     display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px;
     background: var(--chrome); color: var(--chrome-text); box-shadow: 0 10px 30px var(--shadow); border: 1px solid var(--edge);
     transition: opacity .3s, transform .3s; backdrop-filter: blur(8px);
   }
-  body.idle .dock { opacity: 0; transform: translate(-50%, 10px); pointer-events: none; }
+  body.idle .dock { opacity: .35; }
+  body.idle .dock:hover { opacity: 1; }
+  /* In full screen the slide takes the whole screen; the controls then fade away while you present. */
+  :fullscreen body { --dock-space: 0px; }
+  :fullscreen body.idle .dock { opacity: 0; pointer-events: none; }
   .dock button, .dock a { height: 40px; min-width: 40px; padding: 0 12px; border-radius: 999px; border: 0; background: transparent; color: inherit; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; text-decoration: none; }
   .dock button:hover, .dock a:hover, .dock button[aria-pressed="true"] { background: var(--surface-2); }
   .dock svg { width: 18px; height: 18px; }
@@ -259,7 +264,7 @@
   .theme-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #c8102e; background: linear-gradient(135deg, #fff 0 50%, #c8102e 50%); }
 
   .notes {
-    position: fixed; left: 50%; bottom: 72px; transform: translateX(-50%); z-index: 29;
+    position: fixed; left: 50%; bottom: 76px; transform: translateX(-50%); z-index: 29;
     width: min(980px, calc(100vw - 32px)); max-height: 38vh; overflow: auto;
     padding: 18px 22px; border-radius: 16px; background: var(--chrome); color: var(--chrome-text);
     border: 1px solid var(--edge); box-shadow: 0 16px 40px var(--shadow); backdrop-filter: blur(8px);
@@ -295,6 +300,12 @@
   .help dt { font-weight: 800; }
   .help kbd { display: inline-block; min-width: 26px; padding: 2px 7px; border-radius: 6px; border: 1px solid var(--edge); background: var(--surface); text-align: center; font: 700 13px var(--font-body); }
 
+  @media (max-width: 700px) {
+    .dock { gap: 2px; padding: 4px; }
+    .dock button, .dock a { padding: 0 8px; font-size: 0; gap: 0; }
+    .dock .count, .dock .timer { font-size: 13px; }
+    .dock .sep { display: none; }
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; animation-delay: 0s !important; }
   }
@@ -615,7 +626,14 @@
   let index = 0;
 
   // ---------- Fit the 1600×900 stage to the window ----------
-  function fit() { stage.style.transform = `scale(${Math.min(innerWidth / 1600, innerHeight / 900)})`; }
+  // Scale the 1600×900 slide to the largest size that fits above the control strip, centred.
+  const viewport = stage.parentElement;
+  function fit() {
+    const r = viewport.getBoundingClientRect();
+    const s = Math.min((r.width - 16) / 1600, (r.height - 16) / 900);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+  }
+  new ResizeObserver(fit).observe(viewport);
   addEventListener('resize', fit);
   fit();
 

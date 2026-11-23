@@ -1357,6 +1357,16 @@ main > * {
   }
 }
 @media (max-width: 580px) {
+  /* Phones: full screen is rarely needed, so its button is hidden to keep the header on one line. */
+  .controls .ctrl[aria-pressed] {
+    display: none;
+  }
+  .controls {
+    gap: 6px;
+  }
+  .ctrl {
+    padding: 0 10px;
+  }
   .wordmark {
     font-size: 14px;
     gap: 6px;
