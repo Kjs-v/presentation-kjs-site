@@ -91,18 +91,19 @@ export async function currentUser(request: Request): Promise<User | undefined> {
 }
 
 /**
- * Requires a logged-in user. Until they choose their own password, only the endpoints that let them
+ * Requires a logged-in admin. Every staff login is an admin (there is no lower role); any other role
+ * left in the database is refused. Until they choose their own password, only the endpoints that let them
  * do that are open (pass allowPasswordChangePending for those).
  */
 export async function requireUser(
   request: Request,
-  options: { role?: 'admin'; allowPasswordChangePending?: boolean } = {},
+  options: { allowPasswordChangePending?: boolean } = {},
 ): Promise<User> {
   const user = await currentUser(request);
   if (!user) throw new HttpError(401, 'Please log in.');
+  if (user.role !== 'admin') throw new HttpError(403, 'Only admins can use the admin area.');
   if (user.mustChangePassword && !options.allowPasswordChangePending)
     throw new HttpError(403, 'Please choose a new password first.');
-  if (options.role === 'admin' && user.role !== 'admin') throw new HttpError(403, 'Only admins can do this.');
   return user;
 }
 

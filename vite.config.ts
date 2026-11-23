@@ -56,10 +56,49 @@ function localApi(): Plugin {
   };
 }
 
+/**
+ * The admin page lives at /admin (admin.html), and needs the list of files in public/media
+ * to suggest image paths: `import mediaFiles from 'virtual:media-list'`.
+ */
+function adminPage(): Plugin {
+  const VIRTUAL = 'virtual:media-list';
+  const RESOLVED = '\0' + VIRTUAL; // Vite convention for generated modules
+  const listMedia = (dir: string, prefix: string): string[] =>
+    fs.existsSync(dir)
+      ? fs
+          .readdirSync(dir, { withFileTypes: true })
+          .flatMap((e) =>
+            e.isDirectory()
+              ? listMedia(`${dir}/${e.name}`, `${prefix}/${e.name}`)
+              : /\.(jpe?g|png|webp|svg|gif|mp4|webm|pdf)$/i.test(e.name)
+                ? [`${prefix}/${e.name}`]
+                : [],
+          )
+      : [];
+  const toAdmin = (req: IncomingMessage, _res: ServerResponse, next: () => void) => {
+    if (req.url === '/admin' || req.url === '/admin/' || req.url?.startsWith('/admin?'))
+      req.url = '/admin.html';
+    next();
+  };
+  return {
+    name: 'kjs-admin-page',
+    resolveId: (id) => (id === VIRTUAL ? RESOLVED : undefined),
+    load: (id) =>
+      id === RESOLVED
+        ? `export default ${JSON.stringify(listMedia('public/media', '/media').sort())};`
+        : undefined,
+    configureServer: (server) => void server.middlewares.use(toAdmin),
+    configurePreviewServer: (server) => void server.middlewares.use(toAdmin),
+  };
+}
+
 export default defineConfig({
   // Files in public/ (including public/media) are served from the site root, e.g. /media/products/x.jpg
   publicDir: 'public',
   server: { port: 5173, open: true },
-  build: { outDir: 'dist' },
-  plugins: [localApi()],
+  build: {
+    outDir: 'dist',
+    rollupOptions: { input: { main: 'index.html', admin: 'admin.html' } },
+  },
+  plugins: [adminPage(), localApi()],
 });

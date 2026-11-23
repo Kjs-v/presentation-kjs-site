@@ -79,10 +79,14 @@
 - [ ] Merge `presentation-v` into `main` (when the owner says so) and deploy
 - [ ] Full check: every page at every size, login, save, publish, restore, upload, pitch PIN
 
-### Phase 8: Admin page (~4–6 days)
+### Phase 8: Admin page ✅ (at /admin)
 
-- [ ] Login screen, including the forced password change
-- [ ] Sidebar of sections; forms built from `/api/admin/schema`
-- [ ] Image and video upload, drag to reorder, Save draft / Publish / Discard
-- [ ] History with one-click restore; "someone else changed this" warnings
-- [ ] Users page (admins only)
+- [x] Login screen, including the forced password change
+- [x] Sidebar of sections; forms built from `/api/admin/schema` (labels from `.describe()`)
+- [x] Drag (or ↑/↓) to reorder, add/remove items, search long lists, image previews and /media path suggestions
+- [x] Save draft / Publish (with a note) / Undo unpublished changes; errors point to the field
+- [x] History with one-click restore; "someone else changed this" warning (409)
+- [x] Meeting notes page (read, search, delete)
+- [x] Admins page: add (shows a starting password once), reset password, turn off, remove
+- [x] Only admins: every login is an admin; any other role is refused
+- [ ] Image and video upload (waits for Phase 4 / Blob)

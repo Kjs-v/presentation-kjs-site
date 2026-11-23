@@ -7,9 +7,14 @@ import { db, schema } from '../server/db/client';
 import { handle } from '../server/router';
 
 export const ORIGIN = 'http://localhost';
-export const PASSWORDS = { admin: 'admin-password-123', editor: 'editor-password-123' };
+// Every login is an admin. "editor@test.local" is simply a second admin; "legacy@test.local" has an old non-admin role.
+export const PASSWORDS = {
+  admin: 'admin-password-123',
+  editor: 'editor-password-123',
+  legacy: 'legacy-password-123',
+};
 
-/** Wipes the test database and refills it: all content sections, one history entry, an admin and an editor. */
+/** Wipes the test database and refills it: all content sections, one history entry, two admins and one legacy login. */
 export async function resetDatabase() {
   const d = db();
   await d.execute(
@@ -30,10 +35,17 @@ export async function resetDatabase() {
     },
     {
       email: 'editor@test.local',
-      name: 'Test editor',
-      role: 'editor',
+      name: 'Second admin',
+      role: 'admin',
       mustChangePassword: false,
       passwordHash: await bcrypt.hash(PASSWORDS.editor, 4),
+    },
+    {
+      email: 'legacy@test.local',
+      name: 'Old non-admin login',
+      role: 'editor',
+      mustChangePassword: false,
+      passwordHash: await bcrypt.hash(PASSWORDS.legacy, 4),
     },
   ]);
 }

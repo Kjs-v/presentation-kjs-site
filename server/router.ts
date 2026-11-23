@@ -6,7 +6,7 @@
  * Login:   POST /api/auth/login, POST /api/auth/logout, GET /api/auth/me, POST /api/auth/change-password
  * Staff:   /api/admin/sections…, /api/admin/publish, /api/admin/versions…, /api/admin/media…, /api/admin/schema,
  *          /api/admin/notes…
- * Admins:  /api/admin/users…
+ *          /api/admin/users… (every login is an admin; there is no lower role)
  */
 import { randomBytes } from 'node:crypto';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
@@ -379,18 +379,17 @@ const userColumns = {
 };
 
 on('GET', '/api/admin/users', async (request) => {
-  await requireUser(request, { role: 'admin' });
+  await requireUser(request);
   return json({ users: await db().select(userColumns).from(schema.users).orderBy(schema.users.id) });
 });
 
-/** Adds a staff login. Returns a temporary password once; they must change it at first login. */
+/** Adds an admin login. Returns a temporary password once; they must change it at first login. */
 on('POST', '/api/admin/users', async (request) => {
-  await requireUser(request, { role: 'admin' });
-  const body = await readJson<{ email?: unknown; name?: unknown; role?: unknown }>(request);
+  await requireUser(request);
+  const body = await readJson<{ email?: unknown; name?: unknown }>(request);
   const email = asString(body.email, 'Email').toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     throw new HttpError(400, 'That email address does not look right.');
-  const role = body.role === 'admin' ? 'admin' : 'editor';
   const password = tempPassword();
   const [existing] = await db()
     .select({ id: schema.users.id })
@@ -402,7 +401,7 @@ on('POST', '/api/admin/users', async (request) => {
     .values({
       email,
       name: typeof body.name === 'string' ? body.name.slice(0, 100) : '',
-      role,
+      role: 'admin', // every login is an admin
       passwordHash: await hashPassword(password),
       mustChangePassword: true,
     })
@@ -419,16 +418,15 @@ async function assertNotLastAdmin(userId: number) {
 }
 
 on('PUT', '/api/admin/users/:id', async (request, { id }) => {
-  const me = await requireUser(request, { role: 'admin' });
+  const me = await requireUser(request);
   const userId = asId(id);
-  const body = await readJson<{ name?: unknown; role?: unknown; active?: unknown }>(request);
+  const body = await readJson<{ name?: unknown; active?: unknown }>(request);
   const changes: Partial<typeof schema.users.$inferInsert> = {};
   if (typeof body.name === 'string') changes.name = body.name.slice(0, 100);
-  if (body.role === 'admin' || body.role === 'editor') changes.role = body.role;
   if (typeof body.active === 'boolean') changes.active = body.active;
-  if ((changes.role === 'editor' || changes.active === false) && userId === me.id)
+  if (changes.active === false && userId === me.id)
     throw new HttpError(409, 'You cannot remove your own admin access.');
-  if (changes.role === 'editor' || changes.active === false) await assertNotLastAdmin(userId);
+  if (changes.active === false) await assertNotLastAdmin(userId);
   const [row] = await db()
     .update(schema.users)
     .set({
@@ -443,7 +441,7 @@ on('PUT', '/api/admin/users/:id', async (request, { id }) => {
 
 /** Gives a user a new temporary password and signs them out everywhere. */
 on('POST', '/api/admin/users/:id/reset-password', async (request, { id }) => {
-  await requireUser(request, { role: 'admin' });
+  await requireUser(request);
   const password = tempPassword();
   const [row] = await db()
     .update(schema.users)
@@ -460,7 +458,7 @@ on('POST', '/api/admin/users/:id/reset-password', async (request, { id }) => {
 
 /** Removes access (kept in the database for history) and signs them out everywhere. */
 on('DELETE', '/api/admin/users/:id', async (request, { id }) => {
-  const me = await requireUser(request, { role: 'admin' });
+  const me = await requireUser(request);
   const userId = asId(id);
   if (userId === me.id) throw new HttpError(409, 'You cannot remove your own login.');
   await assertNotLastAdmin(userId);

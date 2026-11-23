@@ -235,18 +235,19 @@ export const slideSchema = z.discriminatedUnion('kind', [
 ]);
 
 /** Every content section. Each key is one row in the database (sections table) and one form in the admin page. */
+// The section names (describe) are what the admin page shows in its sidebar.
 export const contentSections = z.object({
-  site: siteSchema,
-  home: homeSchema,
-  about: aboutSchema,
-  productsPage: productsPageSchema,
-  story: storySchema,
-  units: z.array(unitSchema),
-  products: z.array(productSchema),
-  clientPacks: z.array(clientPackSchema),
-  machinery: z.array(machinerySchema),
-  gallery: gallerySchema,
-  slides: z.array(slideSchema),
+  site: siteSchema.describe('Site settings'),
+  home: homeSchema.describe('Home page'),
+  about: aboutSchema.describe('About page'),
+  productsPage: productsPageSchema.describe('Products page'),
+  story: storySchema.describe('Company story'),
+  units: z.array(unitSchema).describe('Units'),
+  products: z.array(productSchema).describe('Products'),
+  clientPacks: z.array(clientPackSchema).describe('Client packs'),
+  machinery: z.array(machinerySchema).describe('Machinery'),
+  gallery: gallerySchema.describe('Gallery'),
+  slides: z.array(slideSchema).describe('Presentation slides'),
 });
 
 export type SectionKey = keyof typeof contentSections.shape;

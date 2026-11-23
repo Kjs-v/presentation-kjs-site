@@ -1,4 +1,4 @@
-/** Meeting notes API: staff only, no duplicates on retry, only the writer or an admin may change a note. */
+/** Meeting notes API: admins only, no duplicates on retry, any admin may change or delete a note. */
 import { beforeAll, describe, expect, it } from 'vitest';
 import { PASSWORDS, call, loginAs, resetDatabase } from './helpers';
 
@@ -10,7 +10,7 @@ beforeAll(async () => {
   await resetDatabase();
   admin = await loginAs('admin@test.local', PASSWORDS.admin);
   editor = await loginAs('editor@test.local', PASSWORDS.editor);
-  // a second editor, who must not be able to change the first editor's notes
+  // a third admin, created through the API
   const created = await call('POST', '/api/admin/users', {
     cookie: admin,
     body: { email: 'other@test.local' },
@@ -75,16 +75,15 @@ describe('meeting notes', () => {
     );
   });
 
-  it('lets only the writer or an admin change or delete a note', async () => {
+  it('lets any admin read, change and delete a note', async () => {
     const list = (await call('GET', '/api/admin/notes', { cookie: other })).data.notes;
-    expect(list).toHaveLength(1); // other staff can read it
+    expect(list).toHaveLength(1);
     const edit = await call('POST', '/api/admin/notes', {
       cookie: other,
-      body: note('note-0001-abc', { body: 'Overwritten' }),
+      body: note('note-0001-abc', { body: 'Updated by another admin' }),
     });
-    expect(edit.status).toBe(403);
-    expect((await call('DELETE', `/api/admin/notes/${list[0].id}`, { cookie: other })).status).toBe(403);
-    expect((await call('DELETE', `/api/admin/notes/${list[0].id}`, { cookie: admin })).status).toBe(200);
+    expect(edit.status).toBe(200);
+    expect((await call('DELETE', `/api/admin/notes/${list[0].id}`, { cookie: other })).status).toBe(200);
     expect((await call('GET', '/api/admin/notes', { cookie: editor })).data.notes).toHaveLength(0);
   });
 });

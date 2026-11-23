@@ -3,12 +3,28 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Backend phase 8: admin page)
+
+- **Did:** the admin page at `/admin` (`admin.html`, `src/admin/`).
+  - Sign-in and first-time password change.
+  - A sidebar with every section; forms built from the schema.
+  - Save draft, Publish with a note, Undo unpublished changes.
+  - History with restore, Meeting notes, Admins and My password.
+  - Works on a phone, where the sidebar becomes a menu.
+- **Only admins (owner's call):** every login is an admin. New logins are always admins, and the API refuses any other role. Tests were updated, and there is a new test for an old non-admin login.
+- **Section names** come from `.describe()` on `contentSections` in the schema.
+- **Checked:**
+  - 44 tests pass.
+  - A 14-step browser test on the dev database with a temporary admin (deleted afterwards). It covered: wrong password, signing in, editing and saving a draft, a blocked leave with unsaved changes, a bad image path refused with a link to the field, undo, and each page.
+  - Screenshots at laptop and phone sizes.
+- **Not yet:** image upload (phase 4). For now, choose images from the /media suggestions.
+
 ## 2026-11-23 (Backend phase 6: meeting notes in the database)
 
 - **Did:** notes are saved to the database when a staff member is signed in. They are always kept on the device first.
 - **Offline:** a note saved without a connection is sent automatically when the connection returns. The note id comes from the browser, so there are no duplicates.
 - **Notes panel:** sign-in with the first-time password change, "+ New note" (it never discards a note that has not reached the database), and "Saved notes" to reopen earlier notes.
-- **API:** `GET/POST /api/admin/notes` and `DELETE /api/admin/notes/:id`. Only the writer or an admin can change or delete a note. Migration `0001` adds client_id, updated_at and updated_by.
+- **API:** `GET/POST /api/admin/notes` and `DELETE /api/admin/notes/:id`. Any admin can change or delete a note (every login is an admin). Migration `0001` adds client_id, updated_at and updated_by.
 - **Checked:**
   - 4 new API tests (44 in total).
   - A 10-step browser test on the dev database with a temporary login, deleted afterwards: save signed out, sign in, offline then back online, new note, reopen.

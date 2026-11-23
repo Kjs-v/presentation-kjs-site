@@ -4,7 +4,15 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/((?!api/|media/|assets/|pitches/).*)",
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/((?!api/|media/|assets/|pitches/|admin).*)",
       "destination": "/index.html"
     }
   ]

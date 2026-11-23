@@ -233,9 +233,16 @@ describe('media', () => {
 });
 
 describe('users', () => {
-  it('lets only admins manage logins', async () => {
-    expect((await call('GET', '/api/admin/users', { cookie: editor })).status).toBe(403);
-    expect((await call('GET', '/api/admin/users', { cookie: admin })).status).toBe(200);
+  it('has only admins: new logins are admins, and an old non-admin login is refused', async () => {
+    const created = await call('POST', '/api/admin/users', {
+      cookie: editor,
+      body: { email: 'fresh@test.local' },
+    });
+    expect(created.status).toBe(201);
+    expect(created.data.user.role).toBe('admin');
+    const legacy = await loginAs('legacy@test.local', PASSWORDS.legacy);
+    expect((await call('GET', '/api/admin/sections', { cookie: legacy })).status).toBe(403);
+    expect((await call('GET', '/api/admin/users', { cookie: legacy })).status).toBe(403);
   });
 
   it('never returns password hashes', async () => {
@@ -280,7 +287,7 @@ describe('users', () => {
     const me = (await call('GET', '/api/auth/me', { cookie: admin })).data.user;
     expect((await call('DELETE', `/api/admin/users/${me.id}`, { cookie: admin })).status).toBe(409);
     expect(
-      (await call('PUT', `/api/admin/users/${me.id}`, { cookie: admin, body: { role: 'editor' } })).status,
+      (await call('PUT', `/api/admin/users/${me.id}`, { cookie: admin, body: { active: false } })).status,
     ).toBe(409);
   });
 });
