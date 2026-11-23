@@ -11,7 +11,7 @@
     },
     "links": [
       {
-        "label": "Website",
+        "label": "Company website",
         "url": "https://www.kjsindia.com/"
       },
       {
@@ -22,15 +22,7 @@
     "nav": [
       {
         "label": "About",
-        "path": "/"
-      },
-      {
-        "label": "Products",
-        "path": "/products"
-      },
-      {
-        "label": "Slides",
-        "path": "/show"
+        "path": "/about"
       },
       {
         "label": "Unit 1",
@@ -48,20 +40,67 @@
     "theme": {
       "colors": {
         "primary": "#112d27",
-        "accent": "#e8603c",
-        "background": "#f6f1e7",
-        "text": "#17382c",
-        "muted": "#6b7a6f"
+        "background": "#102923",
+        "surface": "#20463a",
+        "accent": "#f4b952",
+        "accentSoft": "#a6dfbb",
+        "text": "#fff8e8",
+        "muted": "#cfdfd4",
+        "light": "#f5eedb",
+        "lightText": "#18382d",
+        "edge": "#517361"
       },
-      "fontHeading": "Fraunces",
-      "fontBody": "Inter"
+      "fontHeading": "\"Segoe UI Black\", \"Arial Black\", \"Segoe UI\", sans-serif",
+      "fontBody": "\"Segoe UI\", Arial, sans-serif",
+      "googleFonts": []
     }
   },
   "home": {
+    "intro": true,
+    "eyebrow": "Your Brand, Our Expertise",
+    "title": "KJS India Pvt. Ltd.",
+    "summary": "Food processing and contract packaging in Telangana.",
+    "image": "/media/units/unit-1.jpg",
+    "imageCaption": "Unit 1 · Pashamylaram",
+    "buttons": [
+      {
+        "label": "Explore Our World",
+        "path": "/show",
+        "style": "primary"
+      },
+      {
+        "label": "View Products",
+        "path": "/products",
+        "style": "secondary"
+      }
+    ],
+    "capabilitiesTitle": "What we do",
+    "capabilities": [
+      {
+        "title": "Food processing",
+        "body": "Dry blending for powders and premixes, plus ball milling for confectionery applications.",
+        "link": {
+          "label": "Processing capabilities",
+          "url": "https://kjsindia.com/processing.html"
+        }
+      },
+      {
+        "title": "Contract packaging",
+        "body": "Packaging formats include sealed pouches, cartons and bag-in-box.",
+        "link": {
+          "label": "Packaging formats",
+          "url": "https://www.kjsindia.com/packaging.html"
+        }
+      }
+    ]
+  },
+  "about": {
     "eyebrow": "KJS India Private Limited",
-    "title": "Your Brand, Our Expertise",
+    "title": "Your Brand,",
+    "titleEmphasis": "Our Expertise",
     "subtitle": "Food processing and contract packaging in Pashamylaram, Telangana.",
     "image": "/media/units/unit-1.jpg",
+    "imageCaption": "Unit 1",
     "buttons": [
       {
         "label": "Start presentation",
@@ -97,21 +136,7 @@
         "logo": "/media/logos/mayora.png"
       }
     ],
-    "capabilitiesTitle": "What we do",
-    "capabilities": [
-      {
-        "title": "Processing",
-        "body": "Dry blending distributes ingredients evenly. Ball milling refines chocolate and other confectionery bases."
-      },
-      {
-        "title": "Packaging",
-        "body": "Pack formats from a single-serve stick pack to an outer shipping case."
-      },
-      {
-        "title": "Warehousing",
-        "body": "Ingredients, packaging and finished goods are stored separately, with dedicated dispatch staff."
-      }
-    ]
+    "storyTitle": "Our story"
   },
   "story": {
     "timeline": [
@@ -193,6 +218,24 @@
           "title": "Stick packs",
           "body": "Single-serve stick packs with a customizable fill range."
         }
+      ],
+      "tabs": [
+        {
+          "id": "products",
+          "label": "Products"
+        },
+        {
+          "id": "clients",
+          "label": "Clients"
+        },
+        {
+          "id": "about",
+          "label": "About"
+        },
+        {
+          "id": "machinery",
+          "label": "Machinery"
+        }
       ]
     },
     {
@@ -223,6 +266,20 @@
         {
           "title": "Ball milling",
           "body": "Refines chocolate, cocoa and confectionery bases to a smooth, consistent texture."
+        }
+      ],
+      "tabs": [
+        {
+          "id": "products",
+          "label": "Products"
+        },
+        {
+          "id": "about",
+          "label": "About"
+        },
+        {
+          "id": "machinery",
+          "label": "Machinery"
         }
       ]
     }
@@ -627,8 +684,8 @@
     {
       "id": "keky-latte",
       "name": "Keky Latte",
-      "group": "Coffee",
-      "unit": "unit-1",
+      "group": "Confectionery",
+      "unit": "unit-2",
       "description": "",
       "image": "/media/products/keky-latte.jpg",
       "featured": false,
@@ -809,8 +866,8 @@
     {
       "id": "peti-latte-2in1",
       "name": "Peti Latte 2-in-1",
-      "group": "Coffee",
-      "unit": "unit-1",
+      "group": "Biscuits",
+      "unit": "unit-2",
       "description": "",
       "image": "/media/products/peti-latte-2in1.jpg",
       "featured": true,
@@ -960,214 +1017,294 @@
   ],
   "clientPacks": [
     {
-      "id": "ait-coffee",
-      "name": "AIT Coffee",
-      "brand": "Other",
-      "image": "/media/unit-1-packs/ait-coffee.jpg",
-      "order": 1
-    },
-    {
-      "id": "boost-box",
-      "name": "Boost Box",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/boost-box.jpg",
-      "order": 2
-    },
-    {
-      "id": "boost-jar",
-      "name": "Boost Jar",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/boost-jar.jpg",
-      "order": 3
-    },
-    {
-      "id": "boost-refill",
-      "name": "Boost Refill",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/boost-refill.jpg",
-      "order": 4
-    },
-    {
-      "id": "cafe-niger",
-      "name": "Café Niger",
-      "brand": "Other",
-      "image": "/media/unit-1-packs/cafe-niger.jpg",
-      "order": 5
-    },
-    {
-      "id": "cafe-soka",
-      "name": "Café Soka",
-      "brand": "Other",
-      "image": "/media/unit-1-packs/cafe-soka.jpg",
-      "order": 6
-    },
-    {
-      "id": "choki-choki-jar-40",
-      "name": "Choki Choki Jar 40",
-      "brand": "Mayora",
-      "image": "/media/unit-1-packs/choki-choki-jar-40.jpg",
-      "order": 7
-    },
-    {
-      "id": "choki-choki-jar",
-      "name": "Choki Choki Jar",
-      "brand": "Mayora",
-      "image": "/media/unit-1-packs/choki-choki-jar.jpg",
-      "order": 8
-    },
-    {
-      "id": "choki-choki-pack",
-      "name": "Choki Choki Pack",
-      "brand": "Mayora",
-      "image": "/media/unit-1-packs/choki-choki-pack.jpg",
-      "order": 9
-    },
-    {
-      "id": "choki-choki-xl-box",
-      "name": "Choki Choki XL Box",
-      "brand": "Mayora",
-      "image": "/media/unit-1-packs/choki-choki-xl-box.jpg",
-      "order": 10
-    },
-    {
-      "id": "choki-choki-xl",
-      "name": "Choki Choki XL",
-      "brand": "Mayora",
-      "image": "/media/unit-1-packs/choki-choki-xl.jpg",
-      "order": 11
-    },
-    {
-      "id": "continental-xtra",
-      "name": "Continental Xtra",
-      "brand": "Other",
-      "image": "/media/unit-1-packs/continental-xtra.jpg",
-      "order": 12
-    },
-    {
-      "id": "crown-cafe",
-      "name": "Crown Café",
-      "brand": "Other",
-      "image": "/media/unit-1-packs/crown-cafe.jpg",
-      "order": 13
-    },
-    {
-      "id": "horlicks-2kg",
-      "name": "Horlicks 2 kg",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/horlicks-2kg.jpg",
-      "order": 14
-    },
-    {
-      "id": "horlicks-box",
-      "name": "Horlicks Box",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/horlicks-box.jpg",
-      "order": 15
-    },
-    {
-      "id": "horlicks-jar",
-      "name": "Horlicks Jar",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/horlicks-jar.jpg",
-      "order": 16
-    },
-    {
-      "id": "horlicks-pouch-2",
-      "name": "Horlicks Pouch 2",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/horlicks-pouch-2.jpg",
-      "order": 17
-    },
-    {
-      "id": "horlicks-pouch",
-      "name": "Horlicks Pouch",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/horlicks-pouch.jpg",
-      "order": 18
-    },
-    {
-      "id": "horlicks-super-foods-jar",
-      "name": "Horlicks Super Foods Jar",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/horlicks-super-foods-jar.jpg",
-      "order": 19
-    },
-    {
-      "id": "horlicks-super-foods-pouch",
-      "name": "Horlicks Super Foods Pouch",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/horlicks-super-foods-pouch.jpg",
-      "order": 20
-    },
-    {
-      "id": "junior-horlicks",
-      "name": "Junior Horlicks",
-      "brand": "Unilever",
-      "image": "/media/unit-1-packs/junior-horlicks.jpg",
-      "order": 21
-    },
-    {
       "id": "nescafe-all-in-1-cup",
       "name": "Nescafé All in 1 Cup",
       "brand": "Nestlé",
       "image": "/media/unit-1-packs/nescafe-all-in-1-cup.jpg",
-      "order": 22
+      "order": 1,
+      "unit": "unit-1"
     },
     {
       "id": "nescafe-all-in-1-frappe",
       "name": "Nescafé All in 1 Frappe",
       "brand": "Nestlé",
       "image": "/media/unit-1-packs/nescafe-all-in-1-frappe.jpg",
-      "order": 23
+      "order": 2,
+      "unit": "unit-1"
     },
     {
       "id": "nescafe-classic-pouch",
       "name": "Nescafé Classic Pouch",
       "brand": "Nestlé",
       "image": "/media/unit-1-packs/nescafe-classic-pouch.jpg",
-      "order": 24
+      "order": 3,
+      "unit": "unit-1"
     },
     {
       "id": "nescafe-classic-stick",
       "name": "Nescafé Classic Stick",
       "brand": "Nestlé",
       "image": "/media/unit-1-packs/nescafe-classic-stick.jpg",
-      "order": 25
+      "order": 4,
+      "unit": "unit-1"
     },
     {
       "id": "nescafe-sunrise",
       "name": "Nescafé Sunrise",
       "brand": "Nestlé",
       "image": "/media/unit-1-packs/nescafe-sunrise.jpg",
-      "order": 26
+      "order": 5,
+      "unit": "unit-1"
     },
     {
       "id": "nestle-resource-fiber",
       "name": "Nestlé Resource Fiber",
       "brand": "Nestlé",
       "image": "/media/unit-1-packs/nestle-resource-fiber.jpg",
-      "order": 27
+      "order": 6,
+      "unit": "unit-1"
+    },
+    {
+      "id": "boost-box",
+      "name": "Boost Box",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/boost-box.jpg",
+      "order": 7,
+      "unit": "unit-1"
+    },
+    {
+      "id": "boost-jar",
+      "name": "Boost Jar",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/boost-jar.jpg",
+      "order": 8,
+      "unit": "unit-1"
+    },
+    {
+      "id": "boost-refill",
+      "name": "Boost Refill",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/boost-refill.jpg",
+      "order": 9,
+      "unit": "unit-1"
+    },
+    {
+      "id": "horlicks-2kg",
+      "name": "Horlicks 2 kg",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/horlicks-2kg.jpg",
+      "order": 10,
+      "unit": "unit-1"
+    },
+    {
+      "id": "horlicks-box",
+      "name": "Horlicks Box",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/horlicks-box.jpg",
+      "order": 11,
+      "unit": "unit-1"
+    },
+    {
+      "id": "horlicks-jar",
+      "name": "Horlicks Jar",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/horlicks-jar.jpg",
+      "order": 12,
+      "unit": "unit-1"
+    },
+    {
+      "id": "horlicks-pouch-2",
+      "name": "Horlicks Pouch 2",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/horlicks-pouch-2.jpg",
+      "order": 13,
+      "unit": "unit-1"
+    },
+    {
+      "id": "horlicks-pouch",
+      "name": "Horlicks Pouch",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/horlicks-pouch.jpg",
+      "order": 14,
+      "unit": "unit-1"
+    },
+    {
+      "id": "horlicks-super-foods-jar",
+      "name": "Horlicks Super Foods Jar",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/horlicks-super-foods-jar.jpg",
+      "order": 15,
+      "unit": "unit-1"
+    },
+    {
+      "id": "horlicks-super-foods-pouch",
+      "name": "Horlicks Super Foods Pouch",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/horlicks-super-foods-pouch.jpg",
+      "order": 16,
+      "unit": "unit-1"
+    },
+    {
+      "id": "junior-horlicks",
+      "name": "Junior Horlicks",
+      "brand": "Unilever",
+      "image": "/media/unit-1-packs/junior-horlicks.jpg",
+      "order": 17,
+      "unit": "unit-1"
+    },
+    {
+      "id": "choki-choki-jar-40",
+      "name": "Choki Choki Jar 40",
+      "brand": "Mayora",
+      "image": "/media/unit-1-packs/choki-choki-jar-40.jpg",
+      "order": 18,
+      "unit": "unit-1"
+    },
+    {
+      "id": "choki-choki-jar",
+      "name": "Choki Choki Jar",
+      "brand": "Mayora",
+      "image": "/media/unit-1-packs/choki-choki-jar.jpg",
+      "order": 19,
+      "unit": "unit-1"
+    },
+    {
+      "id": "choki-choki-pack",
+      "name": "Choki Choki Pack",
+      "brand": "Mayora",
+      "image": "/media/unit-1-packs/choki-choki-pack.jpg",
+      "order": 20,
+      "unit": "unit-1"
+    },
+    {
+      "id": "choki-choki-xl-box",
+      "name": "Choki Choki XL Box",
+      "brand": "Mayora",
+      "image": "/media/unit-1-packs/choki-choki-xl-box.jpg",
+      "order": 21,
+      "unit": "unit-1"
+    },
+    {
+      "id": "choki-choki-xl",
+      "name": "Choki Choki XL",
+      "brand": "Mayora",
+      "image": "/media/unit-1-packs/choki-choki-xl.jpg",
+      "order": 22,
+      "unit": "unit-1"
+    },
+    {
+      "id": "ait-coffee",
+      "name": "AIT Coffee",
+      "brand": "Other",
+      "image": "/media/unit-1-packs/ait-coffee.jpg",
+      "order": 23,
+      "unit": "unit-1"
+    },
+    {
+      "id": "cafe-niger",
+      "name": "Café Niger",
+      "brand": "Other",
+      "image": "/media/unit-1-packs/cafe-niger.jpg",
+      "order": 24,
+      "unit": "unit-1"
+    },
+    {
+      "id": "cafe-soka",
+      "name": "Café Soka",
+      "brand": "Other",
+      "image": "/media/unit-1-packs/cafe-soka.jpg",
+      "order": 25,
+      "unit": "unit-1"
+    },
+    {
+      "id": "continental-xtra",
+      "name": "Continental Xtra",
+      "brand": "Other",
+      "image": "/media/unit-1-packs/continental-xtra.jpg",
+      "order": 26,
+      "unit": "unit-1"
+    },
+    {
+      "id": "crown-cafe",
+      "name": "Crown Café",
+      "brand": "Other",
+      "image": "/media/unit-1-packs/crown-cafe.jpg",
+      "order": 27,
+      "unit": "unit-1"
     },
     {
       "id": "prince-superieur-box",
       "name": "Prince Supérieur Box",
       "brand": "Other",
       "image": "/media/unit-1-packs/prince-superieur-box.jpg",
-      "order": 28
+      "order": 28,
+      "unit": "unit-1"
     },
     {
       "id": "prince-superieur-stick",
       "name": "Prince Supérieur Stick",
       "brand": "Other",
       "image": "/media/unit-1-packs/prince-superieur-stick.jpg",
-      "order": 29
+      "order": 29,
+      "unit": "unit-1"
     },
     {
       "id": "swiss-cafe",
       "name": "Swiss Café",
       "brand": "Other",
       "image": "/media/unit-1-packs/swiss-cafe.jpg",
-      "order": 30
+      "order": 30,
+      "unit": "unit-1"
+    }
+  ],
+  "machinery": [
+    {
+      "id": "ball-mill",
+      "name": "Ball mill",
+      "description": "Refines chocolate, cocoa and confectionery bases.",
+      "unit": "unit-2",
+      "image": "/media/machinery/ball-mill.jpg",
+      "order": 1
+    },
+    {
+      "id": "packing-conveyor",
+      "name": "Packing conveyor",
+      "description": "Moves finished packs to packing and dispatch.",
+      "unit": "unit-1",
+      "image": "/media/machinery/packing-conveyor.jpg",
+      "order": 2
+    },
+    {
+      "id": "ribbon-blender",
+      "name": "Ribbon blender",
+      "description": "Counter-directional ribbons blend powders and premixes in 10–20 minutes.",
+      "unit": "unit-1",
+      "image": "/media/machinery/ribbon-blender.jpg",
+      "order": 3
+    },
+    {
+      "id": "ribbon-blender-inside",
+      "name": "Ribbon blender (inside)",
+      "description": "Inner and outer ribbons move ingredients in opposite directions.",
+      "unit": "unit-1",
+      "image": "/media/machinery/ribbon-blender-inside.jpg",
+      "order": 4
+    },
+    {
+      "id": "stick-pack-machine",
+      "name": "Stick-pack machine",
+      "description": "Single-serve stick packs from 0.9 to 3 g.",
+      "unit": "unit-1",
+      "image": "/media/machinery/stick-pack-machine.jpg",
+      "order": 5
+    },
+    {
+      "id": "stick-pack-machine-top",
+      "name": "Stick-pack machine (top view)",
+      "description": "Multi-lane forming, filling and sealing.",
+      "unit": "unit-1",
+      "image": "/media/machinery/stick-pack-machine-top.jpg",
+      "order": 6
     }
   ],
   "gallery": {

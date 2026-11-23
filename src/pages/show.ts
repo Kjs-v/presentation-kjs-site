@@ -2,54 +2,38 @@
 import type { Page } from '../lib/router';
 import type { Content, Slide } from '../../content/content.schema';
 import { h } from '../lib/dom';
+import { cards, productTile } from '../components';
 
 function renderSlide(slide: Slide, content: Content): HTMLElement {
   const head = [h('h2', {}, slide.title), slide.summary ? h('p', { class: 'lead' }, slide.summary) : null];
   switch (slide.kind) {
     case 'cover':
-      return h('section', { class: 'slide slide-cover' }, h('img', { src: slide.image, alt: '' }), ...head);
-    case 'facts':
       return h(
         'section',
-        { class: 'slide' },
+        { class: 'slide wrap slide-cover' },
+        h('img', { src: slide.image, alt: '' }),
         ...head,
-        h(
-          'div',
-          { class: 'card-grid' },
-          ...slide.items.map((i) =>
-            h('article', { class: 'card' }, h('h3', {}, i.title), h('p', {}, i.body)),
-          ),
-        ),
       );
+    case 'facts':
+      return h('section', { class: 'slide wrap' }, ...head, cards(slide.items));
     case 'logos':
       return h(
         'section',
-        { class: 'slide' },
+        { class: 'slide wrap' },
         ...head,
         h(
           'div',
-          { class: 'logo-row' },
-          ...content.home.partners.map((p) => h('img', { src: p.logo, alt: p.name })),
+          { class: 'logos' },
+          ...content.about.partners.map((p) => h('div', {}, h('img', { src: p.logo, alt: p.name }))),
         ),
       );
     case 'products': {
       const picked = slide.productIds.map((id) => content.products.find((p) => p.id === id)!);
       return h(
         'section',
-        { class: 'slide' },
+        { class: 'slide wrap' },
         ...head,
-        h(
-          'div',
-          { class: 'product-grid' },
-          ...picked.map((p) =>
-            h(
-              'figure',
-              { class: 'product' },
-              h('img', { src: p.featuredImage ?? p.image, alt: p.name }),
-              h('figcaption', {}, p.name),
-            ),
-          ),
-        ),
+        h('div', { class: 'tile-grid' }, ...picked.map(productTile)),
       );
     }
   }
@@ -77,7 +61,7 @@ export const showPage: Page = (content) => {
   };
   document.addEventListener('keydown', onKey);
 
-  const deck = h('div', { class: 'page deck' }, ...slides, counter);
+  const deck = h('div', { class: 'deck' }, ...slides, counter);
   go(0);
   return deck;
 };

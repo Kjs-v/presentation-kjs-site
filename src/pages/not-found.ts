@@ -4,7 +4,7 @@ import { h, routeLink } from '../lib/dom';
 export const notFoundPage: Page = () =>
   h(
     'div',
-    { class: 'page' },
+    { class: 'wrap padded' },
     h('h1', {}, 'Page not found'),
-    routeLink('/', 'Back to home', 'btn btn-primary'),
+    h('div', { class: 'actions' }, routeLink('/', 'Back to home', 'primary')),
   );

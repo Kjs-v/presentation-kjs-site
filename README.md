@@ -15,13 +15,13 @@ cp .env.example .env    # ask the project owner for the values (not needed for p
 npm run dev             # http://localhost:5173
 ```
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Start the local dev server |
-| `npm run build` | Check everything, then build to `dist/` |
-| `npm run check` | Type check + content check |
+| Command                 | What it does                                                           |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `npm run dev`           | Start the local dev server                                             |
+| `npm run build`         | Check everything, then build to `dist/`                                |
+| `npm run check`         | Type check + content check                                             |
 | `npm run check:content` | Validate `content/content.json` and check that every media file exists |
-| `npm run format` | Format all files with Prettier |
+| `npm run format`        | Format all files with Prettier                                         |
 
 ## Folder structure
 
@@ -33,13 +33,16 @@ npm run dev             # http://localhost:5173
 ├── src/
 │   ├── main.ts             Entry: loads content, applies theme, registers routes
 │   ├── layout.ts           Header and footer
-│   ├── pages/              One file per page (home, products, show, unit, gallery)
+│   ├── components.ts       Shared pieces: stats, cards, photo tiles
+│   ├── pages/              One file per page (home, about, unit, gallery, products, show)
 │   ├── lib/
 │   │   ├── content.ts      loadContent(): the ONLY way pages get content
 │   │   ├── router.ts       Small client-side router
 │   │   ├── theme.ts        Turns site.theme into CSS variables
+│   │   ├── effects.ts      Sparkles, hide-on-scroll header, intro loader
 │   │   └── dom.ts          h() helper for building elements
-│   └── styles/base.css     Temporary styles. Use the CSS variables, not fixed colours
+│   └── styles/theme.css    Site styles (ported from the design reference). Use the CSS variables, not fixed colours
+├── public/favicon.*        Favicon (from the KJS_v1 project)
 ├── public/media/           Our images and videos, served at /media/...
 │   ├── products/           Product photos (72)
 │   ├── featured/           Best-seller cut-outs (transparent .webp)
@@ -79,10 +82,17 @@ npm run dev             # http://localhost:5173
 
 ## Routes
 
-| Path | Page |
-|---|---|
-| `/` | Home / About |
-| `/products` | Best sellers + all products by group |
-| `/show` | Slide deck (← → or clicker, F = full screen) |
-| `/unit-1`, `/unit-2` | Unit pages (any id in `content.units`) |
-| `/gallery` | Video + machinery photos |
+The header menu is `site.nav` in content.json: About, Unit 1, Unit 2, Gallery.
+
+| Path                                                   | Page                                                                                                                                |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                                                    | Home: the first page, with the full-screen photo, animated company name and "What we do". Add `?nointro` to skip the loading intro. |
+| `/about`                                               | About: hero, brand partners, key numbers, story timeline                                                                            |
+| `/unit-1`, `/unit-2`                                   | Unit page: a big photo with buttons over it (`unit.tabs` in content.json)                                                           |
+| `/unit-1/products`, `/clients`, `/about`, `/machinery` | The section each button opens below the photo. Unit 2 has no Clients button yet.                                                    |
+| `/gallery`                                             | Video + machinery photos                                                                                                            |
+| `/products`                                            | All products and best sellers (from the home page button)                                                                           |
+| `/show`                                                | Slide deck (← → or clicker, F = full screen), from the home page button                                                             |
+
+**Unit buttons:** to add, remove or reorder them, edit that unit's `tabs` in content.json.
+For a new kind of section, add its id to `unitTabIds` in the schema and a renderer in `src/pages/unit.ts`.

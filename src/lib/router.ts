@@ -5,8 +5,9 @@ export type Page = (content: Content, params: Record<string, string>) => HTMLEle
 type Route = { pattern: RegExp; keys: string[]; page: Page };
 
 const routes: Route[] = [];
+const listeners: ((pathname: string) => void)[] = [];
 
-/** `path` may contain params, e.g. "/:unitId". */
+/** `path` may contain params, e.g. "/:unitId" or "/:unitId/:tab". */
 export function route(path: string, page: Page): void {
   const keys: string[] = [];
   const pattern = new RegExp(
@@ -15,25 +16,39 @@ export function route(path: string, page: Page): void {
   routes.push({ pattern, keys, page });
 }
 
+/** Run something after every page change (e.g. effects, page title). */
+export function onRoute(listener: (pathname: string) => void): void {
+  listeners.push(listener);
+}
+
+const section = (pathname: string) => pathname.split('/')[1] ?? '';
+
 export function startRouter(outlet: HTMLElement, content: Content, notFound: Page): void {
+  let previous = '';
   const render = () => {
-    const pathname = location.pathname;
+    const pathname = location.pathname.replace(/\/$/, '') || '/';
+    let page = notFound;
+    let params: Record<string, string> = {};
     for (const r of routes) {
       const match = pathname.match(r.pattern);
       if (match) {
-        const params = Object.fromEntries(r.keys.map((k, i) => [k, decodeURIComponent(match[i + 1])]));
-        outlet.replaceChildren(r.page(content, params));
-        window.scrollTo(0, 0);
-        markActive(pathname);
-        return;
+        page = r.page;
+        params = Object.fromEntries(r.keys.map((k, i) => [k, decodeURIComponent(match[i + 1])]));
+        break;
       }
     }
-    outlet.replaceChildren(notFound(content, {}));
+    outlet.replaceChildren(page(content, params));
+    // Moving between tabs of the same page (e.g. /unit-1/products → /unit-1/about) keeps the scroll position.
+    if (section(pathname) !== section(previous)) window.scrollTo(0, 0);
+    previous = pathname;
+    outlet.dataset.page = pathname;
+    markActive(pathname);
+    listeners.forEach((l) => l(pathname));
   };
 
   document.addEventListener('click', (event) => {
     const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-route]');
-    if (!link || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    if (!link || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     if (link.pathname !== location.pathname) history.pushState(null, '', link.pathname);
     render();
@@ -42,8 +57,11 @@ export function startRouter(outlet: HTMLElement, content: Content, notFound: Pag
   render();
 }
 
+/** Highlights the menu item for the current section (so /unit-1/products highlights "Unit 1"). */
 function markActive(pathname: string): void {
-  document.querySelectorAll<HTMLAnchorElement>('nav a[data-route]').forEach((a) => {
-    a.toggleAttribute('aria-current', a.pathname === pathname);
+  document.querySelectorAll<HTMLAnchorElement>('.topbar nav a[data-route]').forEach((a) => {
+    const active = a.pathname === '/' ? pathname === '/' : section(pathname) === section(a.pathname);
+    if (active) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
   });
 }

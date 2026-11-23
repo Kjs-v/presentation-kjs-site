@@ -34,6 +34,13 @@ const stat = z.object({
   label: z.string().describe('Label'),
 });
 
+const button = z.object({
+  label: z.string().describe('Button text'),
+  path: sitePath.describe('Opens page'),
+  style: z.enum(['primary', 'secondary']).describe('Style'),
+});
+const partner = z.object({ name: z.string().describe('Name'), logo: mediaPath.describe('Logo') });
+
 export const siteSchema = z.object({
   name: z.string().describe('Company name'),
   tagline: z.string().describe('Tagline'),
@@ -45,32 +52,53 @@ export const siteSchema = z.object({
     mapUrl: url.describe('Map link'),
   }),
   links: z.array(z.object({ label: z.string(), url })).describe('Footer links'),
-  nav: z.array(z.object({ label: z.string(), path: sitePath })).describe('Menu'),
+  nav: z.array(z.object({ label: z.string(), path: sitePath })).describe('Header menu (in order)'),
   theme: z.object({
     colors: z.object({
-      primary: color,
-      accent: color,
-      background: color,
-      text: color,
-      muted: color,
+      primary: color.describe('Header / dark panels'),
+      background: color.describe('Page background'),
+      surface: color.describe('Cards on dark background'),
+      accent: color.describe('Highlight (buttons, active menu)'),
+      accentSoft: color.describe('Soft highlight'),
+      text: color.describe('Text on dark background'),
+      muted: color.describe('Secondary text'),
+      light: color.describe('Light section background'),
+      lightText: color.describe('Text on light sections'),
+      edge: color.describe('Borders'),
     }),
-    fontHeading: z.string().describe('Heading font (Google Fonts name)'),
-    fontBody: z.string().describe('Body font (Google Fonts name)'),
+    fontHeading: z.string().describe('Heading font'),
+    fontBody: z.string().describe('Body font'),
+    googleFonts: z.array(z.string()).describe('Google Fonts to load (names), if any'),
   }),
 });
 
+/** Home page ("/"): full-screen hero with the animated company name, then "What we do". */
 export const homeSchema = z.object({
+  intro: z.boolean().describe('Show loading intro on first visit'),
   eyebrow: z.string().describe('Small text above the title'),
-  title: z.string().describe('Main title'),
+  title: z.string().describe('Big animated title'),
+  summary: z.string().describe('Text under the title'),
+  image: mediaPath.describe('Background photo'),
+  imageCaption: z.string().describe('Photo caption'),
+  buttons: z.array(button).describe('Buttons'),
+  capabilitiesTitle: z.string().describe('"What we do" heading'),
+  capabilities: z
+    .array(titleBody.extend({ link: z.object({ label: z.string(), url }).optional() }))
+    .describe('What we do'),
+});
+
+/** About page ("/about"). */
+export const aboutSchema = z.object({
+  eyebrow: z.string().describe('Small text above the title'),
+  title: z.string().describe('Title (first line)'),
+  titleEmphasis: z.string().describe('Title (highlighted second line)'),
   subtitle: z.string().describe('Subtitle'),
-  image: mediaPath.describe('Hero image'),
-  buttons: z
-    .array(z.object({ label: z.string(), path: sitePath, style: z.enum(['primary', 'secondary']) }))
-    .describe('Buttons'),
+  image: mediaPath.describe('Photo'),
+  imageCaption: z.string().describe('Photo caption'),
+  buttons: z.array(button).describe('Buttons'),
   partnersTitle: z.string().describe('Partners heading'),
-  partners: z.array(z.object({ name: z.string(), logo: mediaPath })).describe('Brand partner logos'),
-  capabilitiesTitle: z.string().describe('Capabilities heading'),
-  capabilities: z.array(titleBody).describe('Capabilities'),
+  partners: z.array(partner).describe('Brand partner logos'),
+  storyTitle: z.string().describe('Story heading'),
 });
 
 export const storySchema = z.object({
@@ -78,14 +106,22 @@ export const storySchema = z.object({
   stats: z.array(stat).describe('Key numbers'),
 });
 
+/** The sections a unit page can show. Add a new id here (and a renderer in src/pages/unit.ts) for a new tab type. */
+export const unitTabIds = ['products', 'clients', 'about', 'machinery'] as const;
+
 export const unitSchema = z.object({
   id: slug.describe('ID (used in the URL, e.g. unit-1)'),
-  title: z.string(),
-  subtitle: z.string(),
-  summary: z.string(),
-  photo: mediaPath,
-  stats: z.array(stat),
-  highlights: z.array(titleBody),
+  title: z.string().describe('Title'),
+  subtitle: z.string().describe('Subtitle'),
+  summary: z.string().describe('Summary'),
+  photo: mediaPath.describe('Big photo'),
+  tabs: z
+    .array(
+      z.object({ id: z.enum(unitTabIds).describe('Section'), label: z.string().describe('Button text') }),
+    )
+    .describe('Buttons over the photo (in order). Remove one to hide that section.'),
+  stats: z.array(stat).describe('Key numbers (About section)'),
+  highlights: z.array(titleBody).describe('Highlights (About section)'),
 });
 
 export const productSchema = z.object({
@@ -104,8 +140,18 @@ export const clientPackSchema = z.object({
   id: slug,
   name: z.string().describe('Pack name'),
   brand: z.string().describe('Client brand'),
+  unit: slug.describe('Unit (unit id)'),
   image: mediaPath.describe('Photo'),
-  order: z.number().int(),
+  order: z.number().int().describe('Display order'),
+});
+
+export const machinerySchema = z.object({
+  id: slug,
+  name: z.string().describe('Machine name'),
+  description: z.string().describe('Description'),
+  unit: slug.describe('Unit (unit id)'),
+  image: mediaPath.describe('Photo'),
+  order: z.number().int().describe('Display order'),
 });
 
 export const gallerySchema = z.object({
@@ -126,20 +172,26 @@ export const contentSchema = z
   .object({
     site: siteSchema,
     home: homeSchema,
+    about: aboutSchema,
     story: storySchema,
     units: z.array(unitSchema),
     products: z.array(productSchema),
     clientPacks: z.array(clientPackSchema),
+    machinery: z.array(machinerySchema),
     gallery: gallerySchema,
     slides: z.array(slideSchema),
   })
   .superRefine((c, ctx) => {
     const unitIds = new Set(c.units.map((u) => u.id));
     const productIds = new Set(c.products.map((p) => p.id));
-    c.products.forEach((p, i) => {
-      if (!unitIds.has(p.unit))
-        ctx.addIssue({ code: 'custom', path: ['products', i, 'unit'], message: `Unknown unit "${p.unit}"` });
-    });
+    const checkUnit = (list: { unit: string }[], key: string) =>
+      list.forEach((item, i) => {
+        if (!unitIds.has(item.unit))
+          ctx.addIssue({ code: 'custom', path: [key, i, 'unit'], message: `Unknown unit "${item.unit}"` });
+      });
+    checkUnit(c.products, 'products');
+    checkUnit(c.clientPacks, 'clientPacks');
+    checkUnit(c.machinery, 'machinery');
     c.slides.forEach((s, i) => {
       if (s.kind === 'products')
         s.productIds.forEach((id, j) => {
@@ -157,4 +209,5 @@ export type Content = z.infer<typeof contentSchema>;
 export type Site = Content['site'];
 export type Product = Content['products'][number];
 export type Unit = Content['units'][number];
+export type UnitTabId = (typeof unitTabIds)[number];
 export type Slide = Content['slides'][number];

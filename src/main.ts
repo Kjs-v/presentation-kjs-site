@@ -1,26 +1,52 @@
-import './styles/base.css';
+import './styles/theme.css';
 import { loadContent } from './lib/content';
 import { applyTheme } from './lib/theme';
-import { route, startRouter } from './lib/router';
+import { onRoute, route, startRouter } from './lib/router';
+import { afterRoute, initEffects, introScreen } from './lib/effects';
 import { header, footer } from './layout';
 import { homePage } from './pages/home';
+import { aboutPage } from './pages/about';
 import { productsPage } from './pages/products';
 import { showPage } from './pages/show';
 import { unitPage } from './pages/unit';
 import { galleryPage } from './pages/gallery';
 import { notFoundPage } from './pages/not-found';
 
-// Register routes here. Specific paths first, the "/:unitId" catch-all last.
+// Register routes here. Fixed paths first; the "/:unitId" catch-alls last.
 route('/', homePage);
+route('/about', aboutPage);
 route('/products', productsPage);
 route('/show', showPage);
 route('/gallery', galleryPage);
 route('/:unitId', unitPage);
+route('/:unitId/:tab', unitPage);
 
 const content = await loadContent();
 applyTheme(content.site);
+initEffects();
 
 const app = document.getElementById('app')!;
 const main = document.createElement('main');
-app.replaceChildren(header(content.site), main, footer(content.site));
+const siteFooter = footer(content.site);
+app.replaceChildren(header(content.site), main, siteFooter);
+
+const titles: Record<string, string> = Object.fromEntries([
+  ...content.site.nav.map((n) => [n.path, n.label]),
+  ['/products', 'Products'],
+  ['/show', 'Presentation'],
+]);
+onRoute((pathname) => {
+  afterRoute();
+  // The footer is hidden on the full-screen pages (home and slides), as in the design reference.
+  siteFooter.hidden = pathname === '/' || pathname === '/show';
+  const sectionPath = '/' + (pathname.split('/')[1] ?? '');
+  document.title =
+    pathname === '/'
+      ? content.site.name
+      : `${titles[sectionPath] ?? content.site.name} | ${content.site.name}`;
+});
+
 startRouter(main, content, notFoundPage);
+// Add ?nointro to the URL to skip the intro while developing.
+if (location.pathname === '/' && content.home.intro && !new URLSearchParams(location.search).has('nointro'))
+  introScreen();
