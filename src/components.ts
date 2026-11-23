@@ -1,6 +1,7 @@
 /** Small building blocks shared by several pages. */
 import type { Content, Product } from '../content/content.schema';
 import { h } from './lib/dom';
+import { openProduct } from './widgets/product-dialog';
 
 type Stat = Content['story']['stats'][number];
 
@@ -27,18 +28,28 @@ export function cards(list: { title: string; body: string }[]): HTMLElement {
   );
 }
 
-/** A photo tile with a caption: products, client packs, machines. */
-export function tile(image: string, name: string, note?: string): HTMLElement {
-  return h(
+/** A photo tile with a caption: products, client packs, machines. With onClick it becomes a button. */
+export function tile(image: string, name: string, note?: string, onClick?: () => void): HTMLElement {
+  const figure = h(
     'figure',
     { class: 'tile' },
     h('div', { class: 'tile-photo' }, h('img', { src: image, alt: name, loading: 'lazy' })),
     h('figcaption', {}, h('strong', {}, name), note ? h('span', {}, note) : null),
   );
+  if (!onClick) return figure;
+  const button = h('button', { type: 'button', class: 'tile-button', 'aria-label': `Open ${name}` }, figure);
+  button.addEventListener('click', onClick);
+  return button;
 }
 
-export const productTile = (p: Product) =>
-  tile(p.featuredImage ?? p.image, p.name, p.description || undefined);
+/** A product tile. Pass the content to make it open the product pop-up on click. */
+export const productTile = (p: Product, content?: Content) =>
+  tile(
+    p.featuredImage ?? p.image,
+    p.name,
+    p.description || undefined,
+    content ? () => openProduct(p, content) : undefined,
+  );
 
 /** Groups items by a key, keeping the first-seen order of groups. */
 export function groupBy<T>(items: T[], key: (item: T) => string): [string, T[]][] {

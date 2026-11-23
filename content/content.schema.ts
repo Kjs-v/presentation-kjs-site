@@ -101,6 +101,17 @@ export const aboutSchema = z.object({
   storyTitle: z.string().describe('Story heading'),
 });
 
+/** Products page ("/products"): rotating best sellers on top, the full catalogue below. */
+export const productsPageSchema = z.object({
+  eyebrow: z.string().describe('Small text above the title'),
+  title: z.string().describe('Title over the rotating products'),
+  summary: z.string().describe('Text under the title'),
+  rotationSeconds: z.number().min(10).max(600).describe('Seconds for one full rotation (bigger = slower)'),
+  catalogTitle: z.string().describe('Heading of the full product list'),
+  allLabel: z.string().describe('Filter button that shows every group'),
+  viewLabel: z.string().describe('Button that opens a product'),
+});
+
 export const storySchema = z.object({
   timeline: z.array(titleBody.extend({ subtitle: z.string() })).describe('Timeline'),
   stats: z.array(stat).describe('Key numbers'),
@@ -131,8 +142,11 @@ export const productSchema = z.object({
   unit: slug.describe('Made in unit (unit id)'),
   description: z.string().describe('Description'),
   image: mediaPath.describe('Photo'),
-  featured: z.boolean().describe('Best seller'),
-  featuredImage: mediaPath.optional().describe('Best-seller cut-out image'),
+  featured: z.boolean().describe('Best seller (shown in the rotating products)'),
+  featuredImage: mediaPath.optional().describe('Cut-out image with a transparent background'),
+  specs: z
+    .array(z.object({ label: z.string().describe('Label'), value: z.string().describe('Value') }))
+    .describe('Details, e.g. Item no. / Net weight / Pack'),
   order: z.number().int().describe('Display order'),
 });
 
@@ -173,6 +187,7 @@ export const contentSchema = z
     site: siteSchema,
     home: homeSchema,
     about: aboutSchema,
+    productsPage: productsPageSchema,
     story: storySchema,
     units: z.array(unitSchema),
     products: z.array(productSchema),

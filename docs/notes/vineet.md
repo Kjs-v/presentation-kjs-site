@@ -3,6 +3,16 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Products page)
+
+- **Did:** added Products to the header (About, Products, Unit 1, Unit 2, Gallery).
+  - `/products` hero (~75% of the screen): the 9 best sellers slowly orbit. Hover pauses, and clicking opens a product pop-up.
+  - Below the hero, the catalogue as in the design reference: group filters, a large selected-product panel with details, then every product card with "View product".
+  - Product cards on the Unit pages and slides now open the same pop-up.
+  - Content: new `productsPage` section (texts + rotation speed), and `specs` on each product.
+    - Specs are filled for the 9 best sellers from the catalogue: item no., net weight, pack.
+- **Next:** product descriptions are empty, so add them in content.json.
+
 ## 2026-11-23 (UI template)
 
 - **Did:** set up the UI template.

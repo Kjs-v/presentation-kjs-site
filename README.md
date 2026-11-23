@@ -34,6 +34,7 @@ npm run dev             # http://localhost:5173
 │   ├── main.ts             Entry: loads content, applies theme, registers routes
 │   ├── layout.ts           Header and footer
 │   ├── components.ts       Shared pieces: stats, cards, photo tiles
+│   ├── widgets/            orbit.ts (rotating products), product-dialog.ts (product pop-up)
 │   ├── pages/              One file per page (home, about, unit, gallery, products, show)
 │   ├── lib/
 │   │   ├── content.ts      loadContent(): the ONLY way pages get content
@@ -82,17 +83,17 @@ npm run dev             # http://localhost:5173
 
 ## Routes
 
-The header menu is `site.nav` in content.json: About, Unit 1, Unit 2, Gallery.
+The header menu is `site.nav` in content.json: About, Products, Unit 1, Unit 2, Gallery.
 
-| Path                                                   | Page                                                                                                                                |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                                                    | Home: the first page, with the full-screen photo, animated company name and "What we do". Add `?nointro` to skip the loading intro. |
-| `/about`                                               | About: hero, brand partners, key numbers, story timeline                                                                            |
-| `/unit-1`, `/unit-2`                                   | Unit page: a big photo with buttons over it (`unit.tabs` in content.json)                                                           |
-| `/unit-1/products`, `/clients`, `/about`, `/machinery` | The section each button opens below the photo. Unit 2 has no Clients button yet.                                                    |
-| `/gallery`                                             | Video + machinery photos                                                                                                            |
-| `/products`                                            | All products and best sellers (from the home page button)                                                                           |
-| `/show`                                                | Slide deck (← → or clicker, F = full screen), from the home page button                                                             |
+| Path                                                   | Page                                                                                                                                                                                                                    |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                                                    | Home: the first page, with the full-screen photo, animated company name and "What we do". Add `?nointro` to skip the loading intro.                                                                                     |
+| `/about`                                               | About: hero, brand partners, key numbers, story timeline                                                                                                                                                                |
+| `/unit-1`, `/unit-2`                                   | Unit page: a big photo with buttons over it (`unit.tabs` in content.json)                                                                                                                                               |
+| `/unit-1/products`, `/clients`, `/about`, `/machinery` | The section each button opens below the photo. Unit 2 has no Clients button yet.                                                                                                                                        |
+| `/gallery`                                             | Video + machinery photos                                                                                                                                                                                                |
+| `/products`                                            | Best sellers (`featured: true`) slowly orbiting in a hero (hover pauses, click opens the product pop-up), then the full catalogue: group filters, selected-product panel, all product cards. Text is in `productsPage`. |
+| `/show`                                                | Slide deck (← → or clicker, F = full screen), from the home page button                                                                                                                                                 |
 
 **Unit buttons:** to add, remove or reorder them, edit that unit's `tabs` in content.json.
 For a new kind of section, add its id to `unitTabIds` in the schema and a renderer in `src/pages/unit.ts`.

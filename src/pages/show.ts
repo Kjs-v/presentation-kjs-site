@@ -33,7 +33,7 @@ function renderSlide(slide: Slide, content: Content): HTMLElement {
         'section',
         { class: 'slide wrap' },
         ...head,
-        h('div', { class: 'tile-grid' }, ...picked.map(productTile)),
+        h('div', { class: 'tile-grid' }, ...picked.map((p) => productTile(p, content))),
       );
     }
   }

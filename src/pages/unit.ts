@@ -15,12 +15,13 @@ const empty = (text: string) => [h('p', { class: 'empty' }, text)];
 
 /** One renderer per tab id. To add a new kind of section, add its id to unitTabIds in the schema and a renderer here. */
 const sections: Record<UnitTabId, Section> = {
-  products: (unit, { products }) => {
+  products: (unit, content) => {
+    const { products } = content;
     const list = products.filter((p) => p.unit === unit.id).sort(byOrder);
     if (!list.length) return empty('No products added yet.');
     return groupBy(list, (p) => p.group).flatMap(([group, items]) => [
       h('h3', { class: 'group-title' }, group, h('span', {}, String(items.length))),
-      h('div', { class: 'tile-grid' }, ...items.map(productTile)),
+      h('div', { class: 'tile-grid' }, ...items.map((p) => productTile(p, content))),
     ]);
   },
   clients: (unit, { clientPacks, about }) => {
