@@ -130,7 +130,7 @@
   .stop span { font-size: 16px; color: var(--muted); }
   .began-art { position: relative; height: 600px; display: grid; place-items: center; }
   .began-art .ring { position: absolute; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle, var(--soft), transparent 70%); }
-  .began-art img { position: relative; width: 420px; border-radius: 18px; filter: drop-shadow(0 26px 30px #0004); }
+  .began-art img { position: relative; max-height: 560px; width: auto; max-width: 420px; border-radius: 18px; filter: drop-shadow(0 26px 30px #0004); }
 
   /* ---------- 3. Growth (Choki sticks) ---------- */
   .s-growth { grid-template-columns: 1fr 420px; gap: 50px; align-items: stretch; }
@@ -155,22 +155,20 @@
   .callout p { margin-top: 10px; font-size: 21px; line-height: 1.38; }
 
   /* ---------- 4. Scalability ---------- */
-  .s-skus { grid-template-columns: .95fr 1.05fr; gap: 70px; align-items: center; }
-  .stick-steps { display: flex; align-items: flex-end; gap: 30px; margin-top: 48px; }
+  .s-skus { grid-template-columns: .8fr 1.2fr; gap: 60px; align-items: center; }
+  .scale-visual { display: flex; align-items: flex-end; justify-content: center; gap: 34px; }
   .stick-group { display: grid; justify-items: center; gap: 12px; }
-  .stick-group .sticks { display: flex; align-items: flex-end; gap: 16px; height: 230px; }
-  .stick-group .sticks img { height: 230px; width: auto; filter: drop-shadow(0 8px 8px #0003); }
-  .slide.active .stick-group .sticks img { animation: pop .5s cubic-bezier(.34, 1.56, .64, 1) both; animation-delay: calc(var(--s) * 110ms + 350ms); }
-  @keyframes pop { from { opacity: 0; transform: translateY(30px) scale(.8); } }
-  .stick-group b { font-family: var(--font-display); font-size: 30px; color: var(--heading); }
+  .stick-group b { font-family: var(--font-display); font-size: 34px; color: var(--heading); }
   .stick-group span { font-size: 17px; color: var(--muted); font-weight: 700; margin-top: -8px; }
-  .stick-steps .arrow { font-size: 64px; color: var(--accent); align-self: center; font-weight: 900; margin-bottom: 40px; }
-  .packs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 26px; align-items: end; }
-  .packs figure { margin: 0; display: grid; gap: 12px; justify-items: center; min-width: 0; }
-  .packs .ph { width: 100%; height: 270px; display: grid; place-items: center; border-radius: 18px; background: #fff; border: 1px solid var(--edge); padding: 12px; box-shadow: 0 14px 30px var(--shadow); overflow: hidden; }
-  .packs img { width: 100%; height: 100%; object-fit: contain; }
-  .packs figcaption { font-size: 17px; font-weight: 700; color: var(--muted); }
-  .packs figure:nth-child(even) { transform: translateY(28px); }
+  .one-stick { height: 430px; display: flex; align-items: flex-end; }
+  .one-stick img { height: 100%; width: auto; filter: drop-shadow(0 10px 10px #0003); }
+  .scale-visual .arrow { font-size: 72px; color: var(--accent); font-weight: 900; align-self: center; margin-bottom: 60px; }
+  .mini-packs { display: grid; grid-template-columns: repeat(2, 200px); gap: 14px; }
+  .mini-packs figure { margin: 0; display: grid; gap: 6px; justify-items: center; }
+  .mini-packs .ph { width: 200px; height: 190px; display: grid; place-items: center; border-radius: 16px; background: #fff; border: 1px solid var(--edge); padding: 10px; box-shadow: 0 10px 22px var(--shadow); overflow: hidden; transition: transform .25s; }
+  .mini-packs .ph:hover { transform: scale(1.08); }
+  .mini-packs img { width: 100%; height: 100%; object-fit: contain; }
+  .mini-packs figcaption { font-size: 15px; font-weight: 700; color: var(--muted); }
 
   /* ---------- 5. Unit 2 ---------- */
   .s-unit2 { grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: center; }
@@ -189,26 +187,53 @@
   .prod.more b, .prod.more span { color: var(--on-accent); }
 
   /* ---------- 6. For discussion ---------- */
-  .s-next { grid-template-rows: auto 1fr; gap: 24px; padding-bottom: 110px; }
-  .s-next h2 { font-size: 54px; }
-  .bridge { display: grid; grid-template-columns: .85fr 70px 1.15fr; align-items: stretch; }
-  .bridge .col { padding: 24px 28px; border-radius: 18px; border: 1px solid var(--edge); background: var(--surface); display: grid; gap: 14px; align-content: start; }
-  .bridge .col.future { background: var(--accent); color: var(--on-accent); border-color: transparent; grid-template-columns: 1fr 300px; column-gap: 24px; }
-  .bridge .col h3 { margin: 0; font-size: 18px; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
-  .bridge .col .head { font-family: var(--font-display); font-size: 42px; letter-spacing: -.03em; line-height: 1.05; }
-  .bridge .col ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; font-size: 19px; line-height: 1.35; }
-  .bridge .mid { display: grid; place-items: center; font-size: 56px; color: var(--accent); font-weight: 900; }
-  .future-text { display: grid; gap: 14px; align-content: start; }
-  .future-art { grid-row: span 3; display: grid; grid-template-rows: 140px auto; gap: 10px; }
-  .future-art .render { border-radius: 12px; overflow: hidden; border: 2px solid #ffffff66; }
+  .s-next { grid-template-rows: auto 1fr; gap: 28px; padding-bottom: 110px; }
+  .s-next h2 { font-size: 56px; }
+  .bridge { display: grid; grid-template-columns: .8fr 70px 1.2fr; align-items: stretch; height: 100%; }
+  .bridge .col { padding: 32px 34px; border-radius: 20px; border: 1px solid var(--edge); background: var(--surface); display: grid; gap: 18px; align-content: start; }
+  .bridge .col.future { background: var(--accent); color: var(--on-accent); border-color: transparent; grid-template-columns: 1fr 380px; column-gap: 28px; align-content: stretch; }
+  .bridge .col h3 { margin: 0; font-size: 20px; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+  .bridge .col .head { font-family: var(--font-display); font-size: 50px; letter-spacing: -.03em; line-height: 1.05; }
+  .bridge .col ul { margin: 0; padding-left: 24px; display: grid; gap: 10px; font-size: 23px; line-height: 1.35; }
+  .bridge .mid { display: grid; place-items: center; font-size: 60px; color: var(--accent); font-weight: 900; }
+  .future-text { display: grid; gap: 18px; align-content: start; }
+  .future-art { display: grid; grid-template-rows: 200px 1fr; gap: 14px; }
+  .future-art .render { position: relative; z-index: 1; border-radius: 14px; overflow: hidden; border: 2px solid #ffffff66; transition: transform .3s, box-shadow .3s; }
+  .future-art .render:hover { transform: scale(1.12); z-index: 5; box-shadow: 0 24px 50px #0006; }
   .future-art .render img { width: 100%; height: 100%; object-fit: cover; }
-  .future-art .mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; align-items: center; background: #ffffff; border-radius: 12px; padding: 8px; }
-  .future-art .mini img { width: 100%; height: 70px; object-fit: contain; }
-  .choki-col .pack-mini { height: 96px; display: flex; gap: 10px; }
-  .choki-col .pack-mini img { height: 100%; border-radius: 10px; background: #fff; border: 1px solid var(--edge); padding: 4px; }
-  .asks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 16px; }
-  .ask { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; padding: 14px 20px; border-radius: 14px; border: 1px dashed var(--edge); font-size: 20px; line-height: 1.35; }
-  .ask b { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-weight: 900; }
+  .future-art .mini { position: relative; background: #ffffff; border-radius: 14px; overflow: visible; min-height: 200px; }
+  .ring { position: absolute; left: 50%; top: 50%; width: 0; height: 0; animation: ring-spin 18s linear infinite; }
+  .ring img { position: absolute; left: 0; top: 0; width: 96px; height: 70px; object-fit: contain; filter: drop-shadow(0 6px 6px #0003);
+    transform: translate(-50%, -50%) rotate(var(--a)) translateX(70px) rotate(calc(-1 * var(--a))); }
+  .ring img { animation: ring-upright 18s linear infinite; }
+  .ring:hover, .ring:hover img { animation-play-state: paused; }
+  .ring img:hover { z-index: 3; }
+  .ring img { transition: width .25s, height .25s; }
+  .ring img:hover { filter: drop-shadow(0 10px 12px #0005); width: 150px; height: 110px; }
+  @keyframes ring-spin { to { transform: rotate(360deg); } }
+  /* keeps each product upright while the ring turns */
+  @keyframes ring-upright {
+    from { transform: translate(-50%, -50%) rotate(var(--a)) translateX(70px) rotate(calc(-1 * var(--a))) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(var(--a)) translateX(70px) rotate(calc(-1 * var(--a))) rotate(-360deg); }
+  }
+  .choki-col .pack-mini { height: 130px; display: flex; gap: 14px; }
+  .choki-col .pack-mini img { height: 100%; border-radius: 12px; background: #fff; border: 1px solid var(--edge); padding: 6px; transition: transform .25s; }
+  .choki-col .pack-mini img:hover { transform: scale(1.12); }
+
+  /* ---------- Machinery ---------- */
+  .s-mach { grid-template-rows: auto 1fr; gap: 22px; padding-bottom: 100px; }
+  .mach-head { display: flex; align-items: end; justify-content: space-between; gap: 40px; }
+  .mach-head .lede { margin: 0 0 6px; max-width: 26ch; font-size: 24px; }
+  .mach-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 14px; min-height: 0; }
+  .mach { position: relative; display: flex; flex-direction: column; padding: 0; border: 1px solid var(--edge); border-radius: 16px; overflow: hidden; background: #fff; color: #231416; text-align: left; box-shadow: 0 10px 24px var(--shadow); transition: transform .25s, box-shadow .25s; min-height: 0; }
+  .mach:hover { transform: scale(1.12); z-index: 5; box-shadow: 0 24px 50px #0005; }
+  .mach .ph { position: relative; flex: 1 1 auto; min-height: 0; background: #fff; }
+  .mach .ph img { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: contain; }
+  .mach .cap { flex: none; display: flex; align-items: baseline; gap: 8px; padding: 8px 12px 10px; border-top: 3px solid #c8102e; background: #fff; font-size: 15px; font-weight: 700; color: #6d5558; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mach .cap b { font-family: var(--font-display); font-size: 17px; color: #c8102e; }
+  .mach-sum { display: grid; align-content: center; gap: 8px; padding: 18px; border-radius: 16px; background: #c8102e; color: #fff; }
+  .mach-sum b { font-family: var(--font-display); font-size: 64px; line-height: 1; letter-spacing: -.04em; }
+  .mach-sum span { font-size: 18px; font-weight: 700; line-height: 1.3; }
 
   /* ---------- 7. Commitment + mini gallery ---------- */
   .s-commit { grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: center; }
@@ -226,13 +251,13 @@
   .tile.big { grid-row: span 2; }
 
   /* ---------- 8. Thank you ---------- */
-  .s-close { grid-template-columns: 480px 1fr; gap: 70px; align-items: center; }
-  .portrait { position: relative; height: 640px; border-radius: 22px; overflow: hidden; border: 4px solid var(--accent); box-shadow: 0 30px 60px var(--shadow); }
-  .portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+  .s-close { grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+  .portrait { position: relative; aspect-ratio: 3 / 2; border-radius: 22px; overflow: hidden; border: 4px solid var(--accent); box-shadow: 0 30px 60px var(--shadow); }
+  .portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
   .portrait span { position: absolute; left: 14px; bottom: 14px; padding: 6px 12px; border-radius: 8px; background: #000a; color: #fff; font-size: 15px; font-weight: 700; }
   .close-text { display: grid; gap: 26px; }
-  .thanks { font-family: var(--font-display); font-size: 116px; letter-spacing: -.05em; line-height: .9; color: var(--heading); }
-  .summary-card { padding: 26px 30px; border-radius: 18px; background: var(--surface); border: 1px solid var(--edge); font-size: 23px; line-height: 1.45; }
+  .thanks { font-family: var(--font-display); font-size: 100px; letter-spacing: -.05em; line-height: .9; color: var(--heading); }
+  .summary-card { padding: 22px 26px; border-radius: 18px; background: var(--surface); border: 1px solid var(--edge); font-size: 20px; line-height: 1.45; }
   .contact { display: grid; gap: 12px; }
   .contact .row { display: flex; gap: 16px; align-items: center; font-size: 23px; font-weight: 700; }
   .contact .row svg { width: 26px; height: 26px; color: var(--eyebrow); flex: none; }
@@ -399,28 +424,23 @@
         <p class="eyebrow rise">From 1 SKU to 4</p>
         <h2 class="rise" style="--d:1">Scalability</h2>
         <p class="lede rise" style="--d:2">We started with a single Choki Choki SKU. Today Unit 1 produces <strong>four</strong>, showing our ability to scale, diversify and keep delivering on quality and timelines.</p>
-        <div class="stick-steps rise" style="--d:3">
-          <div class="stick-group">
-            <div class="sticks"><img src="/media/products/choki-choki-stick.webp" alt="" style="--s:0"></div>
-            <b>1 SKU</b><span>2023</span>
-          </div>
-          <div class="arrow">→</div>
-          <div class="stick-group">
-            <div class="sticks">
-              <img src="/media/products/choki-choki-stick.webp" alt="" style="--s:1">
-              <img src="/media/products/choki-choki-stick.webp" alt="" style="--s:2">
-              <img src="/media/products/choki-choki-stick.webp" alt="" style="--s:3">
-              <img src="/media/products/choki-choki-stick.webp" alt="" style="--s:4">
-            </div>
-            <b>4 SKUs</b><span>Today</span>
-          </div>
-        </div>
       </div>
-      <div class="packs">
-        <figure class="rise" style="--d:2"><div class="ph"><img src="/media/unit-1-packs/choki-choki-pack.jpg" alt="Choki Choki Chocomilk pack"></div><figcaption>Chocomilk pack</figcaption></figure>
-        <figure class="rise" style="--d:3"><div class="ph"><img src="/media/unit-1-packs/choki-choki-jar.jpg" alt="Choki Choki jar"></div><figcaption>Jar</figcaption></figure>
-        <figure class="rise" style="--d:4"><div class="ph"><img src="/media/unit-1-packs/choki-choki-xl.jpg" alt="Choki Choki XL"></div><figcaption>XL</figcaption></figure>
-        <figure class="rise" style="--d:5"><div class="ph"><img src="/media/unit-1-packs/choki-choki-xl-box.jpg" alt="Choki Choki XL display box"></div><figcaption>XL display box</figcaption></figure>
+      <!-- 1 SKU (one stick) → 4 SKUs (the four packs, shown small above the label) -->
+      <div class="scale-visual">
+        <div class="stick-group rise" style="--d:2">
+          <div class="one-stick"><img src="/media/products/choki-choki-stick.webp" alt="One Choki Choki stick"></div>
+          <b>1 SKU</b><span>2023</span>
+        </div>
+        <div class="arrow rise" style="--d:3">→</div>
+        <div class="stick-group rise" style="--d:4">
+          <div class="mini-packs">
+            <figure><div class="ph"><img src="/media/unit-1-packs/choki-choki-pack.jpg" alt="Choki Choki Chocomilk pack"></div><figcaption>Chocomilk pack</figcaption></figure>
+            <figure><div class="ph"><img src="/media/unit-1-packs/choki-choki-jar.jpg" alt="Choki Choki jar"></div><figcaption>Jar</figcaption></figure>
+            <figure><div class="ph"><img src="/media/unit-1-packs/choki-choki-xl.jpg" alt="Choki Choki XL"></div><figcaption>XL</figcaption></figure>
+            <figure><div class="ph"><img src="/media/unit-1-packs/choki-choki-xl-box.jpg" alt="Choki Choki XL display box"></div><figcaption>XL display box</figcaption></figure>
+          </div>
+          <b>4 SKUs</b><span>Today</span>
+        </div>
       </div>
       <aside class="notes-src" hidden>
         <li>One SKU in 2023; four at Unit 1 today, added without disrupting quality or delivery dates.</li>
@@ -432,10 +452,10 @@
     <section class="slide s-unit2" data-title="What's next: Unit 2">
       <div>
         <p class="eyebrow rise">What's next</p>
-        <h2 class="rise" style="--d:1">Unit 2: KJS chocolates, biscuits, wafers and more</h2>
+        <h2 class="rise" style="--d:1">Unit 2: chocolates, biscuits, wafers and more</h2>
         <p class="lede rise" style="--d:2">Building on this momentum, Unit 2 gives partners <strong>one reliable manufacturing base</strong> for confectionery and bakery.</p>
         <div class="facts-row rise" style="--d:3">
-          <div><b>₹651 cr</b><span>Planned investment</span></div>
+          <div><b>₹130 cr</b><span>Planned investment</span></div>
           <div><b>44 acres</b><span>Thogarpally, Sangareddy</span></div>
           <div><b>15 May 2026</b><span>Foundation stone</span></div>
         </div>
@@ -446,11 +466,12 @@
         <div class="prod rise" style="--d:4"><div class="shot"><img src="/media/featured/fundo-sandwich-biscuits.webp" alt="Fundo sandwich biscuits"></div><div><b>Biscuits</b><span>Fundo sandwich biscuits</span></div></div>
         <div class="prod rise" style="--d:5"><div class="shot"><img src="/media/featured/maxi-cream-wafers.webp" alt="Maxi cream wafers"></div><div><b>Wafers</b><span>Maxi cream wafers</span></div></div>
         <div class="prod rise" style="--d:6"><div class="shot"><img src="/media/featured/pacho-mellow.webp" alt="Pacho Mellow"></div><div><b>Marshmallow</b><span>Pacho Mellow</span></div></div>
-        <div class="prod more rise" style="--d:7"><div><b>…and cakes, and more</b><span>One partner, one base, several categories</span></div></div>
+        <div class="prod more rise" style="--d:7"><div><b>KJS and More</b><span>Cakes and more. One partner, one base, several categories</span></div></div>
       </div>
       <aside class="notes-src" hidden>
         <li>These are KJS's own confectionery products, made in the categories Unit 2 will add.</li>
-        <li>Foundation stone: 15 May 2026, Thogarpally, Aliyabad (V), Kondapur Mandal, Sangareddy (from the plaque). ₹651 crore and 44 acres as announced by Invest Telangana.</li>
+        <li>Foundation stone: 15 May 2026, Thogarpally, Aliyabad (V), Kondapur Mandal, Sangareddy (from the plaque).</li>
+        <li>Planned investment ₹130 crore (KJS figure). Note: Invest Telangana's public announcement cited ₹651 crore; be ready if Mayora asks about the difference.</li>
         <li>Do not commit to line start dates or capacities unless operations has confirmed them.</li>
       </aside>
     </section>
@@ -478,28 +499,55 @@
             </div>
             <div class="future-art">
               <div class="render"><img src="/media/units/unit-2-render.jpg" alt="Unit 2, architect's render"></div>
+              <!-- KJS products slowly circling; hover pauses the circle and enlarges a product -->
               <div class="mini">
-                <img src="/media/featured/grandy-chocolate-bar.webp" alt="">
-                <img src="/media/featured/fundo-sandwich-biscuits.webp" alt="">
-                <img src="/media/featured/maxi-cream-wafers.webp" alt="">
-                <img src="/media/featured/pacho-mellow.webp" alt="">
+                <div class="ring">
+                  <img src="/media/featured/grandy-chocolate-bar.webp" alt="Grandy chocolate bar" style="--a:0deg">
+                  <img src="/media/featured/fundo-sandwich-biscuits.webp" alt="Fundo sandwich biscuits" style="--a:90deg">
+                  <img src="/media/featured/maxi-cream-wafers.webp" alt="Maxi cream wafers" style="--a:180deg">
+                  <img src="/media/featured/pacho-mellow.webp" alt="Pacho Mellow" style="--a:270deg">
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="asks">
-          <div class="ask rise" style="--d:5"><b>1</b><span>Choki Choki volume and SKU plan for 2027</span></div>
-          <div class="ask rise" style="--d:6"><b>2</b><span>Which Mayora categories to trial at Unit 2</span></div>
-          <div class="ask rise" style="--d:7"><b>3</b><span>Timeline for samples and line trials</span></div>
-        </div>
       </div>
       <aside class="notes-src" hidden>
         <li>This is the ask. Pause here and let Mayora talk.</li>
-        <li>The three points are suggestions; adjust them to the meeting goal.</li>
+        <li>Topics to raise: the Choki Choki volume and SKU plan for 2027, which Mayora categories to trial at Unit 2, and a timeline for samples and line trials.</li>
+        <li>Hover over the Unit 2 render or the products to enlarge them.</li>
       </aside>
     </section>
 
-    <!-- 7. Commitment + gallery -->
+    <!-- 7. Machinery (Unit 2 lines) -->
+    <section class="slide s-mach" data-title="Machinery">
+      <div class="mach-head">
+        <div>
+          <p class="eyebrow rise">Unit 2 · Machinery</p>
+          <h2 class="rise" style="--d:1">Nine lines, ready for your range</h2>
+        </div>
+        <p class="lede rise" style="--d:2">Chocolate, wafers, biscuits, candy bars and cakes, all under one roof.</p>
+      </div>
+      <div class="mach-grid">
+        <button type="button" class="mach rise" style="--d:2" data-img="/media/machinery/unit-2/line-1-chocolate.jpg" data-cap="Line 1 · Chocolate: 5-roller refiner"><span class="ph"><img src="/media/machinery/unit-2/line-1-chocolate.jpg" alt=""></span><span class="cap"><b>Line 1</b>Chocolate</span></button>
+        <button type="button" class="mach rise" style="--d:2" data-img="/media/machinery/unit-2/line-2-wafer.jpg" data-cap="Line 2 · Wafer line 1: enrobing"><span class="ph"><img src="/media/machinery/unit-2/line-2-wafer.jpg" alt=""></span><span class="cap"><b>Line 2</b>Wafers</span></button>
+        <button type="button" class="mach rise" style="--d:3" data-img="/media/machinery/unit-2/line-3-wafer.jpg" data-cap="Line 3 · Wafer line 2: enrobing, plant view"><span class="ph"><img src="/media/machinery/unit-2/line-3-wafer.jpg" alt=""></span><span class="cap"><b>Line 3</b>Wafers</span></button>
+        <button type="button" class="mach rise" style="--d:3" data-img="/media/machinery/unit-2/line-4-biscuit-crackers.jpg" data-cap="Line 4 · Biscuits and crackers"><span class="ph"><img src="/media/machinery/unit-2/line-4-biscuit-crackers.jpg" alt=""></span><span class="cap"><b>Line 4</b>Biscuits &amp; crackers</span></button>
+        <button type="button" class="mach rise" style="--d:4" data-img="/media/machinery/unit-2/line-5-soft-dough.jpg" data-cap="Line 5 · Soft dough: rotary moulder"><span class="ph"><img src="/media/machinery/unit-2/line-5-soft-dough.jpg" alt=""></span><span class="cap"><b>Line 5</b>Soft-dough biscuits</span></button>
+        <button type="button" class="mach rise" style="--d:4" data-img="/media/machinery/unit-2/line-6-sandwich-biscuit.jpg" data-cap="Line 6 · Sandwich biscuits: sandwiching machine"><span class="ph"><img src="/media/machinery/unit-2/line-6-sandwich-biscuit.jpg" alt=""></span><span class="cap"><b>Line 6</b>Sandwich biscuits</span></button>
+        <button type="button" class="mach rise" style="--d:5" data-img="/media/machinery/unit-2/line-7-candy-bar.jpg" data-cap="Line 7 · Candy bars: forming line"><span class="ph"><img src="/media/machinery/unit-2/line-7-candy-bar.jpg" alt=""></span><span class="cap"><b>Line 7</b>Candy bars</span></button>
+        <button type="button" class="mach rise" style="--d:5" data-img="/media/machinery/unit-2/line-8-layer-cake.jpg" data-cap="Line 8 · Layer cake: cream depositor"><span class="ph"><img src="/media/machinery/unit-2/line-8-layer-cake.jpg" alt=""></span><span class="cap"><b>Line 8</b>Layer cakes</span></button>
+        <button type="button" class="mach rise" style="--d:6" data-img="/media/machinery/unit-2/line-9-cupcake.jpg" data-cap="Line 9 · Cupcakes: depositor"><span class="ph"><img src="/media/machinery/unit-2/line-9-cupcake.jpg" alt=""></span><span class="cap"><b>Line 9</b>Cupcakes</span></button>
+        <div class="mach-sum rise" style="--d:6"><b>9</b><span>production lines at Unit 2</span></div>
+      </div>
+      <aside class="notes-src" hidden>
+        <li>Unit 2 has nine lines: chocolate (ball mill, 2- and 5-roller refiners, conche), two wafer lines with enrobing, biscuits and crackers, soft-dough biscuits, sandwich biscuits, candy bars, layer cakes and cupcakes.</li>
+        <li>Hover over a line to enlarge it, or click to open the photo full screen.</li>
+        <li>Several photos are supplier images of the equipment. Confirm which lines are installed and which are on order before quoting timelines.</li>
+      </aside>
+    </section>
+
+    <!-- 8. Commitment + gallery -->
     <section class="slide s-commit" data-title="Our commitment">
       <div>
         <p class="eyebrow rise">Our commitment</p>
@@ -529,11 +577,10 @@
       </aside>
     </section>
 
-    <!-- 8. Thank you -->
+    <!-- 9. Thank you -->
     <section class="slide s-close" data-title="Thank you">
       <div class="portrait rise">
-        <img src="/media/events/unit-2-groundbreaking-guest.jpg" alt="At the Unit 2 groundbreaking ceremony">
-        <span>Unit 2 groundbreaking · 15 May 2026</span>
+        <img src="/media/events/mayora-kjs-handshake.jpg" alt="Mayora India and KJS India leaders shaking hands">
       </div>
       <div class="close-text">
         <div class="thanks rise" style="--d:1">Thank you</div>
@@ -565,7 +612,7 @@
   <a href="/about" title="Back to the KJS site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Site</a>
   <span class="sep"></span>
   <button type="button" id="prev" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-  <button type="button" class="count" id="count" aria-label="Slide overview">1 / 8</button>
+  <button type="button" class="count" id="count" aria-label="Slide overview">1 / 9</button>
   <button type="button" id="next" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
   <span class="sep"></span>
   <button type="button" id="btn-notes" aria-pressed="false" title="Speaker notes (N)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>Notes</button>
@@ -599,7 +646,7 @@
       <dt><kbd>→</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd></dt><dd>Next slide (clickers work too)</dd>
       <dt><kbd>←</kbd> <kbd>PgUp</kbd></dt><dd>Previous slide</dd>
       <dt><kbd>Home</kbd> <kbd>End</kbd></dt><dd>First / last slide</dd>
-      <dt><kbd>1</kbd>–<kbd>8</kbd></dt><dd>Jump to a slide</dd>
+      <dt><kbd>1</kbd>–<kbd>9</kbd></dt><dd>Jump to a slide</dd>
       <dt><kbd>N</kbd></dt><dd>Speaker notes</dd>
       <dt><kbd>O</kbd></dt><dd>All slides</dd>
       <dt><kbd>T</kbd></dt><dd>White / red</dd>
@@ -760,7 +807,7 @@
     lightbox.hidden = false;
   }
   function closeLightbox() { lightbox.hidden = true; lbMedia.innerHTML = ''; }
-  stage.querySelectorAll('.tile').forEach((t) => t.addEventListener('click', () => openLightbox(t)));
+  stage.querySelectorAll('.tile, .mach').forEach((t) => t.addEventListener('click', () => openLightbox(t)));
   $('lb-close').addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 
@@ -801,7 +848,7 @@
     else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(k)) { e.preventDefault(); black.hidden = true; prev(); }
     else if (k === 'Home') go(0);
     else if (k === 'End') go(total - 1);
-    else if (/^[1-8]$/.test(k)) go(Number(k) - 1);
+    else if (/^[1-9]$/.test(k)) go(Number(k) - 1);
     else if (k === 'n' || k === 'N') toggleNotes();
     else if (k === 'o' || k === 'O') toggleOverview();
     else if (k === 't' || k === 'T') toggleTheme();
