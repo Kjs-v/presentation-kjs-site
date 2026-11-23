@@ -39,7 +39,22 @@ const sections: Record<UnitTabId, Section> = {
       ]),
     ];
   },
-  about: (unit) => [h('p', { class: 'lead' }, unit.summary), stats(unit.stats), cards(unit.highlights)],
+  about: (unit) => [
+    h('p', { class: 'lead' }, unit.summary),
+    stats(unit.stats),
+    cards(unit.highlights),
+    unit.mapUrl
+      ? h(
+          'div',
+          { class: 'actions' },
+          h(
+            'a',
+            { class: 'secondary', href: unit.mapUrl, target: '_blank', rel: 'noopener noreferrer' },
+            `Find ${unit.title} on Google Maps`,
+          ),
+        )
+      : h('span'),
+  ],
   machinery: (unit, { machinery }) => {
     const list = machinery.filter((m) => m.unit === unit.id).sort(byOrder);
     if (!list.length) return empty('No machinery added yet.');
@@ -76,6 +91,7 @@ export const unitPage: Page = (content, params) => {
     'section',
     { class: `unit-stage${active ? ' has-tab' : ''}` },
     h('img', { src: unit.photo, alt: `${unit.title} building`, class: 'unit-photo' }),
+    unit.photoCaption ? h('span', { class: 'photo-caption' }, unit.photoCaption) : null,
     h('div', { class: 'unit-heading' }, h('h1', {}, unit.title), h('p', {}, unit.subtitle)),
     tabs,
   );

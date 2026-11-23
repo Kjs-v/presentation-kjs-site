@@ -54,6 +54,27 @@ Items marked **(confirm)** are not verified. Don't show them to clients until th
 
 - Nescafé, Boost, Horlicks, Choki Choki, Nestlé Resource Fiber, Continental Xtra, Café Niger, Swiss Café, Prince Supérieur, AIT Coffee, Café Soka and Crown Café.
 
+## From "unit 1 and 2.pdf" and the D: drive (added 2026-11-23)
+
+- **Unit 1 lines:** 22 packing machines, 6 ball mills and 5 flow-wrap machines.
+- **Project Choki (Mayora):**
+  - Started in April 2023 at 5 MT a day, and reached 12 MT a day within a year.
+  - Cream-preparation ball mills from Türkiye and packing machines from Thailand.
+  - The PDF says this is the only plant in India producing dual-colour chocolate in a small retail pack (₹2).
+  - Project area 5,600 m².
+- **RVL machines:** designed and developed by KJS India. High production efficiency, reliable performance and precision engineering.
+- **Startup 2020:** discussion on 1 May 2020, start on 27 May 2020 (Nescafé lines 1–3).
+- **Unit 2 site plan** (KJS-Peddapur, draft "for approval", 3 Dec 2025, Possibuild Building Technologies):
+  - Factory shed about 251 × 156 m (39,068 m²).
+  - Total ground coverage about 64,693 m².
+  - The site also has a 2.31-acre pond.
+- **Locations:**
+  - Unit 1: https://maps.app.goo.gl/J1KAM9J2N9mt2NRMA
+  - Unit 2: https://maps.app.goo.gl/GwRwJjr43Kw8SSiF9
+- **Mayora growth** (from "Our Partnership with Mayora India.docx"):
+  - Production: 476 MT (2023), 2,378 MT (2024), 3,022 MT (2025), 3,316 MT (Jan–Oct 2026).
+  - SKUs: from 1 to 4.
+
 ## Unit 2: confectionery
 
 - **Range:** 58 product families and 156 item numbers, from the catalogue "UNIT-2_PRODUCTS.pdf".

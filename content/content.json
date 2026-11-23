@@ -24,34 +24,24 @@
     ],
     "nav": [
       {
-        "label": "Home",
-        "path": "/",
-        "icon": "house"
-      },
-      {
         "label": "About",
-        "path": "/about",
-        "icon": "info"
+        "path": "/about"
       },
       {
         "label": "Products",
-        "path": "/products",
-        "icon": "package"
-      },
-      {
-        "label": "Gallery",
-        "path": "/gallery",
-        "icon": "images"
+        "path": "/products"
       },
       {
         "label": "Unit 1",
-        "path": "/unit-1",
-        "icon": "factory"
+        "path": "/unit-1"
       },
       {
         "label": "Unit 2",
-        "path": "/unit-2",
-        "icon": "warehouse"
+        "path": "/unit-2"
+      },
+      {
+        "label": "Gallery",
+        "path": "/gallery"
       }
     ],
     "theme": {
@@ -83,16 +73,9 @@
             "heroText": "#16213a",
             "heroMuted": "#34405a",
             "heroShadow": "none",
-            "menuGlass": "radial-gradient(circle, #fffffffa 0%, #f3f5fbf5 100%)",
-            "menuCoin": "#ffffff",
             "menuRing": "#16213a24",
-            "menuBand": "#1c3a9e0b",
             "menuGlow": "#f4b95259",
-            "shadow": "#16213a2e",
-            "hoverBg": "#1c3a9e",
-            "hoverText": "#ffffff",
-            "currentBg": "#fdf1d6",
-            "currentText": "#a86a12"
+            "shadow": "#16213a2e"
           }
         },
         {
@@ -118,24 +101,16 @@
             "heroText": "#ffffff",
             "heroMuted": "#e3e9ff",
             "heroShadow": "0 3px 0 #0f2366",
-            "menuGlass": "radial-gradient(circle, #2b50c8f7 0%, #1c3a9ef2 100%)",
-            "menuCoin": "#2648bd",
             "menuRing": "#ffffff38",
-            "menuBand": "#ffffff0f",
             "menuGlow": "#f4b9526b",
-            "shadow": "#0a174866",
-            "hoverBg": "#ffffff",
-            "hoverText": "#1c3a9e",
-            "currentBg": "#14296f",
-            "currentText": "#f4b952"
+            "shadow": "#0a174866"
           }
         }
       ]
     },
     "menu": {
       "notesLabel": "Notes",
-      "rimText": "KJS India · Your Brand, Our Expertise · Pashamylaram · KJS India · Your Brand, Our Expertise · Pashamylaram ·",
-      "themeToggleLabel": "Switch colours"
+      "themeToggleLabel": "Switch colours (white / royal blue)"
     }
   },
   "home": {
@@ -248,6 +223,11 @@
         "body": "Dry powder blending, confectionery ball milling, stick packs, pouch and carton packaging, and warehousing."
       },
       {
+        "title": "New journey",
+        "subtitle": "2025",
+        "body": "MoU signed for Unit 2, with new lines for chocolate, biscuits, wafers and cakes."
+      },
+      {
         "title": "Future",
         "subtitle": "Unit 2",
         "body": "Unit 2 groundbreaking at Thogarpally, announced by Invest Telangana in May 2026: ₹651 crore planned investment on 44 acres."
@@ -284,21 +264,25 @@
     {
       "id": "unit-1",
       "title": "Unit 1",
-      "subtitle": "Stick packs, coffee and instant beverages",
+      "subtitle": "Stick packs, coffee, beverages and chocolate",
       "summary": "KJS India’s facility in IDA Pashamylaram, Telangana.",
-      "photo": "/media/units/unit-1.jpg",
+      "photo": "/media/units/unit-1-front.jpg",
       "stats": [
         {
           "value": "0.9–3 g",
           "label": "Stick-pack fill range"
         },
         {
-          "value": "6",
-          "label": "Ribbon blenders"
+          "value": "22",
+          "label": "Packing machines"
         },
         {
-          "value": "10–20 min",
-          "label": "Per blend"
+          "value": "6",
+          "label": "Ball mills"
+        },
+        {
+          "value": "5",
+          "label": "Flow-wrap machines"
         }
       ],
       "highlights": [
@@ -309,6 +293,14 @@
         {
           "title": "Stick packs",
           "body": "Single-serve stick packs with a customizable fill range."
+        },
+        {
+          "title": "Project Choki",
+          "body": "Mayora Choki Choki line started in April 2023 at 5 MT a day and reached 12 MT a day within a year. Cream-preparation ball mills from Türkiye and packing machines from Thailand."
+        },
+        {
+          "title": "RVL machines",
+          "body": "Packing machines designed and developed in-house by KJS India for high efficiency, reliable performance and precision."
         }
       ],
       "tabs": [
@@ -328,36 +320,41 @@
           "id": "machinery",
           "label": "Machinery"
         }
-      ]
+      ],
+      "mapUrl": "https://maps.app.goo.gl/J1KAM9J2N9mt2NRMA"
     },
     {
       "id": "unit-2",
       "title": "Unit 2",
-      "subtitle": "Confectionery",
-      "summary": "Wafers, biscuits, chocolate bars and marshmallow products.",
-      "photo": "/media/units/unit-2.jpg",
+      "subtitle": "Chocolate, biscuits, wafers and cakes",
+      "summary": "Our new facility, with production lines for chocolate, biscuits, wafers, cakes and more.",
+      "photo": "/media/units/unit-2-render.jpg",
       "stats": [
         {
-          "value": "58",
-          "label": "Product families"
+          "value": "39,068 m²",
+          "label": "Factory shed (planned)"
         },
         {
-          "value": "156",
-          "label": "Item numbers"
+          "value": "64,693 m²",
+          "label": "Total built area (planned)"
         },
         {
-          "value": "4",
-          "label": "Categories"
+          "value": "₹651 cr",
+          "label": "Announced investment"
         },
         {
-          "value": "15 days",
-          "label": "Warehousing"
+          "value": "44 acres",
+          "label": "Site"
         }
       ],
       "highlights": [
         {
-          "title": "Ball milling",
-          "body": "Refines chocolate, cocoa and confectionery bases to a smooth, consistent texture."
+          "title": "New production lines",
+          "body": "Chocolate, biscuits, wafers, cakes and more, under one roof."
+        },
+        {
+          "title": "One base for partners",
+          "body": "A single, reliable manufacturing base for several confectionery and bakery categories."
         }
       ],
       "tabs": [
@@ -368,12 +365,10 @@
         {
           "id": "about",
           "label": "About"
-        },
-        {
-          "id": "machinery",
-          "label": "Machinery"
         }
-      ]
+      ],
+      "photoCaption": "Architect's render",
+      "mapUrl": "https://maps.app.goo.gl/GwRwJjr43Kw8SSiF9"
     }
   ],
   "products": [
@@ -1550,8 +1545,8 @@
     {
       "id": "ball-mill",
       "name": "Ball mill",
-      "description": "Refines chocolate, cocoa and confectionery bases.",
-      "unit": "unit-2",
+      "description": "Cream-preparation ball mills for chocolate and confectionery bases.",
+      "unit": "unit-1",
       "image": "/media/machinery/ball-mill.jpg",
       "order": 1
     },
@@ -1594,15 +1589,47 @@
       "unit": "unit-1",
       "image": "/media/machinery/stick-pack-machine-top.jpg",
       "order": 6
+    },
+    {
+      "id": "rvl-machine",
+      "name": "RVL packing machine",
+      "description": "Designed and developed by KJS India.",
+      "unit": "unit-1",
+      "image": "/media/machinery/rvl-machine.jpg",
+      "order": 7
+    },
+    {
+      "id": "rvl-machine-detail",
+      "name": "RVL machine (detail)",
+      "description": "Precision engineering for diverse packing needs.",
+      "unit": "unit-1",
+      "image": "/media/machinery/rvl-machine-detail.jpg",
+      "order": 8
     }
   ],
   "gallery": {
-    "video": {
-      "src": "/media/video/kjs-stick-pack-line.mp4",
-      "poster": "/media/video/kjs-stick-pack-line-poster.jpg",
-      "caption": "Stick-pack line"
-    },
+    "videos": [
+      {
+        "src": "/media/video/kjs-company-film.mp4",
+        "poster": "/media/video/kjs-company-film-poster.jpg",
+        "caption": "KJS India company film"
+      },
+      {
+        "src": "/media/video/unit-2-inauguration.mp4",
+        "poster": "/media/video/unit-2-inauguration-poster.jpg",
+        "caption": "Unit 2 inauguration"
+      },
+      {
+        "src": "/media/video/kjs-stick-pack-line.mp4",
+        "poster": "/media/video/kjs-stick-pack-line-poster.jpg",
+        "caption": "Stick-pack line"
+      }
+    ],
     "photos": [
+      {
+        "src": "/media/events/unit-2-mou.jpg",
+        "caption": "Unit 2 MoU signing, 2025"
+      },
       {
         "src": "/media/machinery/ball-mill.jpg",
         "caption": "Ball Mill"

@@ -3,8 +3,8 @@ import { loadContent } from './lib/content';
 import { applyTheme } from './lib/theme';
 import { onRoute, route, startRouter } from './lib/router';
 import { afterRoute, initEffects, introScreen } from './lib/effects';
-import { header, footer } from './layout';
-import { cornerMenu, markCurrent } from './widgets/corner-menu';
+import { header, footer, markCurrent } from './layout';
+import { notesPanel } from './widgets/notes';
 import { homePage } from './pages/home';
 import { aboutPage } from './pages/about';
 import { productsPage } from './pages/products';
@@ -29,7 +29,8 @@ initEffects();
 const app = document.getElementById('app')!;
 const main = document.createElement('main');
 const siteFooter = footer(content.site);
-app.replaceChildren(header(content.site), main, siteFooter, cornerMenu(content.site));
+const notes = notesPanel();
+app.replaceChildren(header(content.site, notes.api), main, siteFooter, notes.element);
 
 const titles: Record<string, string> = Object.fromEntries([
   ...content.site.nav.map((n) => [n.path, n.label]),

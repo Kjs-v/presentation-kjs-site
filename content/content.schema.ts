@@ -38,18 +38,6 @@ const button = z.object({
   path: sitePath.describe('Opens page'),
   style: z.enum(['primary', 'secondary']).describe('Style'),
 });
-/** Icons available for menu items (see src/lib/icons.ts). */
-export const navIcons = [
-  'house',
-  'info',
-  'package',
-  'images',
-  'factory',
-  'warehouse',
-  'presentation',
-  'link',
-] as const;
-
 /** One colour theme. Values are CSS colours (hex), or a CSS gradient where the name says so. */
 const palette = z.object({
   bg: z.string().describe('Page background'),
@@ -71,16 +59,9 @@ const palette = z.object({
   heroText: z.string().describe('Text over big photos'),
   heroMuted: z.string().describe('Secondary text over big photos'),
   heroShadow: z.string().describe('Shadow under big titles (CSS text-shadow, or none)'),
-  menuGlass: z.string().describe('Corner menu disc (gradient)'),
-  menuCoin: z.string().describe('Corner menu item fill'),
-  menuRing: z.string().describe('Corner menu rings and guides'),
-  menuBand: z.string().describe('Corner menu faint ripples'),
-  menuGlow: z.string().describe('Glow behind the corner button and on hover'),
+  menuRing: z.string().describe('Faint dots and rings'),
+  menuGlow: z.string().describe('Soft glow behind highlights'),
   shadow: z.string().describe('Shadows'),
-  hoverBg: z.string().describe('Corner menu item on hover'),
-  hoverText: z.string().describe('Corner menu icon on hover'),
-  currentBg: z.string().describe('Corner menu: current page fill'),
-  currentText: z.string().describe('Corner menu: current page icon'),
 });
 
 const partner = z.object({ name: z.string().describe('Name'), logo: mediaPath.describe('Logo') });
@@ -108,17 +89,10 @@ export const siteSchema = z.object({
     )
     .describe('Footer links, after phone, email and map'),
   nav: z
-    .array(
-      z.object({
-        label: z.string().describe('Text'),
-        path: sitePath.describe('Opens page'),
-        icon: z.enum(navIcons).describe('Icon'),
-      }),
-    )
-    .describe('Corner menu pages (in order: the first four go on the outer arc, the rest on the inner arc)'),
+    .array(z.object({ label: z.string().describe('Text'), path: sitePath.describe('Opens page') }))
+    .describe('Header links, in order (the company name always links to the home page)'),
   menu: z.object({
     notesLabel: z.string().describe('Notes button text'),
-    rimText: z.string().describe('Text running round the edge of the open menu'),
     themeToggleLabel: z.string().describe('Colour switch label (read out by screen readers)'),
   }),
   theme: z.object({
@@ -187,6 +161,8 @@ export const unitSchema = z.object({
   subtitle: z.string().describe('Subtitle'),
   summary: z.string().describe('Summary'),
   photo: mediaPath.describe('Big photo'),
+  photoCaption: z.string().optional().describe("Label on the photo, e.g. Architect's render"),
+  mapUrl: url.optional().describe('Google Maps link to this unit'),
   tabs: z
     .array(
       z.object({ id: z.enum(unitTabIds).describe('Section'), label: z.string().describe('Button text') }),
@@ -230,7 +206,9 @@ export const machinerySchema = z.object({
 });
 
 export const gallerySchema = z.object({
-  video: z.object({ src: mediaPath, poster: mediaPath, caption: z.string() }),
+  videos: z
+    .array(z.object({ src: mediaPath, poster: mediaPath, caption: z.string().describe('Caption') }))
+    .describe('Videos (the first one is shown large)'),
   photos: z.array(z.object({ src: mediaPath, caption: z.string() })),
 });
 

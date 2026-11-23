@@ -34,7 +34,7 @@ npm run dev             # http://localhost:5173
 │   ├── main.ts             Entry: loads content, applies theme, registers routes
 │   ├── layout.ts           Header and footer
 │   ├── components.ts       Shared pieces: stats, cards, photo tiles
-│   ├── widgets/            corner-menu.ts (navigation), notes.ts, orbit.ts (rotating products), product-dialog.ts
+│   ├── widgets/            notes.ts, orbit.ts (rotating products), product-dialog.ts
 │   ├── pages/              One file per page (home, about, unit, gallery, products, show)
 │   ├── lib/
 │   │   ├── content.ts      loadContent(): the ONLY way pages get content
@@ -84,13 +84,13 @@ npm run dev             # http://localhost:5173
 
 ## Routes
 
-**Navigation** is the gold coin in the bottom-right corner (`src/widgets/corner-menu.ts`). Click it to open the menu, and choosing anything closes it.
+**Header:** the company name (links home), the page links from `site.nav`, and three buttons:
 
-- **Pages:** `site.nav` in content.json, each with an icon. The first four go on the outer arc, the rest on the inner arc.
-- **Notes:** the gold coin in the middle of the inner arc. It opens a corner panel that can go full screen.
-- **Colour switch:** the two-tone coin next to the button switches between the themes in `site.theme.palettes` (white / royal blue). The choice is remembered per browser.
-  - Add `?theme=royal` or `?theme=white` to a link to force one.
-- **Header:** only the company name and Full screen.
+- **Notes:** opens the meeting-notes panel in the bottom-right corner, which can go full screen. Notes are saved per browser.
+- **Colour switch:** the two-tone dot switches between the themes in `site.theme.palettes` (white / royal blue). The choice is remembered per browser, and `?theme=royal` or `?theme=white` in a link forces one.
+- **Full screen.**
+
+On narrow screens the links fold into a Menu button.
 
 | Path                                                   | Page                                                                                                                                                                                                                    |
 | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

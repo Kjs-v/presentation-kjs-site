@@ -3,6 +3,30 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Simple header + material from the D: drive)
+
+- **Did:** dropped the corner navigator.
+  - The header now has the page links, plus Notes, the white / royal blue switch, and Full screen.
+- **New material from D:\KJS INDIA PVT LTD:**
+  - Videos, compressed to 720p in `public/media/video/`: the company film (43 MB, from 2 GB) and the Unit 2 inauguration (23 MB).
+  - Photos from "unit 1 and 2.pdf":
+    - the Unit 1 front (now the Unit 1 photo)
+    - the Unit 2 architect's render (replaces the AI-looking Unit 2 image, which is deleted)
+    - the Unit 2 MoU signing
+    - two RVL machine photos
+  - Google Maps links for Unit 1 and Unit 2 (from "kjs india links.txt"), shown on each unit's About tab.
+  - Unit 2 site plan (draft, 3 Dec 2025): factory shed about 39,068 m², total built area about 64,693 m². Shown as "planned".
+- **Content changes:**
+  - Unit 1 stats: 22 packing machines, 6 ball mills, 5 flow-wrap machines.
+  - Unit 1 highlights: Project Choki and RVL machines.
+  - Ball mills moved to Unit 1, and the empty Machinery tab removed from Unit 2.
+  - Gallery now holds a list of videos.
+  - Timeline: 2025 MoU added.
+- **Open:**
+  - The Unit 2 location in the site plan says "KJS-Peddapur", but the public announcement says Thogarpally. Confirm.
+  - Products tagged Unit 2: where are they made today?
+  - The big shoot folders on D: (`2026_05_15 KJS Rach`, 401 GB; `May KJS Shoot`) are not used yet.
+
 ## 2026-11-23 (Navigator + white / royal blue themes)
 
 - **Did:** removed the page links from the header. Navigation is now the gold KJS coin in the bottom-right corner.

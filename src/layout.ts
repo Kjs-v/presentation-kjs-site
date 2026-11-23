@@ -2,15 +2,63 @@
 import type { Site } from '../content/content.schema';
 import { h } from './lib/dom';
 import { icon } from './lib/icons';
+import { nextTheme } from './lib/theme';
+import type { NotesPanel } from './widgets/notes';
 
-/** Slim header: company name and Full screen. Page links live in the corner menu (src/widgets/corner-menu.ts). */
-export function header(site: Site): HTMLElement {
-  const label = h('span', {}, 'Full screen');
+/**
+ * Header: company name, page links (site.nav), and three small controls:
+ * Notes, the white / royal blue switch, and Full screen. On narrow screens the links fold into a Menu button.
+ */
+export function header(site: Site, notes: NotesPanel): HTMLElement {
+  const nav = h(
+    'nav',
+    { 'aria-label': 'Main', id: 'main-nav' },
+    ...site.nav.map((n) => h('a', { href: n.path, 'data-route': true }, n.label)),
+  );
+
+  const menu = h(
+    'button',
+    { type: 'button', class: 'ctrl menu-btn', 'aria-expanded': 'false', 'aria-controls': 'main-nav' },
+    'Menu',
+  );
+  menu.addEventListener('click', () => {
+    const open = document.body.classList.toggle('mobile-open');
+    menu.setAttribute('aria-expanded', String(open));
+  });
+  nav.addEventListener('click', () => {
+    document.body.classList.remove('mobile-open');
+    menu.setAttribute('aria-expanded', 'false');
+  });
+
+  const badge = h('span', { class: 'notes-badge', hidden: !notes.hasNotes() });
+  const notesBtn = h(
+    'button',
+    { type: 'button', class: 'ctrl', title: site.menu.notesLabel },
+    icon('notebookPen'),
+    h('span', { class: 'ctrl-label' }, site.menu.notesLabel),
+    badge,
+  );
+  notesBtn.addEventListener('click', () => (notes.isOpen() ? notes.close() : notes.open()));
+  notes.onSaved(() => (badge.hidden = !notes.hasNotes()));
+
+  const themeBtn = h(
+    'button',
+    {
+      type: 'button',
+      class: 'ctrl',
+      title: site.menu.themeToggleLabel,
+      'aria-label': site.menu.themeToggleLabel,
+    },
+    h('span', { class: 'theme-dot', 'aria-hidden': 'true' }),
+  );
+  themeBtn.addEventListener('click', () => nextTheme());
+
+  const fullLabel = h('span', { class: 'ctrl-label' }, 'Full screen');
   const fullscreen = h(
     'button',
     { type: 'button', class: 'ctrl', 'aria-pressed': 'false' },
     icon('maximize'),
-    label,
+    fullLabel,
   );
   fullscreen.addEventListener('click', () => {
     if (document.fullscreenElement) document.exitFullscreen();
@@ -19,7 +67,7 @@ export function header(site: Site): HTMLElement {
   document.addEventListener('fullscreenchange', () => {
     const full = Boolean(document.fullscreenElement);
     fullscreen.setAttribute('aria-pressed', String(full));
-    label.textContent = full ? 'Exit full screen' : 'Full screen';
+    fullLabel.textContent = full ? 'Exit full screen' : 'Full screen';
   });
 
   return h(
@@ -31,8 +79,19 @@ export function header(site: Site): HTMLElement {
       h('span', { class: 'mark', 'aria-hidden': 'true' }),
       site.name,
     ),
-    fullscreen,
+    nav,
+    h('div', { class: 'controls' }, notesBtn, themeBtn, fullscreen, menu),
   );
+}
+
+/** Highlights the current section in the header (so /unit-1/products highlights "Unit 1"). */
+export function markCurrent(pathname: string): void {
+  const section = (p: string) => p.split('/')[1] ?? '';
+  document.querySelectorAll<HTMLAnchorElement>('#main-nav a').forEach((a) => {
+    const active = a.pathname === '/' ? pathname === '/' : section(pathname) === section(a.pathname);
+    if (active) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
 }
 
 /** Footer: address, then phone, email, map, KJS website (logo) and LinkedIn, all from content.site. */

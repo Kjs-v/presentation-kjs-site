@@ -1,5 +1,5 @@
 /**
- * Meeting notes: a small panel in the bottom-right corner that can go full screen.
+ * Meeting notes: opened from the header. A small panel in the bottom-right corner that can go full screen.
  * Saved only in this browser (localStorage) for now; later this can move to the database.
  */
 import { h } from '../lib/dom';
@@ -22,9 +22,11 @@ export type NotesPanel = {
   close: () => void;
   isOpen: () => boolean;
   hasNotes: () => boolean;
+  onSaved: (listener: () => void) => void;
 };
 
-export function notesPanel(onSaved: () => void): { element: HTMLElement; api: NotesPanel } {
+export function notesPanel(): { element: HTMLElement; api: NotesPanel } {
+  const savedListeners: (() => void)[] = [];
   const input = (id: string, label: string, placeholder: string) =>
     h('label', { for: `notes-${id}` }, label, h('input', { id: `notes-${id}`, type: 'text', placeholder }));
 
@@ -74,6 +76,7 @@ export function notesPanel(onSaved: () => void): { element: HTMLElement; api: No
     },
     isOpen: () => !panel.hidden,
     hasNotes: () => Object.values(read()).some(Boolean),
+    onSaved: (listener) => savedListeners.push(listener),
   };
   closeBtn.addEventListener('click', api.close);
   document.addEventListener('keydown', (e) => {
@@ -90,7 +93,7 @@ export function notesPanel(onSaved: () => void): { element: HTMLElement; api: No
     } catch {
       status.textContent = 'Could not save in this browser';
     }
-    onSaved();
+    savedListeners.forEach((l) => l());
   });
 
   return { element: panel, api };
