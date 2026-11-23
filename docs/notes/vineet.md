@@ -3,6 +3,16 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Backend phase 3: site reads from the API)
+
+- **Did:** `src/lib/content.ts` now loads the live API first, then the last good copy saved in the browser, then the built-in `content.json`. Every copy is checked against the schema, so broken data is never shown. The API is given up on after 4 seconds.
+- `npm run dev` and `npm run preview` now also serve `/api` locally (Vite plugin in `vite.config.ts`), using the dev database from `.env`.
+- **Checked:**
+  - 7 new loader tests (40 tests in total).
+  - In a browser, a change in the dev database showed on the page, with the source reported as "api".
+  - With the database unreachable, the API returned 500 and the page still rendered from the built-in copy.
+- **Note:** this is on `presentation-v` only. The live site (`main`) still reads `content.json`.
+
 ## 2026-11-23 (Backend phase 2: API)
 
 - **Did:** built the API (`server/router.ts`, served by the single function `api/[...path].ts`).
