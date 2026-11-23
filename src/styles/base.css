@@ -1,0 +1,77 @@
+/*
+ * Temporary base styles. Colours and fonts come from content.site.theme (see src/lib/theme.ts),
+ * so always use the variables below instead of hardcoding colours.
+ */
+:root {
+  --color-primary: #112d27;
+  --color-accent: #e8603c;
+  --color-background: #f6f1e7;
+  --color-text: #17382c;
+  --color-muted: #6b7a6f;
+  --font-heading: Georgia, serif;
+  --font-body: system-ui, sans-serif;
+  --radius: 10px;
+  --gutter: clamp(16px, 4vw, 48px);
+  font-size: clamp(16px, 0.55vw + 12px, 22px); /* grows on big screens / projectors */
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+h1, h2, h3 { font-family: var(--font-heading); line-height: 1.15; margin: 0 0 0.5em; }
+h1 { font-size: 2.6rem; }
+h2 { font-size: 1.6rem; margin-top: 2rem; }
+img, video { max-width: 100%; display: block; }
+a { color: inherit; }
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  padding: 0.75rem var(--gutter); background: var(--color-primary); color: #fff;
+  position: sticky; top: 0; z-index: 10;
+}
+.brand img { height: 2.2rem; width: auto; background: #fff; border-radius: 6px; padding: 2px 6px; }
+.topbar nav { display: flex; gap: 1rem; flex-wrap: wrap; }
+.topbar nav a { text-decoration: none; opacity: 0.8; }
+.topbar nav a[aria-current] { opacity: 1; border-bottom: 2px solid var(--color-accent); }
+
+main { padding: 2rem var(--gutter); max-width: 1400px; margin: 0 auto; }
+.footer { padding: 1.5rem var(--gutter); background: var(--color-primary); color: #fff; font-size: 0.85rem; }
+.footer p { margin: 0.25rem 0; }
+
+.eyebrow { text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-muted); font-size: 0.8rem; }
+.lead { font-size: 1.15rem; color: var(--color-muted); }
+.btn { display: inline-block; padding: 0.6em 1.2em; border-radius: 999px; text-decoration: none; font-weight: 600; }
+.btn-primary { background: var(--color-accent); color: #fff; }
+.btn-secondary { border: 2px solid var(--color-primary); }
+.actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
+.hero-image, .unit-photo { border-radius: var(--radius); width: 100%; object-fit: cover; max-height: 60vh; }
+.logo-row { display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; }
+.logo-row img { height: 3.5rem; width: auto; object-fit: contain; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+.card { background: #fff; border-radius: var(--radius); padding: 1.2rem; }
+.stats { display: flex; flex-wrap: wrap; gap: 2rem; margin: 2rem 0; }
+.stat strong { display: block; font-size: 2rem; color: var(--color-accent); font-family: var(--font-heading); }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+.product { margin: 0; background: #fff; border-radius: var(--radius); padding: 0.75rem; text-align: center; }
+.product img { aspect-ratio: 1; object-fit: contain; width: 100%; }
+.product figcaption { font-size: 0.85rem; margin-top: 0.5rem; }
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.photo-grid figure, .video { margin: 0; }
+.photo-grid img { border-radius: var(--radius); aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+
+.deck { position: relative; min-height: 75vh; }
+.slide { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; }
+.slide-cover img { max-height: 45vh; object-fit: cover; border-radius: var(--radius); margin-bottom: 1.5rem; }
+.slide-counter { position: absolute; right: 0; bottom: 0; color: var(--color-muted); }
+
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; }
+  h1 { font-size: 2rem; }
+}

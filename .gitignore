@@ -1,0 +1,17 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# build / deps
+node_modules/
+dist/
+.vercel/
+
+# editors / OS
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log
