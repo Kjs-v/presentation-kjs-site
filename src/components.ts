@@ -55,12 +55,7 @@ export const productTile = (p: Product, content?: Content) =>
 export function partnerLogo(p: { name: string; logo: string; link?: string }): HTMLElement {
   const img = h('img', { src: p.logo, alt: p.name, loading: 'lazy' });
   if (!p.link) return h('div', {}, img);
-  return h(
-    'a',
-    { href: p.link, class: 'logo-link', title: `Open the ${p.name} presentation` },
-    img,
-    h('span', { class: 'logo-cue' }, 'View pitch →'),
-  );
+  return h('a', { href: p.link, class: 'logo-link', 'aria-label': `${p.name}: open the presentation` }, img);
 }
 
 /** Groups items by a key, keeping the first-seen order of groups. */

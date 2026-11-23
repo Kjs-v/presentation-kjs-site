@@ -563,14 +563,6 @@ main > * {
   transform: translateY(-3px);
   box-shadow: 0 10px 24px #c8102e33;
 }
-.logo-cue {
-  position: absolute;
-  right: 8px;
-  bottom: 6px;
-  font-size: 12px;
-  font-weight: 800;
-  color: #c8102e;
-}
 .logos.compact > a.logo-link {
   min-height: 80px;
 }
