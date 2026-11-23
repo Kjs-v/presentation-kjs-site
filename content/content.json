@@ -7,16 +7,19 @@
       "phone": "+91 97037 35666",
       "email": "contact@kjsindia.com",
       "address": "Plot No. 1 & 2, Phase III, IDA Pashamylaram, Patancheru (M), Sangareddy (D), Hyderabad, Telangana 502307, India",
-      "mapUrl": "https://www.google.com/maps?cid=8562519224063906718"
+      "mapUrl": "https://www.google.com/maps?cid=8562519224063906718",
+      "mapLabel": "Find us"
     },
     "links": [
       {
-        "label": "Company website",
-        "url": "https://www.kjsindia.com/"
+        "label": "KJS INDIA",
+        "url": "https://www.kjsindia.com/",
+        "icon": "logo"
       },
       {
         "label": "LinkedIn",
-        "url": "https://www.linkedin.com/company/kjs-india-pvt-ltd/"
+        "url": "https://www.linkedin.com/company/kjs-india-pvt-ltd/",
+        "icon": "linkedin"
       }
     ],
     "nav": [

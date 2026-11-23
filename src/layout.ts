@@ -1,6 +1,7 @@
 /** Header and footer, built from content.site. */
 import type { Site } from '../content/content.schema';
 import { h, routeLink } from './lib/dom';
+import { icon } from './lib/icons';
 
 export function header(site: Site): HTMLElement {
   const menu = h('button', { type: 'button', id: 'mobile-menu', 'aria-expanded': 'false' }, 'Menu');
@@ -41,31 +42,57 @@ export function header(site: Site): HTMLElement {
   );
 }
 
+/** Footer: address, then phone, email, map, KJS website (logo) and LinkedIn, all from content.site. */
 export function footer(site: Site): HTMLElement {
   const { contact } = site;
+  const external = { target: '_blank', rel: 'noopener noreferrer' };
   const top = h(
     'button',
-    { type: 'button', class: 'secondary' },
+    { type: 'button', class: 'f-link' },
     'Back to top ',
     h('span', { 'aria-hidden': 'true' }, '↟'),
   );
   top.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  const siteLink = (l: Site['links'][number]) => {
+    if (l.icon === 'logo')
+      return h(
+        'a',
+        { href: l.url, ...external, class: 'f-link f-logo', 'aria-label': l.label },
+        h('img', { src: site.logo, alt: l.label }),
+      );
+    return h(
+      'a',
+      { href: l.url, ...external, class: 'f-link' },
+      icon(l.icon, l.icon === 'linkedin' ? 'icon-linkedin' : ''),
+      l.label,
+    );
+  };
+
   return h(
     'footer',
     { class: 'site-footer' },
     h(
       'div',
       { class: 'footer-inner' },
-      h('div', {}, h('strong', {}, site.name), h('p', {}, contact.address)),
+      h('div', { class: 'footer-company' }, h('strong', {}, site.name), h('p', {}, contact.address)),
       h(
         'div',
         { class: 'footer-links' },
-        h('a', { href: `tel:${contact.phone.replace(/\s/g, '')}` }, contact.phone),
-        h('a', { href: `mailto:${contact.email}` }, contact.email),
-        h('a', { href: contact.mapUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Find us'),
-        ...site.links.map((l) =>
-          h('a', { href: l.url, target: '_blank', rel: 'noopener noreferrer' }, l.label),
+        h(
+          'a',
+          { href: `tel:${contact.phone.replace(/s/g, '')}`, class: 'f-link' },
+          icon('phone'),
+          contact.phone,
         ),
+        h('a', { href: `mailto:${contact.email}`, class: 'f-link' }, icon('mail'), contact.email),
+        h(
+          'a',
+          { href: contact.mapUrl, ...external, class: 'f-link' },
+          icon('mapPin', 'icon-map'),
+          contact.mapLabel,
+        ),
+        ...site.links.map(siteLink),
         top,
       ),
     ),

@@ -3,6 +3,16 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Footer + corner menu previews)
+
+- **Did:** updated the footer.
+  - Order is now phone, email, then **Find us** (map pin, opens Google Maps), the **KJS INDIA** logo (links to the company website), **LinkedIn** (with icon), and Back to top.
+  - Content: `site.contact.mapLabel`, plus `icon` on each `site.links` entry (`logo` / `linkedin` / `link`). Icons are in `src/lib/icons.ts`.
+- **Previews (not in the code yet):** a corner menu in three colours (green, white, royal blue).
+  - One button in the bottom-right corner fans out the pages and Notes.
+  - Notes open as a small corner panel that can go full screen.
+- **Next:** pick a colour for the corner menu, then build it into the site in place of the header links.
+
 ## 2026-11-23 (Products page)
 
 - **Did:** added Products to the header (About, Products, Unit 1, Unit 2, Gallery).

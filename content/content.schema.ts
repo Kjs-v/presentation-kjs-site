@@ -49,9 +49,20 @@ export const siteSchema = z.object({
     phone: z.string().describe('Phone'),
     email: z.string().email().describe('Email'),
     address: z.string().describe('Address'),
-    mapUrl: url.describe('Map link'),
+    mapUrl: url.describe('Google Maps link'),
+    mapLabel: z.string().describe('Map link text, e.g. Find us'),
   }),
-  links: z.array(z.object({ label: z.string(), url })).describe('Footer links'),
+  links: z
+    .array(
+      z.object({
+        label: z.string().describe('Text (also read out by screen readers)'),
+        url,
+        icon: z
+          .enum(['logo', 'linkedin', 'link'])
+          .describe('logo = show the KJS logo instead of text; linkedin = LinkedIn icon; link = plain link'),
+      }),
+    )
+    .describe('Footer links, after phone, email and map'),
   nav: z.array(z.object({ label: z.string(), path: sitePath })).describe('Header menu (in order)'),
   theme: z.object({
     colors: z.object({
