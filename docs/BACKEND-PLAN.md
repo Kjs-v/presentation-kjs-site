@@ -24,7 +24,7 @@
 - [x] Dev and test databases (`kjs_dev`, `kjs_test`)
 - [x] Admin logins: vineet@kjsindia.com, narender@kjsindia.com (they must change their password at first login)
 - [ ] Owner: create the Vercel Blob store (Vercel → presentation-site-kjs → Storage → Create → Blob)
-- [ ] Owner: decide whether meeting notes are saved in the database (Phase 6)
+- [x] Owner: meeting notes go to the database (Phase 6)
 
 ### Phase 1: Database ✅
 
@@ -65,10 +65,12 @@
 - [ ] Remove the unused `pitches` table and its media-usage check (migration)
 - [ ] Tests, plus a check that opening a slide or photo link directly without the PIN is refused
 
-### Phase 6: Meeting notes in the database (optional, ~½ day)
+### Phase 6: Meeting notes in the database ✅
 
-- [ ] Notes saved to the database (staff only), with a copy kept in the browser if offline
-- [ ] Staff can read saved notes later
+- [x] Notes saved to the database (staff only); kept on the device first and resent when back online
+- [x] No duplicates when a note is saved again (a note id from the browser)
+- [x] Sign in, including the first-time password change, inside the notes panel
+- [x] "Saved notes" list to reopen and edit earlier notes; only the writer or an admin can change or delete a note
 
 ### Phase 7: Go live (~½ day)
 

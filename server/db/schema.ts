@@ -96,9 +96,13 @@ export const loginAttempts = pgTable(
 /** Meeting notes taken during presentations (staff only). */
 export const notes = pgTable('notes', {
   id: serial('id').primaryKey(),
+  /** Made by the browser when a note is started, so saving the same note twice never makes a duplicate. */
+  clientId: text('client_id').unique(),
   visitor: text('visitor').notNull().default(''),
   company: text('company').notNull().default(''),
   body: text('body').notNull().default(''),
   createdBy: integer('created_by').references(() => users.id, { onDelete: 'set null' }),
   createdAt: createdAt(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedBy: integer('updated_by').references(() => users.id, { onDelete: 'set null' }),
 });

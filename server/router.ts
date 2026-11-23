@@ -4,7 +4,8 @@
  *
  * Public:  GET /api/health, GET /api/content
  * Login:   POST /api/auth/login, POST /api/auth/logout, GET /api/auth/me, POST /api/auth/change-password
- * Staff:   /api/admin/sections…, /api/admin/publish, /api/admin/versions…, /api/admin/media…, /api/admin/schema
+ * Staff:   /api/admin/sections…, /api/admin/publish, /api/admin/versions…, /api/admin/media…, /api/admin/schema,
+ *          /api/admin/notes…
  * Admins:  /api/admin/users…
  */
 import { randomBytes } from 'node:crypto';
@@ -270,6 +271,98 @@ on('DELETE', '/api/admin/media/:id', async (request, { id }) => {
     });
   if (process.env.BLOB_READ_WRITE_TOKEN && BLOB_URL.test(row.url)) await del(row.url);
   await db().delete(schema.media).where(eq(schema.media.id, row.id));
+  return json({ ok: true });
+});
+
+// ---------- Meeting notes (staff) ----------
+const NOTE_LIMITS = { visitor: 200, company: 200, body: 20_000 };
+const CLIENT_ID = /^[A-Za-z0-9_-]{8,64}$/;
+const noteColumns = {
+  id: schema.notes.id,
+  clientId: schema.notes.clientId,
+  visitor: schema.notes.visitor,
+  company: schema.notes.company,
+  body: schema.notes.body,
+  createdAt: schema.notes.createdAt,
+  updatedAt: schema.notes.updatedAt,
+  createdBy: schema.notes.createdBy,
+};
+
+function noteFields(body: { visitor?: unknown; company?: unknown; body?: unknown }) {
+  const text = (v: unknown, field: keyof typeof NOTE_LIMITS) => {
+    if (v === undefined || v === null) return '';
+    if (typeof v !== 'string') throw new HttpError(400, `${field} must be text.`);
+    if (v.length > NOTE_LIMITS[field])
+      throw new HttpError(400, `${field} is too long (max ${NOTE_LIMITS[field]} characters).`);
+    return v;
+  };
+  const fields = {
+    visitor: text(body.visitor, 'visitor').trim(),
+    company: text(body.company, 'company').trim(),
+    body: text(body.body, 'body'),
+  };
+  if (!fields.visitor && !fields.company && !fields.body.trim())
+    throw new HttpError(400, 'The note is empty.');
+  return fields;
+}
+
+const canEditNote = (user: { id: number; role: string }, createdBy: number | null) =>
+  user.role === 'admin' || createdBy === user.id;
+
+on('GET', '/api/admin/notes', async (request) => {
+  await requireUser(request);
+  const rows = await db()
+    .select({ ...noteColumns, createdByEmail: schema.users.email })
+    .from(schema.notes)
+    .leftJoin(schema.users, eq(schema.users.id, schema.notes.createdBy))
+    .orderBy(desc(schema.notes.updatedAt))
+    .limit(200);
+  return json({ notes: rows });
+});
+
+/**
+ * Saves a note. The browser sends the same clientId every time it saves the same note, so retries
+ * (e.g. after the connection comes back) update that note instead of creating duplicates.
+ */
+on('POST', '/api/admin/notes', async (request) => {
+  const user = await requireUser(request);
+  const body = await readJson<{ clientId?: unknown; visitor?: unknown; company?: unknown; body?: unknown }>(
+    request,
+  );
+  if (typeof body.clientId !== 'string' || !CLIENT_ID.test(body.clientId))
+    throw new HttpError(400, 'Missing or invalid note id.');
+  const fields = noteFields(body);
+  const [existing] = await db()
+    .select({ id: schema.notes.id, createdBy: schema.notes.createdBy })
+    .from(schema.notes)
+    .where(eq(schema.notes.clientId, body.clientId));
+  if (existing && !canEditNote(user, existing.createdBy))
+    throw new HttpError(403, 'Only the person who wrote this note (or an admin) can change it.');
+  const [row] = existing
+    ? await db()
+        .update(schema.notes)
+        .set({ ...fields, updatedAt: new Date(), updatedBy: user.id })
+        .where(eq(schema.notes.id, existing.id))
+        .returning(noteColumns)
+    : await db()
+        .insert(schema.notes)
+        .values({ ...fields, clientId: body.clientId, createdBy: user.id, updatedBy: user.id })
+        .onConflictDoNothing({ target: schema.notes.clientId })
+        .returning(noteColumns);
+  if (!row) throw new HttpError(409, 'This note was just saved from another device. Please save again.');
+  return json({ note: row }, { status: existing ? 200 : 201 });
+});
+
+on('DELETE', '/api/admin/notes/:id', async (request, { id }) => {
+  const user = await requireUser(request);
+  const [note] = await db()
+    .select({ id: schema.notes.id, createdBy: schema.notes.createdBy })
+    .from(schema.notes)
+    .where(eq(schema.notes.id, asId(id)));
+  if (!note) throw new HttpError(404, 'Note not found.');
+  if (!canEditNote(user, note.createdBy))
+    throw new HttpError(403, 'Only the person who wrote this note (or an admin) can delete it.');
+  await db().delete(schema.notes).where(eq(schema.notes.id, note.id));
   return json({ ok: true });
 });
 

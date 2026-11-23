@@ -3,6 +3,17 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Backend phase 6: meeting notes in the database)
+
+- **Did:** notes are saved to the database when a staff member is signed in. They are always kept on the device first.
+- **Offline:** a note saved without a connection is sent automatically when the connection returns. The note id comes from the browser, so there are no duplicates.
+- **Notes panel:** sign-in with the first-time password change, "+ New note" (it never discards a note that has not reached the database), and "Saved notes" to reopen earlier notes.
+- **API:** `GET/POST /api/admin/notes` and `DELETE /api/admin/notes/:id`. Only the writer or an admin can change or delete a note. Migration `0001` adds client_id, updated_at and updated_by.
+- **Checked:**
+  - 4 new API tests (44 in total).
+  - A 10-step browser test on the dev database with a temporary login, deleted afterwards: save signed out, sign in, offline then back online, new note, reopen.
+- **Skipped for now (owner's call):** phase 4 uploads (Blob) and phase 5 server-side PIN.
+
 ## 2026-11-23 (Backend phase 3: site reads from the API)
 
 - **Did:** `src/lib/content.ts` now loads the live API first, then the last good copy saved in the browser, then the built-in `content.json`. Every copy is checked against the schema, so broken data is never shown. The API is given up on after 4 seconds.
