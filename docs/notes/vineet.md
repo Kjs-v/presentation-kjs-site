@@ -3,6 +3,20 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Backend phase 2: API)
+
+- **Did:** built the API (`server/router.ts`, served by the single function `api/[...path].ts`).
+  - **Public:** health check and `/api/content` (cached by Vercel).
+  - **Login:** login, logout, "who am I" and change password. Logins are httpOnly cookies that last 7 days. A new password is forced at first login. Wrong passwords are slowed down (5 per 15 minutes).
+  - **Content:** sections with draft saving, which is checked against the schema and refused (409) if someone else saved first. Also discard, publish (checks the whole site and keeps a history copy), history and restore.
+  - **Media:** direct-to-Blob upload tokens, register, list, and delete (blocked while a file is in use).
+  - **Users (admins only):** add, update, reset password, remove. Removing or resetting a user signs them out everywhere, and there is always at least one admin.
+  - `/api/admin/schema` gives the field list for the admin page.
+  - Writes from other websites are refused.
+- **Tests:** `npm test` runs 33 tests against a separate `kjs_test` database that is wiped each run. All pass.
+- **Branches:** pushed to `presentation-v` only. The phase 1 commits had already gone to `main` earlier.
+- **Next:** phase 3, the site reads `/api/content`. Uploads still need the Vercel Blob store.
+
 ## 2026-11-23 (Backend phase 1: database)
 
 - **Did:** backend phase 1, following `docs/BACKEND-PLAN.md`.
