@@ -1,48 +1,86 @@
-# Backend plan
+# Backend plan (checklist)
 
-**Goal:** all site content (text, products, slides, images, pitches) lives in Neon and can be changed through an API. The admin page is built on top of that API afterwards.
+**Goal:** the website's content (text, products, units, gallery, images) lives in Neon and staff edit it through the admin page.
+**Not in scope:** presentation decks (e.g. `/pitches/mayora/`). They are temporary and get redesigned each time, so they stay as hand-made pages in `public/pitches/`. Only their **protection (PIN)** is handled by the backend.
 
 **Stack:**
 
-- One catch-all Vercel Function (`api/[...path].ts`) that routes every endpoint internally, because the free Vercel plan allows at most 12 functions.
-- Neon Postgres through Drizzle, with a **dev** database for development and the **production** database for the live site.
-- Zod checks that reuse `content/content.schema.ts`.
-- Vercel Blob for files, uploaded straight from the browser (Vercel functions only accept 4.5 MB).
+- One Vercel Function (`api/[...path].ts`) routes every endpoint, because the free Vercel plan allows at most 12 functions.
+- Neon Postgres via Drizzle, with three databases: `db-02` (production), `kjs_dev` (local work) and `kjs_test` (tests).
+- Zod checks from `content/content.schema.ts`.
+- Vercel Blob for files.
 - Email and password login.
 
 **Rules**
 
-- After go-live, **the database is the source of truth**. `content/content.json` is only for seeding and offline use. Refresh it with `npm run db:export` before each deploy.
-- Never point local development at the production database. Use the dev database in `.env`.
-- Every phase ends with a passing build and tests, checks at several screen sizes, a push to `presentation-v` and `main`, a deploy, and a note in `docs/notes/<you>.md`.
+- After go-live the database is the source of truth. `content.json` is only for seeding and fallback. Refresh it with `npm run db:export` before each deploy.
+- Backend work goes to `presentation-v` only. `main` is updated only when the owner asks.
+- Every step ends with a passing build and tests, a check at several screen sizes, a push, and a note in `docs/notes/<you>.md`.
 
-## Phases
+## Checklist
 
-| #   | Phase                                                                                                 | Estimate   | Done when                                               |
-| --- | ----------------------------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------- |
-| 0   | Setup (owner): admin email, Blob store, decisions                                                     | 20 min     | Values in `.env` / Vercel                               |
-| 1   | Database: Drizzle, tables, migrate / seed / export                                                    | 1 day      | Seed works twice on the dev database without duplicates |
-| 2   | API: auth, sections with version check, publish, history, media tokens, users, schema endpoint, tests | 1.5–2 days | Vitest passes against the dev database                  |
-| 3   | Site reads `/api/content` (live → last good copy → built-in copy)                                     | 0.5 day    | Site identical; still renders with the API off          |
-| 4   | Media: direct-to-Blob uploads, resized in the browser                                                 | 0.5 day    | An uploaded image shows on the live site                |
-| 5   | Mayora pitch rendered from data                                                                       | 2 days     | Every slide passes the size and overflow checks         |
-| 6   | Meeting notes in the database (optional)                                                              | 0.5 day    | Staff can read saved notes                              |
-| 7   | Go live: Vercel settings, migrate and seed production, full check                                     | 0.5 day    | Full check passes on the live site                      |
+### Phase 0: Setup
 
-## Tables
+- [x] Dev and test databases (`kjs_dev`, `kjs_test`)
+- [x] Admin logins: vineet@kjsindia.com, narender@kjsindia.com (they must change their password at first login)
+- [ ] Owner: create the Vercel Blob store (Vercel → presentation-site-kjs → Storage → Create → Blob)
+- [ ] Owner: decide whether meeting notes are saved in the database (Phase 6)
 
-- **users:** email, name, password hash, role (`admin` or `editor`), `must_change_password`, `session_version`.
-- **sections:** one row per content section (`site`, `home`, `about`…), with `draft`, `published` and `version` (to protect against two people saving at once).
-- **versions:** a copy of all published content at each publish, used for rollback.
-- **media:** uploaded files (link, type, size, alt text).
-- **pitches:** client decks (`mayora`…), with draft, published and version.
-- **login_attempts:** used to slow down repeated failed logins.
-- **notes:** meeting notes (optional).
+### Phase 1: Database ✅
 
-## Safety decisions
+- [x] Tables: users, sections, versions, media, login_attempts, notes
+- [x] Migrations, `db:seed` (safe to rerun), `db:export` (stable order)
+- [x] Images may be `/media/...` or Vercel Blob links
 
-- **Concurrent edits:** every save sends the version it started from, and if someone saved in between, the API answers 409.
-- **Logging users out:** removing a user, or resetting their password, increases `session_version`, which ends their existing logins.
-- **Password resets:** there's no email service, so an admin resets the password and the user must change it at first login.
-- **Deleting media:** a file that content still uses can't be deleted.
-- **Speed after idle:** `/api/content` is cached, and the cached copy is served while it refreshes in the background.
+### Phase 2: API ✅
+
+- [x] Login, logout, "who am I", change password (forced at first login), wrong-password slowdown
+- [x] Drafts per section, checked by the schema, with a version check (409 when someone else saved first)
+- [x] Publish (whole-site check plus a history copy), history and restore, discard draft
+- [x] Media: upload token, register, list, and delete (blocked while a file is in use)
+- [x] Users (admins only): add, edit, reset password, remove; always one admin left
+- [x] Field list for the admin page (`/api/admin/schema`); cross-site writes refused
+- [x] Tests against `kjs_test`
+
+### Phase 3: Site reads from the API ✅
+
+- [x] Live API, then the last good copy saved in the browser, then the built-in copy (all schema-checked)
+- [x] `npm run dev` / `preview` serve `/api` locally
+- [x] Checked: database changes show on the page, and the page still renders with the database down
+
+### Phase 4: Media uploads (~½ day, needs the Blob store)
+
+- [ ] Upload straight from the browser to Blob (photos and videos up to 100 MB)
+- [ ] Shrink large photos in the browser before uploading
+- [ ] Confirm an uploaded photo can be used in content and shows on the site
+- [ ] Tests
+
+### Phase 5: Presentation protection (~½ day)
+
+- [ ] The pitch PIN is checked **on the server** (`POST /api/pitch-unlock`), not in the page
+- [ ] The PIN is kept in Vercel settings (`PITCH_PIN`, default 1305), not in any file; changing it needs no code change
+- [ ] Vercel Routing Middleware serves `/pitches/...` only to browsers that have unlocked (signed cookie), so the slides and their links can't be opened by skipping the lock
+- [ ] Wrong-PIN slowdown on the server (like login)
+- [ ] The 4-digit auto-unlock screen stays the same for presenters
+- [ ] Remove the unused `pitches` table and its media-usage check (migration)
+- [ ] Tests, plus a check that opening a slide or photo link directly without the PIN is refused
+
+### Phase 6: Meeting notes in the database (optional, ~½ day)
+
+- [ ] Notes saved to the database (staff only), with a copy kept in the browser if offline
+- [ ] Staff can read saved notes later
+
+### Phase 7: Go live (~½ day)
+
+- [ ] Vercel settings: production database, session secret, Blob token, PIN; preview deployments use the dev database
+- [ ] Migrate and seed the production database (`db-02`), and create the admins there
+- [ ] Merge `presentation-v` into `main` (when the owner says so) and deploy
+- [ ] Full check: every page at every size, login, save, publish, restore, upload, pitch PIN
+
+### Phase 8: Admin page (~4–6 days)
+
+- [ ] Login screen, including the forced password change
+- [ ] Sidebar of sections; forms built from `/api/admin/schema`
+- [ ] Image and video upload, drag to reorder, Save draft / Publish / Discard
+- [ ] History with one-click restore; "someone else changed this" warnings
+- [ ] Users page (admins only)
