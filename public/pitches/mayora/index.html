@@ -202,15 +202,15 @@
   .future-art .render:hover { transform: scale(1.12); z-index: 5; box-shadow: 0 24px 50px #0006; }
   .future-art .render img { width: 100%; height: 100%; object-fit: cover; }
   .future-art .mini { position: relative; background: #ffffff; border-radius: 14px; overflow: visible; min-height: 200px; }
-  .ring { position: absolute; left: 50%; top: 50%; width: 0; height: 0; animation: ring-spin 18s linear infinite; }
-  .ring img { position: absolute; left: 0; top: 0; width: 96px; height: 70px; object-fit: contain; filter: drop-shadow(0 6px 6px #0003);
+  .prod-ring { position: absolute; left: 50%; top: 50%; width: 0; height: 0; animation: prod-ring-spin 18s linear infinite; }
+  .prod-ring img { position: absolute; left: 0; top: 0; width: 96px; height: 70px; object-fit: contain; filter: drop-shadow(0 6px 6px #0003);
     transform: translate(-50%, -50%) rotate(var(--a)) translateX(70px) rotate(calc(-1 * var(--a))); }
-  .ring img { animation: ring-upright 18s linear infinite; }
-  .ring:hover, .ring:hover img { animation-play-state: paused; }
-  .ring img:hover { z-index: 3; }
-  .ring img { transition: width .25s, height .25s; }
-  .ring img:hover { filter: drop-shadow(0 10px 12px #0005); width: 150px; height: 110px; }
-  @keyframes ring-spin { to { transform: rotate(360deg); } }
+  .prod-ring img { animation: ring-upright 18s linear infinite; }
+  .prod-ring:hover, .prod-ring:hover img { animation-play-state: paused; }
+  .prod-ring img:hover { z-index: 3; }
+  .prod-ring img { transition: width .25s, height .25s; }
+  .prod-ring img:hover { filter: drop-shadow(0 10px 12px #0005); width: 150px; height: 110px; }
+  @keyframes prod-ring-spin { to { transform: rotate(360deg); } }
   /* keeps each product upright while the ring turns */
   @keyframes ring-upright {
     from { transform: translate(-50%, -50%) rotate(var(--a)) translateX(70px) rotate(calc(-1 * var(--a))) rotate(0deg); }
@@ -455,7 +455,7 @@
         <h2 class="rise" style="--d:1">Unit 2: chocolates, biscuits, wafers and more</h2>
         <p class="lede rise" style="--d:2">Building on this momentum, Unit 2 gives partners <strong>one reliable manufacturing base</strong> for confectionery and bakery.</p>
         <div class="facts-row rise" style="--d:3">
-          <div><b>₹130 cr</b><span>Planned investment</span></div>
+          <div><b>₹160 cr</b><span>Planned investment</span></div>
           <div><b>44 acres</b><span>Thogarpally, Sangareddy</span></div>
           <div><b>15 May 2026</b><span>Foundation stone</span></div>
         </div>
@@ -471,7 +471,7 @@
       <aside class="notes-src" hidden>
         <li>These are KJS's own confectionery products, made in the categories Unit 2 will add.</li>
         <li>Foundation stone: 15 May 2026, Thogarpally, Aliyabad (V), Kondapur Mandal, Sangareddy (from the plaque).</li>
-        <li>Planned investment ₹130 crore (KJS figure). Note: Invest Telangana's public announcement cited ₹651 crore; be ready if Mayora asks about the difference.</li>
+        <li>Planned investment ₹160 crore (KJS figure). Note: Invest Telangana's public announcement cited ₹651 crore; be ready if Mayora asks about the difference.</li>
         <li>Do not commit to line start dates or capacities unless operations has confirmed them.</li>
       </aside>
     </section>
@@ -501,7 +501,7 @@
               <div class="render"><img src="/media/units/unit-2-render.jpg" alt="Unit 2, architect's render"></div>
               <!-- KJS products slowly circling; hover pauses the circle and enlarges a product -->
               <div class="mini">
-                <div class="ring">
+                <div class="prod-ring">
                   <img src="/media/featured/grandy-chocolate-bar.webp" alt="Grandy chocolate bar" style="--a:0deg">
                   <img src="/media/featured/fundo-sandwich-biscuits.webp" alt="Fundo sandwich biscuits" style="--a:90deg">
                   <img src="/media/featured/maxi-cream-wafers.webp" alt="Maxi cream wafers" style="--a:180deg">
