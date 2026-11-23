@@ -315,12 +315,32 @@
   .lightbox .x { position: absolute; top: 18px; right: 18px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: #c8102e; color: #fff; font-size: 26px; line-height: 1; }
 
   .black { position: fixed; inset: 0; background: #000; z-index: 50; }
+  .lock { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: radial-gradient(ellipse at 50% 40%, #e4334a, #8e0b20 70%); }
+  .lock-card { width: min(420px, 100%); display: grid; gap: 14px; padding: 30px 28px; border-radius: 20px; background: #fff; color: #231416; box-shadow: 0 30px 80px #0006; text-align: center; }
+  .lock-logos { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 4px; }
+  .lock-logos .kjs { height: 44px; padding: 7px 12px; border-radius: 10px; background: #1d1416; display: grid; place-items: center; }
+  .lock-logos .kjs img { height: 28px; display: block; }
+  .lock-logos .mayora { height: 44px; padding: 4px 8px; border-radius: 10px; border: 1px solid #ecd8d9; }
+  .lock-logos .mayora img { height: 100%; display: block; }
+  .lock-logos .x { color: #6d5558; font-weight: 800; }
+  .lock-card h1 { margin: 0; font-family: var(--font-display); font-size: 26px; letter-spacing: -.03em; color: #c8102e; }
+  .lock-card p { color: #6d5558; font-size: 15px; }
+  .lock-card input { width: 100%; padding: 14px 16px; border: 2px solid #ecd8d9; border-radius: 12px; font: 700 22px var(--font-body); letter-spacing: .3em; text-align: center; color: #231416; background: #fbf4f4; }
+  .lock-card input:focus { outline: none; border-color: #c8102e; }
+  .lock-card button { padding: 14px; border: 0; border-radius: 12px; background: #c8102e; color: #fff; font: 800 17px var(--font-body); cursor: pointer; }
+  .lock-card button:hover { filter: brightness(1.08); }
+  .lock-error { color: #c8102e !important; font-weight: 700; }
+  .lock-card.shake { animation: shake .35s; }
+  @keyframes shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .splash { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; background: #160709; cursor: pointer; transition: opacity .6s ease; }
-  .splash img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; animation: splash-in 1.2s ease both; }
+  .splash img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .splash.run img { animation: splash-in 1.2s ease both; }
   @keyframes splash-in { from { opacity: 0; transform: scale(1.03); } }
   .splash.done { opacity: 0; pointer-events: none; }
   .splash-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: #ffffff22; }
-  .splash-bar i { display: block; height: 100%; width: 100%; background: #c8102e; transform-origin: left; animation: splash-bar 3s linear both; }
+  .splash-bar i { display: block; height: 100%; width: 100%; background: #c8102e; transform-origin: left; transform: scaleX(0); }
+  .splash.run .splash-bar i { animation: splash-bar 3s linear both; }
   @keyframes splash-bar { from { transform: scaleX(0); } }
   .splash-hint { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); margin: 0; padding: 6px 14px; border-radius: 999px; background: #000a; color: #fff; font-size: 14px; font-weight: 700; white-space: nowrap; }
   .help { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; background: #0008; }
@@ -343,6 +363,19 @@
 </head>
 <body>
 
+
+<!-- Passkey screen: shown first. The passkey is checked against its SHA-256 fingerprint (see PASSKEY_HASH). -->
+<div class="lock" id="lock">
+  <form class="lock-card" id="lock-form" autocomplete="off">
+    <div class="lock-logos"><span class="kjs"><img src="/media/logos/kjs-india.png" alt="KJS India"></span><span class="x">×</span><span class="mayora"><img src="/media/logos/mayora.png" alt="Mayora"></span></div>
+    <h1>Partnership presentation</h1>
+    <p>Enter the passkey to open the presentation.</p>
+    <label for="lock-input" class="sr">Passkey</label>
+    <input id="lock-input" type="password" inputmode="numeric" maxlength="12" placeholder="Passkey" required>
+    <button type="submit">Open presentation</button>
+    <p class="lock-error" id="lock-error" role="alert" hidden>That passkey is not correct. Please try again.</p>
+  </form>
+</div>
 
 <!-- Opening screen: the Mayora India Block ribbon cutting. Shows for 3 seconds; click or any key skips it. -->
 <div class="splash" id="splash" role="button" tabindex="0" aria-label="Opening photo. Click or press any key to start the presentation.">
@@ -677,11 +710,48 @@
     splash.classList.add('done');
     setTimeout(() => splash.remove(), 650);
   }
-  const startHash = location.hash.match(/^#slide-(\d+)$/);
-  if (startHash && Number(startHash[1]) > 1) { splashOpen = false; splash.remove(); }
+  function startSplash() {
+    const startHash = location.hash.match(/^#slide-(\d+)$/);
+    if (startHash && Number(startHash[1]) > 1) { splashOpen = false; splash.remove(); }
+    else {
+      splash.classList.add('run');
+      setTimeout(closeSplash, 3000);
+      splash.addEventListener('click', closeSplash);
+    }
+  }
+
+  // ---------- Passkey ----------
+  // Only a fingerprint of the passkey is in the page. This is a simple lock for a static page; it moves to the
+  // server (and becomes editable) with the backend. Unlocking is remembered until the browser tab is closed.
+  const PASSKEY_HASH = '2f2662718eb996a31a76118e823c7cbbf18cb482dd872db5c1c52a2d013a8bfb'; // passkey 1305
+  const UNLOCK_KEY = 'kjs-pitch-mayora-unlocked';
+  const lock = $('lock');
+  let locked = true;
+  async function fingerprint(value) {
+    const bytes = new TextEncoder().encode('kjs-mayora:' + value);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+  function unlock() {
+    locked = false;
+    lock.remove();
+    try { sessionStorage.setItem(UNLOCK_KEY, PASSKEY_HASH); } catch (e) {}
+    startSplash();
+  }
+  let remembered = null;
+  try { remembered = sessionStorage.getItem(UNLOCK_KEY); } catch (e) {}
+  if (remembered === PASSKEY_HASH) unlock();
   else {
-    setTimeout(closeSplash, 3000);
-    splash.addEventListener('click', closeSplash);
+    const input = $('lock-input');
+    setTimeout(() => input.focus(), 50);
+    $('lock-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if ((await fingerprint(input.value.trim())) === PASSKEY_HASH) return unlock();
+      $('lock-error').hidden = false;
+      const card = $('lock-form');
+      card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+      input.select();
+    });
   }
 
   // ---------- Fit the 1600×900 stage to the window ----------
@@ -831,6 +901,7 @@
 
   // ---------- Keyboard, clicker, touch ----------
   addEventListener('keydown', (e) => {
+    if (locked) return; // the passkey field handles its own typing
     if (splashOpen) { e.preventDefault(); closeSplash(); return; } // a key on the opening screen only skips it
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     const k = e.key;
@@ -860,7 +931,7 @@
   let touchX = null;
   addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
   addEventListener('touchend', (e) => {
-    if (splashOpen) { touchX = null; return; }
+    if (locked || splashOpen) { touchX = null; return; }
     if (touchX === null || !lightbox.hidden) return;
     const dx = e.changedTouches[0].clientX - touchX;
     if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
