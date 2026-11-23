@@ -64,7 +64,13 @@ const palette = z.object({
   shadow: z.string().describe('Shadows'),
 });
 
-const partner = z.object({ name: z.string().describe('Name'), logo: mediaPath.describe('Logo') });
+const partner = z.object({
+  name: z.string().describe('Name'),
+  logo: mediaPath.describe('Logo'),
+  link: sitePath
+    .optional()
+    .describe('Page opened by clicking the logo, e.g. a partner pitch (/pitches/mayora/)'),
+});
 
 export const siteSchema = z.object({
   name: z.string().describe('Company name'),

@@ -191,7 +191,8 @@
       },
       {
         "name": "Mayora",
-        "logo": "/media/logos/mayora.png"
+        "logo": "/media/logos/mayora.png",
+        "link": "/pitches/mayora/"
       }
     ],
     "storyTitle": "Our story"

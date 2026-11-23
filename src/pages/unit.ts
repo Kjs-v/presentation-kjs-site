@@ -6,7 +6,7 @@
 import type { Page } from '../lib/router';
 import type { Content, Unit, UnitTabId } from '../../content/content.schema';
 import { h } from '../lib/dom';
-import { byOrder, cards, groupBy, productTile, stats, tile } from '../components';
+import { byOrder, cards, groupBy, productTile, stats, tile, partnerLogo } from '../components';
 import { notFoundPage } from './not-found';
 
 type Section = (unit: Unit, content: Content) => HTMLElement[];
@@ -28,11 +28,7 @@ const sections: Record<UnitTabId, Section> = {
     const list = clientPacks.filter((p) => p.unit === unit.id).sort(byOrder);
     if (!list.length) return empty('No clients added yet.');
     return [
-      h(
-        'div',
-        { class: 'logos compact' },
-        ...about.partners.map((p) => h('div', {}, h('img', { src: p.logo, alt: p.name, loading: 'lazy' }))),
-      ),
+      h('div', { class: 'logos compact' }, ...about.partners.map(partnerLogo)),
       ...groupBy(list, (p) => p.brand).flatMap(([brand, items]) => [
         h('h3', { class: 'group-title' }, brand, h('span', {}, String(items.length))),
         h('div', { class: 'tile-grid' }, ...items.map((p) => tile(p.image, p.name))),

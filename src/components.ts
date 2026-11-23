@@ -51,6 +51,18 @@ export const productTile = (p: Product, content?: Content) =>
     content ? () => openProduct(p, content) : undefined,
   );
 
+/** A partner logo; opens its pitch page when the partner has a link. */
+export function partnerLogo(p: { name: string; logo: string; link?: string }): HTMLElement {
+  const img = h('img', { src: p.logo, alt: p.name, loading: 'lazy' });
+  if (!p.link) return h('div', {}, img);
+  return h(
+    'a',
+    { href: p.link, class: 'logo-link', title: `Open the ${p.name} presentation` },
+    img,
+    h('span', { class: 'logo-cue' }, 'View pitch →'),
+  );
+}
+
 /** Groups items by a key, keeping the first-seen order of groups. */
 export function groupBy<T>(items: T[], key: (item: T) => string): [string, T[]][] {
   const map = new Map<string, T[]>();

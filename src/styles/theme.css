@@ -546,6 +546,34 @@ main > * {
   border: 1px solid var(--c-edge);
   border-radius: var(--radius);
 }
+.logos > a.logo-link {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  min-height: 110px;
+  background: #fff;
+  border: 2px solid #c8102e;
+  border-radius: var(--radius);
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.logos > a.logo-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px #c8102e33;
+}
+.logo-cue {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #c8102e;
+}
+.logos.compact > a.logo-link {
+  min-height: 80px;
+}
 .logos img {
   max-height: 70px;
   width: auto;

@@ -2,7 +2,7 @@
 import type { Page } from '../lib/router';
 import type { Content, Slide } from '../../content/content.schema';
 import { h } from '../lib/dom';
-import { cards, productTile } from '../components';
+import { cards, productTile, partnerLogo } from '../components';
 
 function renderSlide(slide: Slide, content: Content): HTMLElement {
   const head = [h('h2', {}, slide.title), slide.summary ? h('p', { class: 'lead' }, slide.summary) : null];
@@ -21,11 +21,7 @@ function renderSlide(slide: Slide, content: Content): HTMLElement {
         'section',
         { class: 'slide wrap' },
         ...head,
-        h(
-          'div',
-          { class: 'logos' },
-          ...content.about.partners.map((p) => h('div', {}, h('img', { src: p.logo, alt: p.name }))),
-        ),
+        h('div', { class: 'logos' }, ...content.about.partners.map(partnerLogo)),
       );
     case 'products': {
       const picked = slide.productIds.map((id) => content.products.find((p) => p.id === id)!);

@@ -3,6 +3,27 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Mayora pitch on the site)
+
+- **Did:** rebuilt the Mayora India pitch as a page of the site: `public/pitches/mayora/index.html`, served at `/pitches/mayora/`.
+  - Clicking the **Mayora logo** (About page, Unit 1 Clients, slides) opens it. This is set by `link` on the partner in content.json.
+  - Red and white (Mayora colours), with a white or red background. T or the Colours button switches.
+  - Bigger KJS logo in the header band.
+  - 8 slides:
+    1. Cover: "Trusted Co-manufacturer for Choki Choki"
+    2. Where we began
+    3. Growth: bars drawn as Choki sticks, 2023 as a cut piece, bigger numbers
+    4. Scalability: 1 → 4 sticks plus pack photos
+    5. Unit 2 with KJS products
+    6. For discussion, with Unit 2 images
+    7. Commitment plus a mini gallery (company film, Unit 2 inauguration, Choki team training, groundbreaking, foundation stone)
+    8. Thank you, with a photo from the groundbreaking
+  - Removed the old "numbers" and "how Unit 1 delivers" slides. The date is December 2026.
+- **D: drive:** found no ribbon-cutting photo (the 15 May 2026 event was a groundbreaking with lamp lighting and a plaque).
+  - Slide 8 uses the photo provided (ROH02464). An alternative is ROH02866, a podium speech in front of the plaque.
+  - The plaque gives the Unit 2 address: Thogarpally, Aliyabad (V), Kondapur Mandal, Sangareddy.
+- **Note:** the pitch text is written in the page's HTML, not in content.json yet. It moves to content.json with the admin work.
+
 ## 2026-11-23 (Simple header + material from the D: drive)
 
 - **Did:** dropped the corner navigator.

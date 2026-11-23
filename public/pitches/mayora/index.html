@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="en" data-theme="white">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>KJS India × Mayora India</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+  /*
+   * KJS India × Mayora India partnership deck.
+   * A fixed 1600×900 stage scaled to fit any screen (projector-safe).
+   * Colours follow Mayora's red and white; T switches between a white and a red background.
+   * All images and videos come from /media on the site.
+   */
+  :root {
+    --bg: #ffffff;
+    --surface: #fbf4f4;
+    --surface-2: #f5e4e4;
+    --text: #231416;
+    --muted: #6d5558;
+    --edge: #ecd8d9;
+    --heading: #c8102e;
+    --eyebrow: #c8102e;
+    --accent: #c8102e;
+    --on-accent: #ffffff;
+    --soft: #fde7e9;
+    --letterbox: #f3e6e7;
+    --chrome: #ffffffee;
+    --chrome-text: #231416;
+    --shadow: #5a0a1426;
+    --choc: #5b2d1d;
+    --choc-2: #7a3d27;
+    --font-display: "Segoe UI Black", "Arial Black", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Segoe UI", "Helvetica Neue", Arial, system-ui, sans-serif;
+    color-scheme: light;
+  }
+  :root[data-theme="red"] {
+    --bg: #c8102e;
+    --surface: #b00e28;
+    --surface-2: #9c0c23;
+    --text: #ffffff;
+    --muted: #ffd9dd;
+    --edge: #e04a5f;
+    --heading: #ffffff;
+    --eyebrow: #ffe08a;
+    --accent: #ffffff;
+    --on-accent: #c8102e;
+    --soft: #a80d27;
+    --letterbox: #7d0a1c;
+    --chrome: #8e0b20ee;
+    --chrome-text: #ffffff;
+    --shadow: #3a040c66;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--letterbox); color: var(--text); font-family: var(--font-body); overflow: hidden; transition: background .3s; }
+  button { font: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  svg { display: block; }
+  p { margin: 0; }
+
+  /* ---------- Stage ---------- */
+  .viewport { position: fixed; inset: 0; display: grid; place-items: center; }
+  .stage {
+    position: relative; width: 1600px; height: 900px; flex: none; overflow: hidden;
+    background: var(--bg); color: var(--text); transform-origin: center center;
+    box-shadow: 0 20px 80px var(--shadow); transition: background .3s, color .3s;
+  }
+  .stage::before { /* thin Mayora-red ribbon along the top */
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px; z-index: 3;
+    background: linear-gradient(90deg, #c8102e, #e4334a 60%, #c8102e);
+  }
+  :root[data-theme="red"] .stage::before { background: linear-gradient(90deg, #fff, #ffd9dd 60%, #fff); }
+  .slide {
+    position: absolute; inset: 0; padding: 150px 110px 100px;
+    display: grid; opacity: 0; visibility: hidden;
+    transition: opacity .45s ease, visibility 0s .45s;
+  }
+  .slide.active { opacity: 1; visibility: visible; transition: opacity .45s ease; }
+  .slide.active .rise { animation: rise .6s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--d, 0) * 90ms + 80ms); }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+
+  /* shared bands */
+  .band-top { position: absolute; left: 110px; right: 110px; top: 36px; display: flex; align-items: center; justify-content: space-between; z-index: 2; }
+  .lockup { display: flex; align-items: center; gap: 20px; }
+  .lockup .kjs { height: 64px; padding: 10px 18px; border-radius: 12px; background: #1d1416; display: grid; place-items: center; }
+  .lockup .kjs img { height: 42px; display: block; }
+  .lockup .x { color: var(--muted); font-weight: 800; font-size: 26px; }
+  .lockup .mayora { height: 64px; padding: 6px 12px; border-radius: 12px; background: #fff; border: 1px solid var(--edge); }
+  .lockup .mayora img { height: 100%; display: block; }
+  .section-tag { font-size: 16px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .band-bottom { position: absolute; left: 110px; right: 110px; bottom: 32px; display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: var(--muted); border-top: 1px solid var(--edge); padding-top: 14px; }
+  .band-bottom b { color: var(--text); font-weight: 700; }
+  .page-no { font-variant-numeric: tabular-nums; font-weight: 800; color: var(--text); }
+
+  /* type */
+  .eyebrow { margin: 0 0 18px; color: var(--eyebrow); font-weight: 800; font-size: 20px; letter-spacing: .08em; text-transform: uppercase; }
+  h1, h2 { margin: 0; font-family: var(--font-display); font-weight: 900; letter-spacing: -.045em; color: var(--heading); text-wrap: balance; }
+  h2 { font-size: 64px; line-height: 1; }
+  .lede { margin: 24px 0 0; font-size: 28px; line-height: 1.38; color: var(--muted); max-width: 32ch; }
+  .lede strong { color: var(--text); }
+  .src { font-size: 14px; color: var(--muted); }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--edge); background: var(--surface); font-weight: 700; font-size: 19px; }
+  .pill.red { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+
+  /* ---------- 1. Cover ---------- */
+  .s-cover { grid-template-columns: 1.02fr .98fr; gap: 60px; align-items: center; }
+  .s-cover h1 { font-size: 100px; line-height: .95; }
+  .s-cover h1 .choki { display: block; color: var(--text); }
+  :root[data-theme="red"] .s-cover h1 .choki { color: #ffe08a; }
+  .s-cover .swoosh { margin-top: 34px; width: 180px; height: 10px; border-radius: 10px; background: var(--accent); }
+  .cover-art { position: relative; height: 640px; }
+  .cover-photo { position: absolute; inset: 0 0 60px 40px; border-radius: 48% 48% 18px 18px / 36% 36% 18px 18px; overflow: hidden; box-shadow: 0 30px 70px var(--shadow); border: 4px solid var(--accent); }
+  .cover-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .cover-pack { position: absolute; left: -10px; bottom: 0; width: 260px; filter: drop-shadow(0 22px 26px #0005); transform: rotate(-8deg); border-radius: 14px; }
+
+  /* ---------- 2. Where we began ---------- */
+  .s-began { grid-template-columns: 1fr .82fr; gap: 80px; align-items: center; }
+  .quote-block { margin-top: 30px; padding: 26px 30px; border-left: 6px solid var(--accent); background: var(--surface); border-radius: 0 14px 14px 0; font-size: 28px; line-height: 1.4; }
+  .journey { margin-top: 44px; display: grid; grid-template-columns: repeat(5, 1fr); position: relative; }
+  .journey::before { content: ""; position: absolute; left: 10%; right: 10%; top: 13px; height: 3px; background: var(--accent); border-radius: 3px; }
+  .stop { position: relative; display: grid; justify-items: center; gap: 10px; text-align: center; }
+  .stop i { width: 30px; height: 30px; border-radius: 50%; background: var(--bg); border: 4px solid var(--accent); }
+  .stop:first-child i { background: var(--accent); }
+  .stop.next i { border-style: dashed; }
+  .stop b { font-size: 22px; }
+  .stop span { font-size: 16px; color: var(--muted); }
+  .began-art { position: relative; height: 600px; display: grid; place-items: center; }
+  .began-art .ring { position: absolute; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle, var(--soft), transparent 70%); }
+  .began-art img { position: relative; width: 420px; border-radius: 18px; filter: drop-shadow(0 26px 30px #0004); }
+
+  /* ---------- 3. Growth (Choki sticks) ---------- */
+  .s-growth { grid-template-columns: 1fr 420px; gap: 50px; align-items: stretch; }
+  .chart-card { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px; min-height: 0; }
+  .s-growth h2 { font-size: 52px; }
+  .chart { width: 100%; height: 100%; min-height: 0; overflow: visible; }
+  .chart .base { stroke: var(--edge); stroke-width: 3; }
+  .chart .year { fill: var(--text); font: 800 26px var(--font-body); }
+  .chart .sub { fill: var(--muted); font: 600 17px var(--font-body); }
+  .chart .val { fill: var(--heading); font: 900 50px var(--font-display); letter-spacing: -.02em; }
+  .chart .unit { fill: var(--muted); font: 800 20px var(--font-body); letter-spacing: .08em; }
+  .chart .stick { transform-box: fill-box; transform-origin: bottom; }
+  .chart .seal { fill: #c8102e; }
+  :root[data-theme="red"] .chart .seal { fill: #ffcc2a; stroke: #fff; stroke-width: 2; }
+  .slide.active .chart .stick { animation: grow 1s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--d) * 140ms + 200ms); }
+  .slide.active .chart .label { animation: fade .5s both; animation-delay: calc(var(--d) * 140ms + 800ms); }
+  @keyframes grow { from { transform: scaleY(0); } }
+  @keyframes fade { from { opacity: 0; } }
+  .legend { display: flex; gap: 24px; font-size: 16px; color: var(--muted); }
+  .callouts { display: grid; gap: 18px; align-content: center; }
+  .callout { padding: 26px 28px; border-radius: 16px; background: var(--surface); border: 1px solid var(--edge); }
+  .callout.hero { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+  .callout .big { font-family: var(--font-display); font-weight: 900; font-size: 66px; letter-spacing: -.04em; line-height: 1; }
+  .callout p { margin-top: 10px; font-size: 21px; line-height: 1.38; }
+
+  /* ---------- 4. Scalability ---------- */
+  .s-skus { grid-template-columns: .95fr 1.05fr; gap: 70px; align-items: center; }
+  .stick-steps { display: flex; align-items: flex-end; gap: 30px; margin-top: 48px; }
+  .stick-group { display: grid; justify-items: center; gap: 12px; }
+  .stick-group .sticks { display: flex; align-items: flex-end; gap: 10px; height: 190px; }
+  .stick-group .sticks svg { height: 190px; width: auto; filter: drop-shadow(0 10px 12px #0003); }
+  .slide.active .stick-group .sticks svg { animation: pop .5s cubic-bezier(.34, 1.56, .64, 1) both; animation-delay: calc(var(--s) * 110ms + 350ms); }
+  @keyframes pop { from { opacity: 0; transform: translateY(30px) scale(.8); } }
+  .stick-group b { font-family: var(--font-display); font-size: 30px; color: var(--heading); }
+  .stick-group span { font-size: 17px; color: var(--muted); font-weight: 700; margin-top: -8px; }
+  .stick-steps .arrow { font-size: 64px; color: var(--accent); align-self: center; font-weight: 900; margin-bottom: 40px; }
+  .packs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 26px; align-items: end; }
+  .packs figure { margin: 0; display: grid; gap: 12px; justify-items: center; min-width: 0; }
+  .packs .ph { width: 100%; height: 270px; display: grid; place-items: center; border-radius: 18px; background: #fff; border: 1px solid var(--edge); padding: 12px; box-shadow: 0 14px 30px var(--shadow); overflow: hidden; }
+  .packs img { width: 100%; height: 100%; object-fit: contain; }
+  .packs figcaption { font-size: 17px; font-weight: 700; color: var(--muted); }
+  .packs figure:nth-child(even) { transform: translateY(28px); }
+
+  /* ---------- 5. Unit 2 ---------- */
+  .s-unit2 { grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: center; }
+  .facts-row { margin-top: 30px; display: grid; grid-template-columns: repeat(3, auto); gap: 30px; justify-content: start; }
+  .facts-row div { display: grid; gap: 4px; }
+  .facts-row b { font-family: var(--font-display); font-size: 38px; color: var(--heading); letter-spacing: -.03em; }
+  .facts-row span { font-size: 17px; color: var(--muted); }
+  .range { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .prod { position: relative; display: grid; grid-template-rows: 1fr auto; padding: 14px 14px 16px; border-radius: 18px; background: var(--surface); border: 1px solid var(--edge); overflow: hidden; min-height: 0; }
+  .prod .shot { display: grid; place-items: center; height: 170px; overflow: hidden; }
+  .prod .shot img { max-width: 100%; max-height: 160px; object-fit: contain; filter: drop-shadow(0 12px 14px #0003); transition: transform .3s; }
+  .prod:hover .shot img { transform: scale(1.06) rotate(-2deg); }
+  .prod b { font-family: var(--font-display); font-size: 26px; letter-spacing: -.02em; color: var(--heading); }
+  .prod span { display: block; font-size: 16px; color: var(--muted); }
+  .prod.more { background: var(--accent); border-color: var(--accent); align-content: center; text-align: left; padding: 22px; }
+  .prod.more b, .prod.more span { color: var(--on-accent); }
+
+  /* ---------- 6. For discussion ---------- */
+  .s-next { grid-template-rows: auto 1fr; gap: 24px; padding-bottom: 110px; }
+  .s-next h2 { font-size: 54px; }
+  .bridge { display: grid; grid-template-columns: .85fr 70px 1.15fr; align-items: stretch; }
+  .bridge .col { padding: 24px 28px; border-radius: 18px; border: 1px solid var(--edge); background: var(--surface); display: grid; gap: 14px; align-content: start; }
+  .bridge .col.future { background: var(--accent); color: var(--on-accent); border-color: transparent; grid-template-columns: 1fr 300px; column-gap: 24px; }
+  .bridge .col h3 { margin: 0; font-size: 18px; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+  .bridge .col .head { font-family: var(--font-display); font-size: 42px; letter-spacing: -.03em; line-height: 1.05; }
+  .bridge .col ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; font-size: 19px; line-height: 1.35; }
+  .bridge .mid { display: grid; place-items: center; font-size: 56px; color: var(--accent); font-weight: 900; }
+  .future-text { display: grid; gap: 14px; align-content: start; }
+  .future-art { grid-row: span 3; display: grid; grid-template-rows: 140px auto; gap: 10px; }
+  .future-art .render { border-radius: 12px; overflow: hidden; border: 2px solid #ffffff66; }
+  .future-art .render img { width: 100%; height: 100%; object-fit: cover; }
+  .future-art .mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; align-items: center; background: #ffffff; border-radius: 12px; padding: 8px; }
+  .future-art .mini img { width: 100%; height: 70px; object-fit: contain; }
+  .choki-col .pack-mini { height: 96px; display: flex; gap: 10px; }
+  .choki-col .pack-mini img { height: 100%; border-radius: 10px; background: #fff; border: 1px solid var(--edge); padding: 4px; }
+  .asks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 16px; }
+  .ask { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; padding: 14px 20px; border-radius: 14px; border: 1px dashed var(--edge); font-size: 20px; line-height: 1.35; }
+  .ask b { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-weight: 900; }
+
+  /* ---------- 7. Commitment + mini gallery ---------- */
+  .s-commit { grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: center; }
+  .s-commit blockquote { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 50px; line-height: 1.12; letter-spacing: -.035em; color: var(--heading); text-wrap: balance; }
+  .s-commit blockquote em { font-style: normal; color: var(--text); }
+  .s-commit .trio { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .mosaic { display: grid; grid-template-columns: 1.25fr 1fr 1fr; grid-template-rows: 300px 210px; gap: 12px; }
+  .tile { position: relative; padding: 0; border: 0; border-radius: 16px; overflow: hidden; background: #000; color: #fff; text-align: left; box-shadow: 0 14px 30px var(--shadow); }
+  .tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .tile:hover img { transform: scale(1.05); }
+  .tile span { position: absolute; left: 10px; bottom: 10px; right: 10px; padding: 5px 10px; border-radius: 8px; background: #000a; font-size: 14px; font-weight: 700; }
+  .tile.video .play { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 78px; height: 78px; border-radius: 50%; background: #c8102e; display: grid; place-items: center; box-shadow: 0 0 0 8px #ffffff55; transition: transform .2s; }
+  .tile.video:hover .play { transform: translate(-50%, -50%) scale(1.08); }
+  .tile.video .play svg { width: 32px; height: 32px; margin-left: 5px; }
+  .tile.big { grid-row: span 2; }
+
+  /* ---------- 8. Thank you ---------- */
+  .s-close { grid-template-columns: 480px 1fr; gap: 70px; align-items: center; }
+  .portrait { position: relative; height: 640px; border-radius: 22px; overflow: hidden; border: 4px solid var(--accent); box-shadow: 0 30px 60px var(--shadow); }
+  .portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+  .portrait span { position: absolute; left: 14px; bottom: 14px; padding: 6px 12px; border-radius: 8px; background: #000a; color: #fff; font-size: 15px; font-weight: 700; }
+  .close-text { display: grid; gap: 26px; }
+  .thanks { font-family: var(--font-display); font-size: 116px; letter-spacing: -.05em; line-height: .9; color: var(--heading); }
+  .summary-card { padding: 26px 30px; border-radius: 18px; background: var(--surface); border: 1px solid var(--edge); font-size: 23px; line-height: 1.45; }
+  .contact { display: grid; gap: 12px; }
+  .contact .row { display: flex; gap: 16px; align-items: center; font-size: 23px; font-weight: 700; }
+  .contact .row svg { width: 26px; height: 26px; color: var(--eyebrow); flex: none; }
+  .contact .addr { font-size: 17px; color: var(--muted); line-height: 1.45; font-weight: 400; }
+
+  /* ---------- Presenter chrome (outside the stage) ---------- */
+  .progress { position: fixed; left: 0; top: 0; height: 4px; background: #c8102e; z-index: 30; transition: width .4s ease; }
+  :root[data-theme="red"] .progress { background: #fff; }
+  .dock {
+    position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 30;
+    display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px;
+    background: var(--chrome); color: var(--chrome-text); box-shadow: 0 10px 30px var(--shadow); border: 1px solid var(--edge);
+    transition: opacity .3s, transform .3s; backdrop-filter: blur(8px);
+  }
+  body.idle .dock { opacity: 0; transform: translate(-50%, 10px); pointer-events: none; }
+  .dock button, .dock a { height: 40px; min-width: 40px; padding: 0 12px; border-radius: 999px; border: 0; background: transparent; color: inherit; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; text-decoration: none; }
+  .dock button:hover, .dock a:hover, .dock button[aria-pressed="true"] { background: var(--surface-2); }
+  .dock svg { width: 18px; height: 18px; }
+  .dock .count { min-width: 64px; justify-content: center; font-variant-numeric: tabular-nums; }
+  .dock .sep { width: 1px; height: 22px; background: var(--edge); }
+  .dock .timer { font-variant-numeric: tabular-nums; min-width: 70px; justify-content: center; }
+  .theme-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #c8102e; background: linear-gradient(135deg, #fff 0 50%, #c8102e 50%); }
+
+  .notes {
+    position: fixed; left: 50%; bottom: 72px; transform: translateX(-50%); z-index: 29;
+    width: min(980px, calc(100vw - 32px)); max-height: 38vh; overflow: auto;
+    padding: 18px 22px; border-radius: 16px; background: var(--chrome); color: var(--chrome-text);
+    border: 1px solid var(--edge); box-shadow: 0 16px 40px var(--shadow); backdrop-filter: blur(8px);
+  }
+  .notes header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  .notes h4 { margin: 0; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--eyebrow); }
+  .notes .next { font-size: 13px; color: var(--muted); }
+  .notes ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 16px; line-height: 1.45; }
+
+  .overview { position: fixed; inset: 0; z-index: 40; overflow: auto; padding: 28px 16px; background: var(--letterbox); }
+  .overview header { display: flex; justify-content: space-between; align-items: center; margin: 0 auto 18px; max-width: 1400px; color: var(--chrome-text); }
+  .overview h3 { margin: 0; font-size: 18px; color: #fff; }
+  :root[data-theme="white"] .overview h3 { color: var(--text); }
+  .ov-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; max-width: 1400px; margin: 0 auto; }
+  .ov-item { padding: 0; border: 2px solid transparent; border-radius: 12px; background: none; text-align: left; color: var(--text); }
+  :root[data-theme="red"] .ov-item { color: #fff; }
+  .ov-item[aria-current="true"] { border-color: #c8102e; }
+  .ov-thumb { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 10px; background: var(--bg); box-shadow: 0 8px 20px var(--shadow); }
+  .ov-thumb .stage-mini { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; transform-origin: 0 0; pointer-events: none; }
+  .ov-thumb .stage-mini .slide { opacity: 1; visibility: visible; transition: none; }
+  .ov-label { display: block; padding: 8px 4px 0; font-size: 14px; font-weight: 700; }
+
+  .lightbox { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: #0b0204e8; padding: 30px; }
+  .lightbox video, .lightbox img { max-width: min(1400px, 100%); max-height: calc(100vh - 110px); border-radius: 12px; background: #000; box-shadow: 0 30px 80px #000; }
+  .lightbox .cap { margin-top: 12px; color: #fff; font-weight: 700; text-align: center; }
+  .lightbox .x { position: absolute; top: 18px; right: 18px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: #c8102e; color: #fff; font-size: 26px; line-height: 1; }
+
+  .black { position: fixed; inset: 0; background: #000; z-index: 50; }
+  .help { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; background: #0008; }
+  .help .card { width: min(520px, calc(100vw - 32px)); padding: 24px 26px; border-radius: 16px; background: var(--chrome); color: var(--chrome-text); box-shadow: 0 20px 60px #0006; }
+  .help h3 { margin: 0 0 12px; }
+  .help dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 18px; font-size: 15px; }
+  .help dt { font-weight: 800; }
+  .help kbd { display: inline-block; min-width: 26px; padding: 2px 7px; border-radius: 6px; border: 1px solid var(--edge); background: var(--surface); text-align: center; font: 700 13px var(--font-body); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; animation-delay: 0s !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- A Choki Choki stick, reused by the chart and the Scalability slide -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="choc" x1="0" x2="1"><stop offset="0" stop-color="#4a2316"/><stop offset=".45" stop-color="#7a3d27"/><stop offset="1" stop-color="#4a2316"/></linearGradient>
+    <linearGradient id="shine" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <pattern id="stripes" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)"><rect width="16" height="16" fill="#c8102e"/><rect width="7" height="16" fill="#ffcc2a"/></pattern>
+    <symbol id="stick" viewBox="0 0 60 240">
+      <path d="M6 14 L54 14 L54 236 Q54 240 50 240 L10 240 Q6 240 6 236 Z" fill="url(#choc)"/>
+      <path d="M4 2 h52 v14 h-52 z" fill="#c8102e"/>
+      <path d="M4 2 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 v-4 z" fill="#ffcc2a"/>
+      <rect x="6" y="150" width="48" height="58" fill="url(#stripes)"/>
+      <text x="30" y="110" fill="#fff" font-family="Segoe UI Black, Arial Black, sans-serif" font-size="15" font-weight="900" text-anchor="middle" transform="rotate(-90 30 110)">choki choki</text>
+      <rect x="14" y="16" width="9" height="220" rx="4" fill="url(#shine)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="progress" id="progress"></div>
+<div class="viewport">
+  <div class="stage" id="stage" role="region" aria-roledescription="presentation" aria-label="KJS India and Mayora India partnership">
+
+    <!-- 1. Cover -->
+    <section class="slide s-cover" data-title="Cover">
+      <div>
+        <h1 class="rise" style="--d:1">Trusted Co‑manufacturer for <span class="choki">Choki Choki</span></h1>
+        <div class="swoosh rise" style="--d:2"></div>
+      </div>
+      <div class="cover-art rise" style="--d:2">
+        <div class="cover-photo"><img src="/media/units/unit-1-front.jpg" alt="KJS India Unit 1, Pashamylaram"></div>
+        <img class="cover-pack" src="/media/unit-1-packs/choki-choki-pack.jpg" alt="Choki Choki Chocomilk pack">
+      </div>
+      <aside class="notes-src" hidden>
+        <li>Welcome the Mayora India team and thank them for the partnership.</li>
+        <li>One line to set the tone: KJS India is the trusted co-manufacturer for Choki Choki.</li>
+        <li>Agenda: where we started, how we have grown, what Unit 2 adds, and what we would like to discuss.</li>
+      </aside>
+    </section>
+
+    <!-- 2. Where we began -->
+    <section class="slide s-began" data-title="Where we began">
+      <div>
+        <p class="eyebrow rise">2023 · Where we began</p>
+        <h2 class="rise" style="--d:1">One product line became a trusted partnership</h2>
+        <p class="quote-block rise" style="--d:2">In 2023, we partnered with Mayora India to manufacture <b>Choki Choki</b>, the popular chocolate stick, at our <b>Unit 1</b> facility.</p>
+        <div class="journey rise" style="--d:3">
+          <div class="stop"><i></i><b>2023</b><span>First line</span></div>
+          <div class="stop"><i></i><b>2024</b><span>Scale-up</span></div>
+          <div class="stop"><i></i><b>2025</b><span>More SKUs</span></div>
+          <div class="stop"><i></i><b>2026</b><span>Record year</span></div>
+          <div class="stop next"><i></i><b>Next</b><span>Unit 2</span></div>
+        </div>
+      </div>
+      <div class="began-art rise" style="--d:2">
+        <div class="ring"></div>
+        <img src="/media/unit-1-packs/choki-choki-xl-box.jpg" alt="Choki Choki XL display box">
+      </div>
+      <aside class="notes-src" hidden>
+        <li>April 2023: the Choki Choki line started at Unit 1 at 5 MT a day; within a year it reached 12 MT a day.</li>
+        <li>What began as one product line is now a strong, trusted manufacturing partnership.</li>
+      </aside>
+    </section>
+
+    <!-- 3. Growth -->
+    <section class="slide s-growth" data-title="Growth at a glance">
+      <div class="chart-card">
+        <div>
+          <p class="eyebrow rise">Growth at a glance</p>
+          <h2 class="rise" style="--d:1">Choki Choki production at Unit 1</h2>
+        </div>
+        <svg class="chart" id="chart" viewBox="0 0 980 560" role="img" aria-label="Production in metric tonnes: 2023, 476; 2024, 2,378; 2025, 3,022; 2026 January to October, 3,316."></svg>
+        <div class="legend rise" style="--d:2"><span>Metric tonnes (MT) · 2026 shows January to October</span></div>
+      </div>
+      <div class="callouts">
+        <div class="callout hero rise" style="--d:2"><div class="big">≈7×</div><p>Output growth in just under four years, from 476 MT to 3,316 MT.</p></div>
+        <div class="callout rise" style="--d:3"><div class="big">+9.7%</div><p>By October, 2026 had already passed the full-year volume of 2025, with two months still to go.</p></div>
+      </div>
+      <aside class="notes-src" hidden>
+        <li>2023: 476 MT · 2024: 2,378 MT · 2025: 3,022 MT · 2026 (Jan–Oct): 3,316 MT.</li>
+        <li>The 2023 stick is shown as a cut piece: our first, smaller year.</li>
+        <li>Nearly 7× in under four years (3,316 ÷ 476 ≈ 6.97).</li>
+        <li>By the end of October, 2026 had already passed the whole of 2025 (3,316 vs 3,022, +9.7%), with November and December still to come.</li>
+        <li>If you have November figures by the meeting, mention them here.</li>
+      </aside>
+    </section>
+
+    <!-- 4. Scalability -->
+    <section class="slide s-skus" data-title="Scalability">
+      <div>
+        <p class="eyebrow rise">From 1 SKU to 4</p>
+        <h2 class="rise" style="--d:1">Scalability</h2>
+        <p class="lede rise" style="--d:2">We started with a single Choki Choki SKU. Today Unit 1 produces <strong>four</strong>, showing our ability to scale, diversify and keep delivering on quality and timelines.</p>
+        <div class="stick-steps rise" style="--d:3">
+          <div class="stick-group">
+            <div class="sticks"><svg viewBox="0 0 60 240" style="--s:0"><use href="#stick"/></svg></div>
+            <b>1 SKU</b><span>2023</span>
+          </div>
+          <div class="arrow">→</div>
+          <div class="stick-group">
+            <div class="sticks">
+              <svg viewBox="0 0 60 240" style="--s:1"><use href="#stick"/></svg>
+              <svg viewBox="0 0 60 240" style="--s:2"><use href="#stick"/></svg>
+              <svg viewBox="0 0 60 240" style="--s:3"><use href="#stick"/></svg>
+              <svg viewBox="0 0 60 240" style="--s:4"><use href="#stick"/></svg>
+            </div>
+            <b>4 SKUs</b><span>Today</span>
+          </div>
+        </div>
+      </div>
+      <div class="packs">
+        <figure class="rise" style="--d:2"><div class="ph"><img src="/media/unit-1-packs/choki-choki-pack.jpg" alt="Choki Choki Chocomilk pack"></div><figcaption>Chocomilk pack</figcaption></figure>
+        <figure class="rise" style="--d:3"><div class="ph"><img src="/media/unit-1-packs/choki-choki-jar.jpg" alt="Choki Choki jar"></div><figcaption>Jar</figcaption></figure>
+        <figure class="rise" style="--d:4"><div class="ph"><img src="/media/unit-1-packs/choki-choki-xl.jpg" alt="Choki Choki XL"></div><figcaption>XL</figcaption></figure>
+        <figure class="rise" style="--d:5"><div class="ph"><img src="/media/unit-1-packs/choki-choki-xl-box.jpg" alt="Choki Choki XL display box"></div><figcaption>XL display box</figcaption></figure>
+      </div>
+      <aside class="notes-src" hidden>
+        <li>One SKU in 2023; four at Unit 1 today, added without disrupting quality or delivery dates.</li>
+        <li>Confirm the exact names of the four SKUs and match the captions before the meeting.</li>
+      </aside>
+    </section>
+
+    <!-- 5. Unit 2 -->
+    <section class="slide s-unit2" data-title="What's next: Unit 2">
+      <div>
+        <p class="eyebrow rise">What's next</p>
+        <h2 class="rise" style="--d:1">Unit 2: KJS chocolates, biscuits, wafers and more</h2>
+        <p class="lede rise" style="--d:2">Building on this momentum, Unit 2 gives partners <strong>one reliable manufacturing base</strong> for confectionery and bakery.</p>
+        <div class="facts-row rise" style="--d:3">
+          <div><b>₹651 cr</b><span>Planned investment</span></div>
+          <div><b>44 acres</b><span>Thogarpally, Sangareddy</span></div>
+          <div><b>15 May 2026</b><span>Foundation stone</span></div>
+        </div>
+      </div>
+      <div class="range">
+        <div class="prod rise" style="--d:2"><div class="shot"><img src="/media/featured/grandy-chocolate-bar.webp" alt="Grandy chocolate bar"></div><div><b>Chocolate</b><span>Grandy chocolate bar</span></div></div>
+        <div class="prod rise" style="--d:3"><div class="shot"><img src="/media/featured/brandon-white.webp" alt="Brandon White"></div><div><b>Chocolate</b><span>Brandon White</span></div></div>
+        <div class="prod rise" style="--d:4"><div class="shot"><img src="/media/featured/fundo-sandwich-biscuits.webp" alt="Fundo sandwich biscuits"></div><div><b>Biscuits</b><span>Fundo sandwich biscuits</span></div></div>
+        <div class="prod rise" style="--d:5"><div class="shot"><img src="/media/featured/maxi-cream-wafers.webp" alt="Maxi cream wafers"></div><div><b>Wafers</b><span>Maxi cream wafers</span></div></div>
+        <div class="prod rise" style="--d:6"><div class="shot"><img src="/media/featured/pacho-mellow.webp" alt="Pacho Mellow"></div><div><b>Marshmallow</b><span>Pacho Mellow</span></div></div>
+        <div class="prod more rise" style="--d:7"><div><b>…and cakes, and more</b><span>One partner, one base, several categories</span></div></div>
+      </div>
+      <aside class="notes-src" hidden>
+        <li>These are KJS's own confectionery products, made in the categories Unit 2 will add.</li>
+        <li>Foundation stone: 15 May 2026, Thogarpally, Aliyabad (V), Kondapur Mandal, Sangareddy (from the plaque). ₹651 crore and 44 acres as announced by Invest Telangana.</li>
+        <li>Do not commit to line start dates or capacities unless operations has confirmed them.</li>
+      </aside>
+    </section>
+
+    <!-- 6. For discussion -->
+    <section class="slide s-next" data-title="For discussion">
+      <div>
+        <p class="eyebrow rise">For discussion</p>
+        <h2 class="rise" style="--d:1">From Choki Choki today to more of Mayora tomorrow</h2>
+      </div>
+      <div>
+        <div class="bridge">
+          <div class="col choki-col rise" style="--d:2">
+            <h3>Today · Unit 1</h3>
+            <div class="head">Choki Choki</div>
+            <div class="pack-mini"><img src="/media/unit-1-packs/choki-choki-pack.jpg" alt=""><img src="/media/unit-1-packs/choki-choki-jar.jpg" alt=""></div>
+            <ul><li>4 SKUs in production</li><li>3,316 MT in Jan–Oct 2026</li><li>Steady quality, on-time delivery</li></ul>
+          </div>
+          <div class="mid rise" style="--d:3">→</div>
+          <div class="col future rise" style="--d:4">
+            <div class="future-text">
+              <h3>Next · Unit 2</h3>
+              <div class="head">More of your range</div>
+              <ul><li>Chocolate, biscuits, wafers, cakes</li><li>One base for several categories</li><li>The same team and the same standards</li></ul>
+            </div>
+            <div class="future-art">
+              <div class="render"><img src="/media/units/unit-2-render.jpg" alt="Unit 2, architect's render"></div>
+              <div class="mini">
+                <img src="/media/featured/grandy-chocolate-bar.webp" alt="">
+                <img src="/media/featured/fundo-sandwich-biscuits.webp" alt="">
+                <img src="/media/featured/maxi-cream-wafers.webp" alt="">
+                <img src="/media/featured/pacho-mellow.webp" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="asks">
+          <div class="ask rise" style="--d:5"><b>1</b><span>Choki Choki volume and SKU plan for 2027</span></div>
+          <div class="ask rise" style="--d:6"><b>2</b><span>Which Mayora categories to trial at Unit 2</span></div>
+          <div class="ask rise" style="--d:7"><b>3</b><span>Timeline for samples and line trials</span></div>
+        </div>
+      </div>
+      <aside class="notes-src" hidden>
+        <li>This is the ask. Pause here and let Mayora talk.</li>
+        <li>The three points are suggestions; adjust them to the meeting goal.</li>
+      </aside>
+    </section>
+
+    <!-- 7. Commitment + gallery -->
+    <section class="slide s-commit" data-title="Our commitment">
+      <div>
+        <p class="eyebrow rise">Our commitment</p>
+        <blockquote class="rise" style="--d:1">Consistent quality, scalable capacity, and the agility to grow with your brand. <em>With Unit 2, we're ready to take on the next chapter together.</em></blockquote>
+        <div class="trio rise" style="--d:2"><span class="pill">Consistent quality</span><span class="pill">Scalable capacity</span><span class="pill red">Agility to grow with you</span></div>
+      </div>
+      <div class="mosaic">
+        <button type="button" class="tile video big rise" style="--d:2" data-video="/media/video/kjs-company-film.mp4" data-cap="KJS India company film">
+          <img src="/media/video/kjs-company-film-poster.jpg" alt=""><i class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></i><span>KJS India company film</span>
+        </button>
+        <button type="button" class="tile rise" style="--d:3" data-img="/media/events/project-choki-team.jpg" data-cap="Mayora × KJS: Choki Choki operational training">
+          <img src="/media/events/project-choki-team.jpg" alt=""><span>Choki Choki team training</span>
+        </button>
+        <button type="button" class="tile video rise" style="--d:4" data-video="/media/video/unit-2-inauguration.mp4" data-cap="Unit 2 inauguration">
+          <img src="/media/video/unit-2-inauguration-poster.jpg" alt=""><i class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></i><span>Unit 2 inauguration</span>
+        </button>
+        <button type="button" class="tile rise" style="--d:5" data-img="/media/events/unit-2-lamp-lighting.jpg" data-cap="Unit 2 groundbreaking, 15 May 2026">
+          <img src="/media/events/unit-2-lamp-lighting.jpg" alt=""><span>Unit 2 groundbreaking</span>
+        </button>
+        <button type="button" class="tile rise" style="--d:6" data-img="/media/events/unit-2-foundation-plaque.jpg" data-cap="Unit 2 foundation stone, 15 May 2026">
+          <img src="/media/events/unit-2-foundation-plaque.jpg" alt=""><span>Foundation stone</span>
+        </button>
+      </div>
+      <aside class="notes-src" hidden>
+        <li>Read the line slowly; this is the takeaway.</li>
+        <li>Click any tile to open it full screen. The company film is 3½ minutes and the inauguration about 1½ minutes; play only if time allows.</li>
+      </aside>
+    </section>
+
+    <!-- 8. Thank you -->
+    <section class="slide s-close" data-title="Thank you">
+      <div class="portrait rise">
+        <img src="/media/events/unit-2-groundbreaking-guest.jpg" alt="At the Unit 2 groundbreaking ceremony">
+        <span>Unit 2 groundbreaking · 15 May 2026</span>
+      </div>
+      <div class="close-text">
+        <div class="thanks rise" style="--d:1">Thank you</div>
+        <div class="summary-card rise" style="--d:2">Partnered with Mayora India in 2023 to produce Choki Choki, we've grown from <b>476 MT</b> to <b>3,316 MT</b> (Jan–Oct 2026) and from <b>1 to 4 SKUs</b>. Now, Unit 2 brings new lines for chocolate, biscuits, wafers and cakes.</div>
+        <div class="contact">
+          <div class="row rise" style="--d:3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>contact@kjsindia.com</div>
+          <div class="row rise" style="--d:4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+91 97037 35666</div>
+          <div class="row addr rise" style="--d:5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Plot No. 1 &amp; 2, Phase III, IDA Pashamylaram, Patancheru (M), Sangareddy (D), Telangana 502307</div>
+        </div>
+      </div>
+      <aside class="notes-src" hidden>
+        <li>Recap the one-paragraph summary, then open for questions.</li>
+        <li>Agree next steps and owners before the meeting ends.</li>
+      </aside>
+    </section>
+
+    <div class="band-top" aria-hidden="true">
+      <div class="lockup"><span class="kjs"><img src="/media/logos/kjs-india.png" alt=""></span><span class="x">×</span><span class="mayora"><img src="/media/logos/mayora.png" alt=""></span></div>
+      <span class="section-tag" id="section-tag"></span>
+    </div>
+    <div class="band-bottom" aria-hidden="true">
+      <span><b>KJS India × Mayora India</b> · Partnership review · December 2026 · Confidential</span>
+      <span class="page-no" id="page-no"></span>
+    </div>
+  </div>
+</div>
+
+<div class="dock" id="dock" role="toolbar" aria-label="Presenter controls">
+  <a href="/about" title="Back to the KJS site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Site</a>
+  <span class="sep"></span>
+  <button type="button" id="prev" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+  <button type="button" class="count" id="count" aria-label="Slide overview">1 / 8</button>
+  <button type="button" id="next" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+  <span class="sep"></span>
+  <button type="button" id="btn-notes" aria-pressed="false" title="Speaker notes (N)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>Notes</button>
+  <button type="button" id="btn-grid" title="All slides (O)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>Slides</button>
+  <button type="button" id="btn-theme" title="Switch white / red (T)"><span class="theme-dot"></span>Colours</button>
+  <button type="button" id="btn-full" title="Full screen (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+  <span class="sep"></span>
+  <button type="button" class="timer" id="timer" title="Time since you started presenting. Click to reset.">00:00</button>
+  <button type="button" id="btn-help" aria-label="Keyboard shortcuts">?</button>
+</div>
+
+<section class="notes" id="notes" aria-label="Speaker notes" hidden>
+  <header><h4 id="notes-title">Speaker notes</h4><span class="next" id="notes-next"></span></header>
+  <ul id="notes-list"></ul>
+</section>
+
+<div class="overview" id="overview" hidden>
+  <header><h3>All slides</h3><button type="button" class="pill" id="ov-close">Close (Esc)</button></header>
+  <div class="ov-grid" id="ov-grid"></div>
+</div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button type="button" class="x" id="lb-close" aria-label="Close">×</button>
+  <div><div id="lb-media"></div><p class="cap" id="lb-cap"></p></div>
+</div>
+
+<div class="help" id="help" hidden>
+  <div class="card" role="dialog" aria-label="Keyboard shortcuts">
+    <h3>Presenting</h3>
+    <dl>
+      <dt><kbd>→</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd></dt><dd>Next slide (clickers work too)</dd>
+      <dt><kbd>←</kbd> <kbd>PgUp</kbd></dt><dd>Previous slide</dd>
+      <dt><kbd>Home</kbd> <kbd>End</kbd></dt><dd>First / last slide</dd>
+      <dt><kbd>1</kbd>–<kbd>8</kbd></dt><dd>Jump to a slide</dd>
+      <dt><kbd>N</kbd></dt><dd>Speaker notes</dd>
+      <dt><kbd>O</kbd></dt><dd>All slides</dd>
+      <dt><kbd>T</kbd></dt><dd>White / red</dd>
+      <dt><kbd>F</kbd></dt><dd>Full screen</dd>
+      <dt><kbd>B</kbd></dt><dd>Black screen (press again to return)</dd>
+      <dt><kbd>R</kbd></dt><dd>Reset the timer</dd>
+    </dl>
+  </div>
+</div>
+
+<div class="black" id="black" hidden></div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const slides = [...stage.querySelectorAll('.slide')];
+  const total = slides.length;
+  const $ = (id) => document.getElementById(id);
+  let index = 0;
+
+  // ---------- Fit the 1600×900 stage to the window ----------
+  function fit() { stage.style.transform = `scale(${Math.min(innerWidth / 1600, innerHeight / 900)})`; }
+  addEventListener('resize', fit);
+  fit();
+
+  // ---------- Growth chart: one Choki stick per year, height to scale ----------
+  const data = [
+    { year: '2023', sub: 'Full year', v: 476 },
+    { year: '2024', sub: 'Full year', v: 2378 },
+    { year: '2025', sub: 'Full year', v: 3022 },
+    { year: '2026', sub: 'Jan–Oct', v: 3316 },
+  ];
+  (function drawChart() {
+    const svg = $('chart'), W = 980, H = 560, B = 86, T = 110;
+    const max = 3316, base = H - B, full = base - T;
+    const step = W / data.length, sw = 92;
+    let s = `<line class="base" x1="20" x2="${W - 20}" y1="${base}" y2="${base}"/>`;
+    data.forEach((d, i) => {
+      const cx = step * i + step / 2, h = (full * d.v) / max, top = base - h, x = cx - sw / 2;
+      const cut = i === 0; // 2023: a cut piece of a stick
+      s += `<g class="stick" style="--d:${i}">`;
+      // chocolate body
+      s += `<rect x="${x}" y="${top}" width="${sw}" height="${h}" rx="10" fill="url(#choc)"/>`;
+      if (cut) {
+        // jagged, bitten top edge + crumbs
+        let p = `M${x} ${top + 14}`;
+        for (let k = 0; k <= 8; k++) p += ` L${x + (sw / 8) * k} ${top + (k % 2 ? 0 : 16)}`;
+        p += ` L${x + sw} ${top - 6} L${x} ${top - 6} Z`;
+        s += `<path d="${p}" fill="var(--bg)"/>`;
+        s += `<circle cx="${cx + 58}" cy="${top + 22}" r="6" fill="#7a3d27"/><circle cx="${cx + 72}" cy="${top + 40}" r="4" fill="#5b2d1d"/><circle cx="${cx - 60}" cy="${top + 30}" r="5" fill="#7a3d27"/>`;
+      } else {
+        // red crimped seal with a yellow zig-zag
+        s += `<rect class="seal" x="${x - 4}" y="${top - 8}" width="${sw + 8}" height="26" rx="5"/>`;
+        let z = `M${x - 4} ${top + 18}`;
+        for (let k = 0; k <= 12; k++) z += ` L${x - 4 + ((sw + 8) / 12) * k} ${top + (k % 2 ? 10 : 18)}`;
+        s += `<path d="${z}" fill="none" stroke="#ffcc2a" stroke-width="3"/>`;
+        // label band
+        const lb = Math.min(110, h * 0.32);
+        s += `<rect x="${x}" y="${base - lb - 20}" width="${sw}" height="${lb}" fill="url(#stripes)"/>`;
+        if (h > 230) s += `<text x="${cx}" y="${top + (h - lb) / 2}" fill="#fff" font-family="Segoe UI Black, Arial Black, sans-serif" font-size="22" font-weight="900" text-anchor="middle" transform="rotate(-90 ${cx} ${top + (h - lb) / 2})">choki choki</text>`;
+      }
+      s += `<rect x="${x + 16}" y="${top + 20}" width="14" height="${Math.max(0, h - 30)}" rx="7" fill="url(#shine)"/>`;
+      s += `</g>`;
+      s += `<g class="label" style="--d:${i}">`;
+      s += `<text class="val" x="${cx}" y="${top - (cut ? 46 : 54)}" text-anchor="middle">${d.v.toLocaleString('en-IN')}</text>`;
+      s += `<text class="unit" x="${cx}" y="${top - (cut ? 20 : 28)}" text-anchor="middle">MT</text>`;
+      s += `</g>`;
+      s += `<text class="year" x="${cx}" y="${base + 38}" text-anchor="middle">${d.year}</text><text class="sub" x="${cx}" y="${base + 64}" text-anchor="middle">${d.sub}</text>`;
+    });
+    svg.innerHTML = s;
+  })();
+
+  // ---------- Navigation ----------
+  const notesBox = $('notes');
+  function go(i, fromHash) {
+    index = Math.max(0, Math.min(total - 1, i));
+    slides.forEach((s, n) => { s.classList.toggle('active', n === index); s.setAttribute('aria-hidden', String(n !== index)); });
+    $('count').textContent = `${index + 1} / ${total}`;
+    $('page-no').textContent = `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+    $('section-tag').textContent = index === 0 ? '' : slides[index].dataset.title;
+    $('progress').style.width = `${((index + 1) / total) * 100}%`;
+    $('prev').disabled = index === 0;
+    $('next').disabled = index === total - 1;
+    renderNotes(); markOverview();
+    if (!fromHash) history.replaceState(null, '', `#slide-${index + 1}`);
+    startTimer();
+  }
+  const next = () => go(index + 1);
+  const prev = () => go(index - 1);
+  $('next').addEventListener('click', next);
+  $('prev').addEventListener('click', prev);
+
+  function renderNotes() {
+    const src = slides[index].querySelector('.notes-src');
+    $('notes-title').textContent = `Speaker notes · ${index + 1}. ${slides[index].dataset.title}`;
+    $('notes-next').textContent = index < total - 1 ? `Next: ${slides[index + 1].dataset.title}` : 'Last slide';
+    $('notes-list').innerHTML = src ? src.innerHTML : '';
+  }
+  function toggleNotes(force) {
+    const show = force ?? notesBox.hidden;
+    notesBox.hidden = !show;
+    $('btn-notes').setAttribute('aria-pressed', String(show));
+  }
+  $('btn-notes').addEventListener('click', () => toggleNotes());
+
+  // ---------- Overview ----------
+  const overview = $('overview'), grid = $('ov-grid');
+  slides.forEach((s, n) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'ov-item';
+    const thumb = document.createElement('div'); thumb.className = 'ov-thumb';
+    const mini = document.createElement('div'); mini.className = 'stage-mini';
+    const copy = s.cloneNode(true); copy.classList.remove('active');
+    copy.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+    mini.append(copy); thumb.append(mini);
+    const label = document.createElement('span'); label.className = 'ov-label'; label.textContent = `${n + 1}. ${s.dataset.title}`;
+    b.append(thumb, label);
+    b.addEventListener('click', () => { toggleOverview(false); go(n); });
+    grid.append(b);
+  });
+  const scaleThumbs = () => grid.querySelectorAll('.ov-thumb').forEach((t) => { t.firstChild.style.transform = `scale(${t.clientWidth / 1600})`; });
+  const markOverview = () => grid.querySelectorAll('.ov-item').forEach((b, n) => b.setAttribute('aria-current', String(n === index)));
+  function toggleOverview(force) {
+    const show = force ?? overview.hidden;
+    overview.hidden = !show;
+    if (show) { scaleThumbs(); grid.children[index].focus(); }
+  }
+  $('btn-grid').addEventListener('click', () => toggleOverview(true));
+  $('count').addEventListener('click', () => toggleOverview(true));
+  $('ov-close').addEventListener('click', () => toggleOverview(false));
+  addEventListener('resize', () => { if (!overview.hidden) scaleThumbs(); });
+
+  // ---------- Mini gallery: open photos and videos full screen ----------
+  const lightbox = $('lightbox'), lbMedia = $('lb-media');
+  function openLightbox(tile) {
+    lbMedia.innerHTML = '';
+    let el;
+    if (tile.dataset.video) {
+      el = document.createElement('video');
+      el.src = tile.dataset.video; el.controls = true; el.autoplay = true; el.playsInline = true;
+    } else {
+      el = document.createElement('img'); el.src = tile.dataset.img; el.alt = tile.dataset.cap;
+    }
+    lbMedia.append(el);
+    $('lb-cap').textContent = tile.dataset.cap;
+    lightbox.hidden = false;
+  }
+  function closeLightbox() { lightbox.hidden = true; lbMedia.innerHTML = ''; }
+  stage.querySelectorAll('.tile').forEach((t) => t.addEventListener('click', () => openLightbox(t)));
+  $('lb-close').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+  // ---------- Theme, full screen, black screen, help ----------
+  function setTheme(t) { document.documentElement.dataset.theme = t; try { localStorage.setItem('kjs-mayora-theme', t); } catch (e) {} }
+  let saved = null; try { saved = localStorage.getItem('kjs-mayora-theme'); } catch (e) {}
+  setTheme(saved === 'red' ? 'red' : 'white');
+  const toggleTheme = () => setTheme(document.documentElement.dataset.theme === 'red' ? 'white' : 'red');
+  $('btn-theme').addEventListener('click', toggleTheme);
+  function toggleFull() { const r = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); r?.catch?.(() => {}); }
+  $('btn-full').addEventListener('click', toggleFull);
+  const black = $('black'); black.addEventListener('click', () => (black.hidden = true));
+  const help = $('help'); $('btn-help').addEventListener('click', () => (help.hidden = false)); help.addEventListener('click', () => (help.hidden = true));
+
+  // ---------- Timer ----------
+  let started = 0, tick = 0;
+  function startTimer() { if (started || index === 0) return; started = Date.now(); tick = setInterval(showTime, 1000); showTime(); }
+  function showTime() { const s = started ? Math.floor((Date.now() - started) / 1000) : 0; $('timer').textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; }
+  function resetTimer() { clearInterval(tick); started = 0; showTime(); startTimer(); }
+  $('timer').addEventListener('click', resetTimer);
+
+  // ---------- Keyboard, clicker, touch ----------
+  addEventListener('keydown', (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    const k = e.key;
+    if (k === 'Escape') {
+      if (!lightbox.hidden) closeLightbox();
+      else if (!help.hidden) help.hidden = true;
+      else if (!overview.hidden) toggleOverview(false);
+      else if (!black.hidden) black.hidden = true;
+      else if (!notesBox.hidden) toggleNotes(false);
+      return;
+    }
+    if (!lightbox.hidden) return; // let the video player keep its keys
+    if (!overview.hidden && !['o', 'O'].includes(k)) return;
+    if (['ArrowRight', 'PageDown', ' ', 'Enter', 'ArrowDown'].includes(k)) { e.preventDefault(); black.hidden = true; next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace', 'ArrowUp'].includes(k)) { e.preventDefault(); black.hidden = true; prev(); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(total - 1);
+    else if (/^[1-8]$/.test(k)) go(Number(k) - 1);
+    else if (k === 'n' || k === 'N') toggleNotes();
+    else if (k === 'o' || k === 'O') toggleOverview();
+    else if (k === 't' || k === 'T') toggleTheme();
+    else if (k === 'f' || k === 'F') toggleFull();
+    else if (k === 'b' || k === 'B' || k === '.') black.hidden = !black.hidden;
+    else if (k === 'r' || k === 'R') resetTimer();
+    else if (k === '?') help.hidden = !help.hidden;
+  });
+  let touchX = null;
+  addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', (e) => {
+    if (touchX === null || !lightbox.hidden) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
+    touchX = null;
+  });
+
+  let idleTimer;
+  function wake() { document.body.classList.remove('idle'); clearTimeout(idleTimer); idleTimer = setTimeout(() => document.body.classList.add('idle'), 2600); }
+  ['mousemove', 'mousedown', 'touchstart'].forEach((ev) => addEventListener(ev, wake, { passive: true }));
+  wake();
+
+  const fromHash = () => { const m = location.hash.match(/^#slide-(\d+)$/); return m ? Number(m[1]) - 1 : 0; };
+  addEventListener('hashchange', () => go(fromHash(), true));
+  go(fromHash(), true);
+})();
+</script>
+</body>
+</html>
