@@ -8,8 +8,8 @@
 import bcrypt from 'bcryptjs';
 import { and, eq, gt, sql } from 'drizzle-orm';
 import { SignJWT, jwtVerify } from 'jose';
-import { db, schema } from './db/client';
-import { HttpError, clientIp } from './http';
+import { db, schema } from './db/client.js';
+import { HttpError, clientIp } from './http.js';
 
 export const COOKIE = 'kjs_session';
 const MAX_AGE_SECONDS = 7 * 24 * 60 * 60;

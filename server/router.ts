@@ -1,5 +1,5 @@
 /**
- * Every /api endpoint, in one place. Vercel runs this through a single function (api/[...path].ts),
+ * Every /api endpoint, in one place. Vercel runs this through a single function (api/index.ts),
  * because the free plan allows at most 12 functions; the dev server and the tests call handle() directly.
  *
  * Public:  GET /api/health, GET /api/content
@@ -14,7 +14,7 @@ import { del } from '@vercel/blob';
 import bcrypt from 'bcryptjs';
 import { and, desc, eq, ne, sql } from 'drizzle-orm';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import { contentSections, sectionKeys } from '../content/content.schema';
+import { contentSections, sectionKeys } from '../content/content.schema.js';
 import {
   checkNewPassword,
   clearSessionCookie,
@@ -24,7 +24,7 @@ import {
   login,
   publicUser,
   requireUser,
-} from './auth';
+} from './auth.js';
 import {
   discardDraft,
   getSection,
@@ -36,9 +36,9 @@ import {
   saveDraft,
   sectionList,
   versionList,
-} from './content-store';
-import { db, schema } from './db/client';
-import { HttpError, assertSameOrigin, errorResponse, json, readJson } from './http';
+} from './content-store.js';
+import { db, schema } from './db/client.js';
+import { HttpError, assertSameOrigin, errorResponse, json, readJson } from './http.js';
 
 type Params = Record<string, string>;
 type Handler = (request: Request, params: Params) => Promise<Response>;

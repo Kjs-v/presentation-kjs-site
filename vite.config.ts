@@ -4,7 +4,7 @@ import { defineConfig, type Plugin } from 'vite';
 
 /**
  * Runs the API (server/router.ts) inside `npm run dev` and `npm run preview`, so the whole site works locally.
- * It uses the dev database from .env. On Vercel the same router runs as the function api/[...path].ts.
+ * It uses the dev database from .env. On Vercel the same router runs as the function api/index.ts.
  */
 function localApi(): Plugin {
   const middleware = async (req: IncomingMessage, res: ServerResponse, next: () => void) => {

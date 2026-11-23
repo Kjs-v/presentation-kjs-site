@@ -3,6 +3,17 @@
 - **Role:** Project owner
 - **Started:** 2026-11-23
 
+## 2026-11-23 (Backend phase 7: go live, part 1)
+
+- **Production database (`db-02`):** migrated and seeded with the 11 sections, the first history entry and the 2 admins (starting password from .env, which must be changed at first sign-in).
+- **Vercel settings:** `DATABASE_URL` and `SESSION_SECRET` for Production (db-02, with a new secret saved as `PRODUCTION_SESSION_SECRET` in .env) and for Preview (dev database).
+- **Vercel fixes:**
+  - Server imports now end in `.js`, because Node on Vercel needs it.
+  - The function is now `api/index.ts`, and `/api/(.*)` is rewritten to it, because the catch-all file name did not match nested paths.
+- **Checked on a preview deploy:** health, content, sign in, save draft, the 409 conflict check, undo, notes, schema and sign out.
+- **Merged** `main` (the Mayora PIN) into `presentation-v`.
+- **Waiting:** the owner's go-ahead to merge into `main` and deploy to production.
+
 ## 2026-11-23 (Backend phase 8: admin page)
 
 - **Did:** the admin page at `/admin` (`admin.html`, `src/admin/`).

@@ -3,9 +3,9 @@
  * Drafts are checked section by section when saved; publishing checks the whole site at once.
  */
 import { and, desc, eq, sql } from 'drizzle-orm';
-import { contentSchema, contentSections, sectionKeys, type SectionKey } from '../content/content.schema';
-import { db, schema } from './db/client';
-import { HttpError, validationError } from './http';
+import { contentSchema, contentSections, sectionKeys, type SectionKey } from '../content/content.schema.js';
+import { db, schema } from './db/client.js';
+import { HttpError, validationError } from './http.js';
 
 export const isSectionKey = (key: string): key is SectionKey => (sectionKeys as string[]).includes(key);
 

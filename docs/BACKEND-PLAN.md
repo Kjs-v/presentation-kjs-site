@@ -5,7 +5,7 @@
 
 **Stack:**
 
-- One Vercel Function (`api/[...path].ts`) routes every endpoint, because the free Vercel plan allows at most 12 functions.
+- One Vercel Function (`api/index.ts`) routes every endpoint, because the free Vercel plan allows at most 12 functions.
 - Neon Postgres via Drizzle, with three databases: `db-02` (production), `kjs_dev` (local work) and `kjs_test` (tests).
 - Zod checks from `content/content.schema.ts`.
 - Vercel Blob for files.
@@ -74,8 +74,9 @@
 
 ### Phase 7: Go live (~½ day)
 
-- [ ] Vercel settings: production database, session secret, Blob token, PIN; preview deployments use the dev database
-- [ ] Migrate and seed the production database (`db-02`), and create the admins there
+- [x] Vercel settings: production uses `db-02` and its own session secret; previews use the dev database (Blob token and PIN wait for phases 4 and 5)
+- [x] Migrate and seed the production database (`db-02`), and create the admins there
+- [x] API works on Vercel (preview checked: sign in, save draft, conflict check, undo, notes)
 - [ ] Merge `presentation-v` into `main` (when the owner says so) and deploy
 - [ ] Full check: every page at every size, login, save, publish, restore, upload, pitch PIN
 
