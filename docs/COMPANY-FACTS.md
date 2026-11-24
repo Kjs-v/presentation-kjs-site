@@ -19,6 +19,13 @@ Items marked **(confirm)** are not verified. Don't show them to clients until th
 - **Unit 2 project:** Invest Telangana announced the groundbreaking at Thogarpally in May 2026, with ₹651 crore of planned investment on 44 acres.
   - Source: https://invest.telangana.gov.in/kjs-india-unit-2-groundbreaking-sangareddy/
 
+## Supply chain (shown on /supply-chain)
+
+- Dispatch from Unit 1, Pashamylaram (Patancheru), Hyderabad, by road **(confirm)**.
+- Destination cities: Delhi, Lucknow (North); Mumbai, Ahmedabad (West); Bengaluru, Chennai (South); Kolkata (East); Guwahati (North-East). All placeholders **(confirm)**.
+- Numbers: 8+ cities, 5+ regions, 7,685+ km over all routes (straight-line distances from Unit 1) **(confirm)**.
+- Routes follow NH 44, NH 65 and NH 16 corridors; illustrative only.
+
 ## Unit 1: stick packs, coffee and instant beverages (assumed split, confirm)
 
 **Stick packs**

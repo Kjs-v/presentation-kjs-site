@@ -52,8 +52,6 @@ export const showPage: Page = (content) => {
     if (!document.querySelector('.deck')) return;
     if (['ArrowRight', 'PageDown', ' '].includes(e.key)) (e.preventDefault(), go(index + 1));
     else if (['ArrowLeft', 'PageUp'].includes(e.key)) (e.preventDefault(), go(index - 1));
-    else if (e.key.toLowerCase() === 'f')
-      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
   };
   document.addEventListener('keydown', onKey);
 
