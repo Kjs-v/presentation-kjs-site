@@ -1,6 +1,6 @@
 import './styles/theme.css';
 import { loadContent } from './lib/content';
-import { applyTheme } from './lib/theme';
+import { applyPageColour, applyTheme } from './lib/theme';
 import { onRoute, route, startRouter } from './lib/router';
 import { afterRoute, initEffects, introScreen } from './lib/effects';
 import { header, footer, markCurrent } from './layout';
@@ -11,6 +11,7 @@ import { productsPage } from './pages/products';
 import { showPage } from './pages/show';
 import { unitPage } from './pages/unit';
 import { galleryPage } from './pages/gallery';
+import { supplyChainPage } from './pages/supply-chain';
 import { notFoundPage } from './pages/not-found';
 
 // Register routes here. Fixed paths first; the "/:unitId" catch-alls last.
@@ -19,6 +20,7 @@ route('/about', aboutPage);
 route('/products', productsPage);
 route('/show', showPage);
 route('/gallery', galleryPage);
+route('/supply-chain', supplyChainPage);
 route('/:unitId', unitPage);
 route('/:unitId/:tab', unitPage);
 
@@ -39,6 +41,7 @@ const titles: Record<string, string> = Object.fromEntries([
 ]);
 onRoute((pathname) => {
   afterRoute();
+  applyPageColour(pathname);
   markCurrent(pathname);
   // The footer is hidden on the full-screen pages (home and slides), as in the design reference.
   siteFooter.hidden = pathname === '/' || pathname === '/show';

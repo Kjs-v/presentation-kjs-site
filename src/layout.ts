@@ -2,12 +2,12 @@
 import type { Site } from '../content/content.schema';
 import { h } from './lib/dom';
 import { icon } from './lib/icons';
-import { nextTheme } from './lib/theme';
+import { colourMenu } from './widgets/colour-menu';
 import type { NotesPanel } from './widgets/notes';
 
 /**
  * Header: company name, page links (site.nav), and three small controls:
- * Notes, the white / royal blue switch, and Full screen. On narrow screens the links fold into a Menu button.
+ * Notes, the colour menu, and Full screen (also the F key on any page; Esc exits). On narrow screens the links fold into a Menu button.
  */
 export function header(site: Site, notes: NotesPanel): HTMLElement {
   const nav = h(
@@ -41,17 +41,7 @@ export function header(site: Site, notes: NotesPanel): HTMLElement {
   notesBtn.addEventListener('click', () => (notes.isOpen() ? notes.close() : notes.open()));
   notes.onSaved(() => (badge.hidden = !notes.hasNotes()));
 
-  const themeBtn = h(
-    'button',
-    {
-      type: 'button',
-      class: 'ctrl',
-      title: site.menu.themeToggleLabel,
-      'aria-label': site.menu.themeToggleLabel,
-    },
-    h('span', { class: 'theme-dot', 'aria-hidden': 'true' }),
-  );
-  themeBtn.addEventListener('click', () => nextTheme());
+  const themeBtn = colourMenu(site);
 
   const fullLabel = h('span', { class: 'ctrl-label' }, 'Full screen');
   const fullscreen = h(
@@ -60,9 +50,18 @@ export function header(site: Site, notes: NotesPanel): HTMLElement {
     icon('maximize'),
     fullLabel,
   );
-  fullscreen.addEventListener('click', () => {
-    if (document.fullscreenElement) document.exitFullscreen();
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) void document.exitFullscreen();
     else document.documentElement.requestFullscreen?.().catch(() => {});
+  };
+  fullscreen.addEventListener('click', toggleFullscreen);
+  // F toggles full screen on every page (Esc leaves it, as browsers do). Ignored while typing.
+  document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() !== 'f' || e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+    const target = e.target as HTMLElement | null;
+    if (target?.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"]')) return;
+    e.preventDefault();
+    toggleFullscreen();
   });
   document.addEventListener('fullscreenchange', () => {
     const full = Boolean(document.fullscreenElement);

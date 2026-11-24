@@ -40,6 +40,10 @@
         "path": "/unit-2"
       },
       {
+        "label": "Supply Chain",
+        "path": "/supply-chain"
+      },
+      {
         "label": "Gallery",
         "path": "/gallery"
       }
@@ -110,7 +114,58 @@
     },
     "menu": {
       "notesLabel": "Notes",
-      "themeToggleLabel": "Switch colours (white / royal blue)"
+      "themeToggleLabel": "Change colours",
+      "colour": {
+        "whiteLabel": "White",
+        "multiLabel": "Multi colour",
+        "swatches": [
+          {
+            "label": "Royal blue",
+            "color": "#1c3a9e"
+          },
+          {
+            "label": "Navy",
+            "color": "#16213a"
+          },
+          {
+            "label": "Charcoal",
+            "color": "#22262e"
+          },
+          {
+            "label": "Forest",
+            "color": "#1f4d3a"
+          },
+          {
+            "label": "Maroon",
+            "color": "#5a1f2a"
+          },
+          {
+            "label": "Cream",
+            "color": "#fdf3df"
+          },
+          {
+            "label": "Sky",
+            "color": "#e7f0fb"
+          },
+          {
+            "label": "Mint",
+            "color": "#e6f4ec"
+          },
+          {
+            "label": "Blush",
+            "color": "#fbeaea"
+          },
+          {
+            "label": "Lavender",
+            "color": "#efeafa"
+          }
+        ],
+        "customLabel": "Any colour",
+        "scopeQuestion": "Apply this colour to",
+        "thisPage": "This page only",
+        "allPages": "All pages",
+        "cancel": "Cancel"
+      }
     }
   },
   "home": {
@@ -1656,6 +1711,254 @@
         "caption": "Stick Pack Machine"
       }
     ]
+  },
+  "supplyChain": {
+    "eyebrow": "From Unit 1, Pashamylaram",
+    "title": "Supply Chain",
+    "intro": "Orders are loaded at our dock near Hyderabad and dispatched by road to every part of India.",
+    "steps": ["Loading at the plant", "Dispatched across India", "Delivered"],
+    "mapOutline": "/media/maps/india-outline.svg",
+    "origin": {
+      "name": "KJS India, Unit 1",
+      "city": "Hyderabad (Patancheru), Telangana",
+      "mapLabel": "Unit 1 · Hyderabad",
+      "lat": 17.53,
+      "lon": 78.27
+    },
+    "destinations": [
+      {
+        "city": "Delhi",
+        "region": "North",
+        "lat": 28.61,
+        "lon": 77.21,
+        "via": [
+          [21.15, 79.09],
+          [25.45, 78.57],
+          [27.18, 78.01]
+        ],
+        "labelSide": "left"
+      },
+      {
+        "city": "Lucknow",
+        "region": "North",
+        "lat": 26.85,
+        "lon": 80.95,
+        "via": [
+          [21.15, 79.09],
+          [23.18, 79.95],
+          [26.45, 80.33]
+        ],
+        "labelSide": "right"
+      },
+      {
+        "city": "Guwahati",
+        "region": "North-East",
+        "lat": 26.14,
+        "lon": 91.74,
+        "via": [
+          [16.5, 80.65],
+          [17.69, 83.22],
+          [20.3, 85.82],
+          [22.57, 88],
+          [24.8, 87.92],
+          [26.6, 88.45],
+          [26.55, 89.4],
+          [26.48, 90.56]
+        ],
+        "labelSide": "top"
+      },
+      {
+        "city": "Kolkata",
+        "region": "East",
+        "lat": 22.57,
+        "lon": 88.36,
+        "via": [
+          [16.5, 80.65],
+          [17.69, 83.22],
+          [20.3, 85.82]
+        ],
+        "labelSide": "right"
+      },
+      {
+        "city": "Ahmedabad",
+        "region": "West",
+        "lat": 23.02,
+        "lon": 72.57,
+        "via": [
+          [17.66, 75.9],
+          [19.09, 74.74],
+          [20.9, 74.77],
+          [22.3, 73.18]
+        ],
+        "labelSide": "left"
+      },
+      {
+        "city": "Mumbai",
+        "region": "West",
+        "lat": 19.07,
+        "lon": 72.88,
+        "via": [
+          [17.66, 75.9],
+          [18.52, 73.86]
+        ],
+        "labelSide": "left"
+      },
+      {
+        "city": "Bengaluru",
+        "region": "South",
+        "lat": 12.97,
+        "lon": 77.59,
+        "via": [
+          [15.83, 78.04],
+          [14.68, 77.6]
+        ],
+        "labelSide": "left"
+      },
+      {
+        "city": "Chennai",
+        "region": "South",
+        "lat": 13.08,
+        "lon": 80.27,
+        "via": [
+          [15.83, 78.04],
+          [14.47, 78.82]
+        ],
+        "labelSide": "right"
+      }
+    ],
+    "chapters": [
+      {
+        "kind": "loading",
+        "railLabel": "Dock",
+        "title": "Loading at the plant",
+        "caption": "Loading at the plant",
+        "text": "Pallets of finished cartons go from the staging area straight into the truck at the Unit 1 dispatch dock."
+      },
+      {
+        "kind": "dispatch",
+        "railLabel": "Dispatch",
+        "title": "Sealed and on the road",
+        "caption": "Dispatched across India",
+        "text": "Doors sealed, load confirmed. The truck leaves Pashamylaram for the national highway network."
+      },
+      {
+        "kind": "region",
+        "railLabel": "North",
+        "title": "North",
+        "caption": "North",
+        "text": "Delhi NCR and Lucknow, up NH 44 through Nagpur, Jhansi and Agra.",
+        "cities": ["Delhi", "Lucknow"],
+        "camera": {
+          "lat": 25,
+          "lon": 79,
+          "distance": 27,
+          "turn": -0.12
+        }
+      },
+      {
+        "kind": "region",
+        "railLabel": "West & South",
+        "title": "West & South",
+        "caption": "West & South",
+        "text": "Mumbai and Ahmedabad on the west coast; Bengaluru and Chennai a day’s run to the south.",
+        "cities": ["Mumbai", "Ahmedabad", "Bengaluru", "Chennai"],
+        "camera": {
+          "lat": 17.6,
+          "lon": 76,
+          "distance": 29,
+          "turn": 0.1
+        }
+      },
+      {
+        "kind": "region",
+        "railLabel": "East & North-East",
+        "title": "East & North-East",
+        "caption": "East & North-East",
+        "text": "Kolkata along the east coast, then Guwahati through the Siliguri corridor: the longest run on the network.",
+        "cities": ["Kolkata", "Guwahati"],
+        "camera": {
+          "lat": 22,
+          "lon": 86,
+          "distance": 29,
+          "turn": 0.18
+        }
+      },
+      {
+        "kind": "delivered",
+        "railLabel": "Network",
+        "title": "Delivered",
+        "caption": "Delivered",
+        "text": "One plant in Hyderabad. Eight cities across five regions, served by road."
+      }
+    ],
+    "regions": [
+      {
+        "label": "NORTH",
+        "lat": 33.6,
+        "lon": 77
+      },
+      {
+        "label": "WEST",
+        "lat": 16.2,
+        "lon": 70.6
+      },
+      {
+        "label": "SOUTH",
+        "lat": 10.6,
+        "lon": 77.8
+      },
+      {
+        "label": "EAST",
+        "lat": 19.2,
+        "lon": 88.8
+      },
+      {
+        "label": "NORTH-EAST",
+        "lat": 24.6,
+        "lon": 97.6
+      }
+    ],
+    "stats": [
+      {
+        "value": 8,
+        "suffix": "+",
+        "label": "Cities"
+      },
+      {
+        "value": 5,
+        "suffix": "+",
+        "label": "Regions"
+      },
+      {
+        "value": "7,685",
+        "suffix": "+",
+        "label": "km, all routes"
+      }
+    ],
+    "labels": {
+      "stage": "A forklift loads pallets into a KJS India truck at the dock, then trucks travel from Hyderabad to cities across India.",
+      "loadMeter": "Pallets",
+      "loadedTag": "✓ Loaded · doors sealed",
+      "chapter": "Chapter",
+      "loadFactor": "Load factor",
+      "palletsOnDock": "Pallets on dock",
+      "truckStatus": "Truck status",
+      "statusLoading": "Loading",
+      "statusSealed": "Sealed",
+      "statusDeparted": "Departed",
+      "delivered": "Delivered",
+      "onRoad": "On the road",
+      "distance": "Distance covered",
+      "km": "km",
+      "play": "Play",
+      "pause": "Pause",
+      "previous": "Previous chapter",
+      "next": "Next chapter",
+      "replay": "Replay",
+      "autoAdvance": "Auto-advance",
+      "note": "Use ← → keys or a clicker to step, P to pause. Distances are straight-line from Unit 1; destinations are example routes until confirmed.",
+      "noWebgl": "The 3D view needs WebGL, which is turned off in this browser. The panel shows the final result."
+    }
   },
   "slides": [
     {
