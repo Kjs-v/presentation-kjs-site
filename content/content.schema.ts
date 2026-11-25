@@ -269,7 +269,9 @@ export const supplyChainSchema = z.object({
         via: z
           .array(latLon)
           .describe('Highway waypoints between the plant and the city (latitude, longitude)'),
-        labelSide: z.enum(['left', 'right', 'top']).describe('Where the city name sits next to its pin'),
+        labelSide: z
+          .enum(['left', 'right', 'top', 'bottom'])
+          .describe('Where the city name sits next to its pin'),
       }),
     )
     .min(1)
