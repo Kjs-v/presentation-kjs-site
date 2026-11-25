@@ -1748,7 +1748,7 @@
           [23.18, 79.95],
           [26.45, 80.33]
         ],
-        "labelSide": "right"
+        "labelSide": "bottom"
       },
       {
         "city": "Guwahati",
@@ -1756,14 +1756,15 @@
         "lat": 26.14,
         "lon": 91.74,
         "via": [
-          [16.5, 80.65],
-          [17.69, 83.22],
-          [20.3, 85.82],
-          [22.57, 88],
-          [24.8, 87.92],
-          [26.6, 88.45],
-          [26.55, 89.4],
-          [26.48, 90.56]
+          [16.52, 80.5],
+          [17.75, 82.9],
+          [20.4, 85.4],
+          [22.3, 87.3],
+          [23.6, 87.6],
+          [25.2, 87.85],
+          [26.65, 88.45],
+          [26.6, 89.6],
+          [26.45, 90.6]
         ],
         "labelSide": "top"
       },
@@ -1773,9 +1774,10 @@
         "lat": 22.57,
         "lon": 88.36,
         "via": [
-          [16.5, 80.65],
-          [17.69, 83.22],
-          [20.3, 85.82]
+          [16.52, 80.5],
+          [17.75, 82.9],
+          [20.4, 85.4],
+          [22.3, 87.3]
         ],
         "labelSide": "right"
       },
@@ -1849,10 +1851,10 @@
         "text": "Delhi NCR and Lucknow, up NH 44 through Nagpur, Jhansi and Agra.",
         "cities": ["Delhi", "Lucknow"],
         "camera": {
-          "lat": 25,
-          "lon": 79,
-          "distance": 27,
-          "turn": -0.12
+          "lat": 24.4,
+          "lon": 79.4,
+          "distance": 30,
+          "turn": -0.06
         }
       },
       {
@@ -1863,10 +1865,10 @@
         "text": "Mumbai and Ahmedabad on the west coast; Bengaluru and Chennai a day’s run to the south.",
         "cities": ["Mumbai", "Ahmedabad", "Bengaluru", "Chennai"],
         "camera": {
-          "lat": 17.6,
-          "lon": 76,
-          "distance": 29,
-          "turn": 0.1
+          "lat": 16.5,
+          "lon": 76.4,
+          "distance": 31,
+          "turn": 0.06
         }
       },
       {
@@ -1877,10 +1879,10 @@
         "text": "Kolkata along the east coast, then Guwahati through the Siliguri corridor: the longest run on the network.",
         "cities": ["Kolkata", "Guwahati"],
         "camera": {
-          "lat": 22,
-          "lon": 86,
-          "distance": 29,
-          "turn": 0.18
+          "lat": 21.8,
+          "lon": 86.2,
+          "distance": 31,
+          "turn": 0.1
         }
       },
       {
@@ -1894,28 +1896,28 @@
     "regions": [
       {
         "label": "NORTH",
-        "lat": 33.6,
-        "lon": 77
+        "lat": 36.3,
+        "lon": 77.2
       },
       {
         "label": "WEST",
-        "lat": 16.2,
-        "lon": 70.6
+        "lat": 15.8,
+        "lon": 67.8
       },
       {
         "label": "SOUTH",
-        "lat": 10.6,
-        "lon": 77.8
+        "lat": 7.3,
+        "lon": 78.2
       },
       {
         "label": "EAST",
-        "lat": 19.2,
-        "lon": 88.8
+        "lat": 18.0,
+        "lon": 88.2
       },
       {
         "label": "NORTH-EAST",
-        "lat": 24.6,
-        "lon": 97.6
+        "lat": 24.4,
+        "lon": 96.6
       }
     ],
     "stats": [

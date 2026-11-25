@@ -1599,22 +1599,38 @@ main > * {
   inset: 0;
   z-index: 2;
   pointer-events: none;
+  overflow: hidden;
+}
+.sc-leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.sc-leaders line {
+  stroke: var(--c-link);
+  stroke-width: 1.25;
+  stroke-opacity: 0.45;
+  stroke-dasharray: 2.5 2.5;
 }
 .sc-lbl {
   position: absolute;
   left: 0;
   top: 0;
-  padding: 4px 9px;
-  border-radius: 6px;
-  background: var(--c-bg);
+  padding: 4px 8px;
+  border-radius: 7px;
+  background: var(--c-scrim);
+  backdrop-filter: blur(6px);
   border: 1px solid var(--c-edge);
   color: var(--c-text);
-  font-size: 12px;
+  font-size: 11.5px;
+  line-height: 1.25;
   font-weight: 700;
   white-space: nowrap;
   opacity: 0;
   transition: opacity 0.4s;
-  box-shadow: 0 6px 16px var(--c-shadow);
+  box-shadow: 0 4px 14px var(--c-shadow);
 }
 .sc-lbl.show {
   opacity: 1;
@@ -1624,38 +1640,41 @@ main > * {
 }
 .sc-lbl small {
   display: block;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 650;
   color: var(--c-eyebrow);
+  margin-top: 1px;
 }
 .sc-lbl.origin {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   background: var(--c-text);
   border-color: var(--c-text);
   color: var(--c-bg);
   opacity: 1;
   padding: 4px 8px;
+  font-size: 11.5px;
 }
 .sc-lbl.origin img {
-  height: 16px;
+  height: 14px;
   width: auto;
 }
 .sc-region {
   position: absolute;
   left: 0;
   top: 0;
-  font-size: 12px;
+  font-size: 10.5px;
   font-weight: 800;
-  letter-spacing: 0.35em;
+  letter-spacing: 0.28em;
   color: var(--c-link);
   opacity: 0;
   transition: opacity 1s;
   white-space: nowrap;
+  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.7);
 }
 .sc-region.show {
-  opacity: 0.8;
+  opacity: 0.65;
 }
 .sc-webgl {
   position: absolute;
@@ -1861,10 +1880,10 @@ main > * {
   font-variant-numeric: tabular-nums;
 }
 .sc-stats sup {
-  font-size: 0.55em;
-  vertical-align: super;
+  font-size: 0.85em;
+  vertical-align: 0.08em;
   line-height: 0;
-  margin-left: 1px;
+  margin-left: 2px;
   color: var(--c-eyebrow);
 }
 .sc-stats span {
