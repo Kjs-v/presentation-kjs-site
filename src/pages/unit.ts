@@ -15,16 +15,51 @@ type Section = (unit: Unit, content: Content) => HTMLElement[];
 
 const empty = (text: string) => [h('p', { class: 'empty' }, text)];
 
+/**
+ * unit.productPacks: a grid of client packs showing one row, with a button that opens the rest.
+ * The row length follows the grid's column count, so it stays one row at any screen width.
+ */
+function packShowcase(pp: NonNullable<Unit['productPacks']>, content: Content): HTMLElement[] {
+  const byId = new Map(content.clientPacks.map((p) => [p.id, p]));
+  const tiles = pp.packs.map((id) => byId.get(id)!).map((p) => tile(p.image, p.name));
+  const grid = h('div', { class: 'tile-grid' }, ...tiles);
+  const toggle = h('button', { type: 'button', class: 'secondary show-all', 'aria-expanded': 'false' });
+  let open = false;
+  const layout = () => {
+    const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean).length || 1;
+    // A class, not `hidden`, so the PDF (print) still shows every pack.
+    tiles.forEach((t, i) => t.classList.toggle('folded', !open && i >= cols));
+    toggle.hidden = tiles.length <= cols;
+    toggle.textContent = open ? pp.showLessLabel : `${pp.showAllLabel} (${tiles.length})`;
+    toggle.setAttribute('aria-expanded', String(open));
+  };
+  toggle.addEventListener('click', () => {
+    open = !open;
+    layout();
+    if (!open) grid.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+  new ResizeObserver(layout).observe(grid);
+  layout();
+  return [
+    h('h3', { class: 'group-title' }, pp.title, h('span', {}, String(tiles.length))),
+    grid,
+    h('div', { class: 'actions show-all-row' }, toggle),
+  ];
+}
+
 /** One renderer per tab id. To add a new kind of section, add its id to unitTabIds in the schema and a renderer here. */
 const sections: Record<UnitTabId, Section> = {
   products: (unit, content) => {
     const { products } = content;
     const list = products.filter((p) => p.unit === unit.id).sort(byOrder);
-    if (!list.length) return empty('No products added yet.');
-    return groupBy(list, (p) => p.group).flatMap(([group, items]) => [
-      h('h3', { class: 'group-title' }, group, h('span', {}, String(items.length))),
-      h('div', { class: 'tile-grid' }, ...items.map((p) => productTile(p, content))),
-    ]);
+    const showcase = unit.productPacks ? packShowcase(unit.productPacks, content) : [];
+    if (!list.length) return showcase.length ? showcase : empty('No products added yet.');
+    return showcase.concat(
+      groupBy(list, (p) => p.group).flatMap(([group, items]) => [
+        h('h3', { class: 'group-title' }, group, h('span', {}, String(items.length))),
+        h('div', { class: 'tile-grid' }, ...items.map((p) => productTile(p, content))),
+      ]),
+    );
   },
   customers: (unit, { clientPacks, site }) => {
     const list = clientPacks.filter((p) => p.unit === unit.id).sort(byOrder);

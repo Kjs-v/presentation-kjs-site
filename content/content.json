@@ -399,6 +399,38 @@
           "url": "https://kjsindia.com/"
         }
       ],
+      "productPacks": {
+        "title": "Unit-1 products",
+        "packs": [
+          "nescafe-classic-stick",
+          "nescafe-sunrise",
+          "nescafe-classic-pouch",
+          "nescafe-all-in-1-cup",
+          "nescafe-all-in-1-frappe",
+          "boost-jar",
+          "boost-refill",
+          "boost-box",
+          "horlicks-super-foods-jar",
+          "horlicks-jar",
+          "horlicks-pouch",
+          "horlicks-box",
+          "horlicks-2kg",
+          "horlicks-super-foods-pouch",
+          "junior-horlicks",
+          "horlicks-pouch-2",
+          "choki-choki-pack",
+          "choki-choki-xl",
+          "choki-choki-jar-40",
+          "choki-choki-xl-box",
+          "choki-choki-jar",
+          "nestle-resource-fiber",
+          "continental-xtra",
+          "cafe-niger",
+          "swiss-cafe"
+        ],
+        "showAllLabel": "Show all",
+        "showLessLabel": "Show less"
+      },
       "mapUrl": "https://maps.app.goo.gl/J1KAM9J2N9mt2NRMA"
     },
     {
@@ -552,12 +584,12 @@
     {
       "id": "coffee-3-in-1-premix",
       "name": "Coffee 3-in-1 Premix",
-      "group": "Coffee",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
       "image": "/media/products/coffee-3-in-1-premix.jpg",
       "featured": false,
-      "order": 8,
+      "order": 29,
       "specs": []
     },
     {
@@ -857,111 +889,111 @@
     {
       "id": "hot-chocolate-powder",
       "name": "Hot Chocolate Powder",
-      "group": "Drink powders",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
       "image": "/media/products/hot-chocolate-powder.jpg",
-      "featured": false,
-      "order": 29,
-      "specs": []
-    },
-    {
-      "id": "instant-guava-drink-powder",
-      "name": "Instant Guava Drink Powder",
-      "group": "Drink powders",
-      "unit": "unit-1",
-      "description": "",
-      "image": "/media/products/instant-guava-drink-powder.jpg",
       "featured": false,
       "order": 30,
       "specs": []
     },
     {
-      "id": "instant-lime-drink-powder",
-      "name": "Instant Lime Drink Powder",
-      "group": "Drink powders",
+      "id": "instant-guava-drink-powder",
+      "name": "Instant Guava Drink Powder",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
-      "image": "/media/products/instant-lime-drink-powder.jpg",
+      "image": "/media/products/instant-guava-drink-powder.jpg",
       "featured": false,
       "order": 31,
       "specs": []
     },
     {
-      "id": "instant-mango-drink-powder",
-      "name": "Instant Mango Drink Powder",
-      "group": "Drink powders",
+      "id": "instant-lime-drink-powder",
+      "name": "Instant Lime Drink Powder",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
-      "image": "/media/products/instant-mango-drink-powder.jpg",
+      "image": "/media/products/instant-lime-drink-powder.jpg",
       "featured": false,
       "order": 32,
       "specs": []
     },
     {
-      "id": "instant-orange-drink-powder",
-      "name": "Instant Orange Drink Powder",
-      "group": "Drink powders",
+      "id": "instant-mango-drink-powder",
+      "name": "Instant Mango Drink Powder",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
-      "image": "/media/products/instant-orange-drink-powder.jpg",
+      "image": "/media/products/instant-mango-drink-powder.jpg",
       "featured": false,
       "order": 33,
       "specs": []
     },
     {
-      "id": "instant-passion-fruit-drink-powder",
-      "name": "Instant Passion Fruit Drink Powder",
-      "group": "Drink powders",
+      "id": "instant-orange-drink-powder",
+      "name": "Instant Orange Drink Powder",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
-      "image": "/media/products/instant-passion-fruit-drink-powder.jpg",
+      "image": "/media/products/instant-orange-drink-powder.jpg",
       "featured": false,
       "order": 34,
       "specs": []
     },
     {
-      "id": "instant-peach-drink-powder",
-      "name": "Instant Peach Drink Powder",
-      "group": "Drink powders",
+      "id": "instant-passion-fruit-drink-powder",
+      "name": "Instant Passion Fruit Drink Powder",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
-      "image": "/media/products/instant-peach-drink-powder.jpg",
+      "image": "/media/products/instant-passion-fruit-drink-powder.jpg",
       "featured": false,
       "order": 35,
       "specs": []
     },
     {
-      "id": "instant-pineapple-drink-powder",
-      "name": "Instant Pineapple Drink Powder",
-      "group": "Drink powders",
+      "id": "instant-peach-drink-powder",
+      "name": "Instant Peach Drink Powder",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
-      "image": "/media/products/instant-pineapple-drink-powder.jpg",
+      "image": "/media/products/instant-peach-drink-powder.jpg",
       "featured": false,
       "order": 36,
       "specs": []
     },
     {
-      "id": "instant-strawberry-drink-powder",
-      "name": "Instant Strawberry Drink Powder",
-      "group": "Drink powders",
+      "id": "instant-pineapple-drink-powder",
+      "name": "Instant Pineapple Drink Powder",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
-      "image": "/media/products/instant-strawberry-drink-powder.jpg",
+      "image": "/media/products/instant-pineapple-drink-powder.jpg",
       "featured": false,
       "order": 37,
       "specs": []
     },
     {
+      "id": "instant-strawberry-drink-powder",
+      "name": "Instant Strawberry Drink Powder",
+      "group": "Premix Powder",
+      "unit": "unit-1",
+      "description": "",
+      "image": "/media/products/instant-strawberry-drink-powder.jpg",
+      "featured": false,
+      "order": 38,
+      "specs": []
+    },
+    {
       "id": "instant-watermelon-drink-powder",
       "name": "Instant Watermelon Drink Powder",
-      "group": "Drink powders",
+      "group": "Premix Powder",
       "unit": "unit-1",
       "description": "",
       "image": "/media/products/instant-watermelon-drink-powder.jpg",
       "featured": false,
-      "order": 38,
+      "order": 39,
       "specs": []
     },
     {
@@ -972,7 +1004,7 @@
       "description": "",
       "image": "/media/products/karamilo-cocoa.jpg",
       "featured": false,
-      "order": 39,
+      "order": 40,
       "specs": []
     },
     {
@@ -983,7 +1015,7 @@
       "description": "",
       "image": "/media/products/keky-latte.jpg",
       "featured": false,
-      "order": 40,
+      "order": 41,
       "specs": []
     },
     {
@@ -994,7 +1026,7 @@
       "description": "",
       "image": "/media/products/kremali-sandwich-biscuits.jpg",
       "featured": false,
-      "order": 41,
+      "order": 42,
       "specs": []
     },
     {
@@ -1005,7 +1037,7 @@
       "description": "",
       "image": "/media/products/lupita-duble.jpg",
       "featured": false,
-      "order": 42,
+      "order": 43,
       "specs": []
     },
     {
@@ -1016,7 +1048,7 @@
       "description": "",
       "image": "/media/products/maria-biscuits.jpg",
       "featured": false,
-      "order": 43,
+      "order": 44,
       "specs": []
     },
     {
@@ -1027,7 +1059,7 @@
       "description": "",
       "image": "/media/products/marshmallow-sandwich-biscuit.jpg",
       "featured": false,
-      "order": 44,
+      "order": 45,
       "specs": []
     },
     {
@@ -1038,7 +1070,7 @@
       "description": "",
       "image": "/media/products/marshmoe-sandwich-biscuits.jpg",
       "featured": false,
-      "order": 45,
+      "order": 46,
       "specs": []
     },
     {
@@ -1049,7 +1081,7 @@
       "description": "",
       "image": "/media/products/maxi-big-wafers-chocolate.jpg",
       "featured": false,
-      "order": 46,
+      "order": 47,
       "specs": []
     },
     {
@@ -1060,7 +1092,7 @@
       "description": "",
       "image": "/media/products/maxi-big-wafers-granule.jpg",
       "featured": false,
-      "order": 47,
+      "order": 48,
       "specs": []
     },
     {
@@ -1072,7 +1104,7 @@
       "image": "/media/products/maxi-cream-wafers.jpg",
       "featured": true,
       "featuredImage": "/media/featured/maxi-cream-wafers.webp",
-      "order": 48,
+      "order": 49,
       "specs": [
         {
           "label": "Item no.",
@@ -1100,7 +1132,7 @@
       "description": "",
       "image": "/media/products/milk-wafer.jpg",
       "featured": false,
-      "order": 49,
+      "order": 50,
       "specs": []
     },
     {
@@ -1111,7 +1143,7 @@
       "description": "",
       "image": "/media/products/pacho-chocolate-bar.jpg",
       "featured": false,
-      "order": 50,
+      "order": 51,
       "specs": []
     },
     {
@@ -1122,7 +1154,7 @@
       "description": "",
       "image": "/media/products/pacho-cream-biscuits.jpg",
       "featured": false,
-      "order": 51,
+      "order": 52,
       "specs": []
     },
     {
@@ -1133,7 +1165,7 @@
       "description": "",
       "image": "/media/products/pacho-fret.jpg",
       "featured": false,
-      "order": 52,
+      "order": 53,
       "specs": []
     },
     {
@@ -1144,7 +1176,7 @@
       "description": "",
       "image": "/media/products/pacho-mellow-banana.jpg",
       "featured": false,
-      "order": 53,
+      "order": 54,
       "specs": []
     },
     {
@@ -1156,7 +1188,7 @@
       "image": "/media/products/pacho-mellow.jpg",
       "featured": true,
       "featuredImage": "/media/featured/pacho-mellow.webp",
-      "order": 54,
+      "order": 55,
       "specs": [
         {
           "label": "Item no.",
@@ -1180,7 +1212,7 @@
       "description": "",
       "image": "/media/products/paleyo-chocolate-bar.jpg",
       "featured": false,
-      "order": 55,
+      "order": 56,
       "specs": []
     },
     {
@@ -1191,7 +1223,7 @@
       "description": "",
       "image": "/media/products/palmix-x2-wafer.jpg",
       "featured": false,
-      "order": 56,
+      "order": 57,
       "specs": []
     },
     {
@@ -1202,7 +1234,7 @@
       "description": "",
       "image": "/media/products/peti-honey.jpg",
       "featured": false,
-      "order": 57,
+      "order": 58,
       "specs": []
     },
     {
@@ -1214,7 +1246,7 @@
       "image": "/media/products/peti-latte-2in1.jpg",
       "featured": true,
       "featuredImage": "/media/featured/peti-latte-2in1.webp",
-      "order": 58,
+      "order": 59,
       "specs": [
         {
           "label": "Item no.",
@@ -1238,7 +1270,7 @@
       "description": "",
       "image": "/media/products/petit-beurre-biscuits.jpg",
       "featured": false,
-      "order": 59,
+      "order": 60,
       "specs": []
     },
     {
@@ -1249,7 +1281,7 @@
       "description": "",
       "image": "/media/products/philo-chocolate-bar.jpg",
       "featured": false,
-      "order": 60,
+      "order": 61,
       "specs": []
     },
     {
@@ -1260,7 +1292,7 @@
       "description": "",
       "image": "/media/products/piknik-biscuits.jpg",
       "featured": false,
-      "order": 61,
+      "order": 62,
       "specs": []
     },
     {
@@ -1271,7 +1303,7 @@
       "description": "",
       "image": "/media/products/pitaro-sandwich-biscuits.jpg",
       "featured": false,
-      "order": 62,
+      "order": 63,
       "specs": []
     },
     {
@@ -1282,7 +1314,7 @@
       "description": "",
       "image": "/media/products/prens-sandwich-biscuits.jpg",
       "featured": false,
-      "order": 63,
+      "order": 64,
       "specs": []
     },
     {
@@ -1293,7 +1325,7 @@
       "description": "",
       "image": "/media/products/ranch-chocolate-bar.jpg",
       "featured": false,
-      "order": 64,
+      "order": 65,
       "specs": []
     },
     {
@@ -1304,7 +1336,7 @@
       "description": "",
       "image": "/media/products/ranch-marshmallow-sandwich.jpg",
       "featured": false,
-      "order": 65,
+      "order": 66,
       "specs": []
     },
     {
@@ -1315,7 +1347,7 @@
       "description": "",
       "image": "/media/products/sandwich-marshmallow-biscuit.jpg",
       "featured": false,
-      "order": 66,
+      "order": 67,
       "specs": []
     },
     {
@@ -1326,7 +1358,7 @@
       "description": "",
       "image": "/media/products/share-wafer.jpg",
       "featured": false,
-      "order": 67,
+      "order": 68,
       "specs": []
     },
     {
@@ -1337,7 +1369,7 @@
       "description": "",
       "image": "/media/products/spray-dried-instant-coffee.jpg",
       "featured": false,
-      "order": 68,
+      "order": 69,
       "specs": []
     },
     {
@@ -1348,7 +1380,7 @@
       "description": "",
       "image": "/media/products/susamli-sesame-biscuits.jpg",
       "featured": false,
-      "order": 69,
+      "order": 70,
       "specs": []
     },
     {
@@ -1359,7 +1391,7 @@
       "description": "",
       "image": "/media/products/wafer-2021-chocolate.jpg",
       "featured": false,
-      "order": 70,
+      "order": 71,
       "specs": []
     },
     {
@@ -1370,7 +1402,7 @@
       "description": "",
       "image": "/media/products/wafer-2021-milk.jpg",
       "featured": false,
-      "order": 71,
+      "order": 72,
       "specs": []
     },
     {
@@ -1381,7 +1413,7 @@
       "description": "",
       "image": "/media/products/wafer-time.jpg",
       "featured": false,
-      "order": 72,
+      "order": 73,
       "specs": []
     }
   ],

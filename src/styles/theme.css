@@ -2499,3 +2499,18 @@ main > * {
     break-before: auto;
   }
 }
+
+/* Unit products: one row of packs, then "Show all" (everything shows when printed) */
+.show-all-row {
+  margin-top: 14px;
+}
+@media screen {
+  .tile.folded {
+    display: none;
+  }
+}
+@media print {
+  .show-all-row {
+    display: none;
+  }
+}

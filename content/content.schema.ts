@@ -225,6 +225,15 @@ export const unitSchema = z.object({
       }),
     )
     .describe('Buttons over the photo (in order). Remove one to hide that section.'),
+  productPacks: z
+    .object({
+      title: z.string().describe('Heading, e.g. Unit-1 products'),
+      packs: z.array(slug).min(1).describe('Client packs shown, in order (clientPacks ids)'),
+      showAllLabel: z.string().describe('Button that opens the full list'),
+      showLessLabel: z.string().describe('Button that folds it back to one row'),
+    })
+    .optional()
+    .describe('Optional: packs shown at the top of the Products section (one row, then "Show all")'),
   stats: z.array(stat).describe('Key numbers (About section)'),
   highlights: z.array(titleBody).describe('Highlights (About section)'),
 });
@@ -455,6 +464,17 @@ export const contentSchema = z
     checkUnit(c.products, 'products');
     checkUnit(c.clientPacks, 'clientPacks');
     checkUnit(c.machinery, 'machinery');
+    const packIds = new Set(c.clientPacks.map((p) => p.id));
+    c.units.forEach((u, i) =>
+      u.productPacks?.packs.forEach((id, j) => {
+        if (!packIds.has(id))
+          ctx.addIssue({
+            code: 'custom',
+            message: `No client pack with id "${id}"`,
+            path: ['units', i, 'productPacks', 'packs', j],
+          });
+      }),
+    );
     c.certifications.forEach((cert, i) =>
       cert.units.forEach((u, j) => {
         if (!unitIds.has(u))
