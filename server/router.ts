@@ -441,7 +441,9 @@ on('PUT', '/api/admin/users/:id', async (request, { id }) => {
 
 /** Gives a user a new temporary password and signs them out everywhere. */
 on('POST', '/api/admin/users/:id/reset-password', async (request, { id }) => {
-  await requireUser(request);
+  const me = await requireUser(request);
+  // Resetting yourself would sign you out on the spot; use "My password" instead.
+  if (asId(id) === me.id) throw new HttpError(409, 'To change your own password, use My password.');
   const password = tempPassword();
   const [row] = await db()
     .update(schema.users)
@@ -487,7 +489,12 @@ export async function handle(request: Request): Promise<Response> {
       // Writes must come from our own site. The Blob completion callback is the one exception
       // (it is signed by Vercel and checked inside handleUpload).
       if (pathname !== '/api/admin/media/upload') assertSameOrigin(request);
-      const params = Object.fromEntries(route.keys.map((k, i) => [k, decodeURIComponent(match[i + 1])]));
+      let params: Params;
+      try {
+        params = Object.fromEntries(route.keys.map((k, i) => [k, decodeURIComponent(match[i + 1])]));
+      } catch {
+        throw new HttpError(404, 'Not found.'); // broken %-escape in the address
+      }
       return await route.handler(request, params);
     }
     throw new HttpError(methodMismatch ? 405 : 404, methodMismatch ? 'Method not allowed.' : 'Not found.');

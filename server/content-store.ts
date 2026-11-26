@@ -121,13 +121,18 @@ export async function publish(userId: number, note: string) {
   const parsed = contentSchema.safeParse(drafts);
   if (!parsed.success) throw validationError(parsed.error);
 
+  // Make live exactly what was checked above. (Copying "draft" in the database would also publish
+  // a save that landed after the check, unchecked.)
   const d = db();
+  const updates = sectionKeys.map((k) =>
+    d.update(schema.sections).set({ published: parsed.data[k] }).where(eq(schema.sections.key, k)),
+  );
   const [inserted] = await d.batch([
     d
       .insert(schema.versions)
       .values({ snapshot: parsed.data, note: note.slice(0, 200), publishedBy: userId })
       .returning({ id: schema.versions.id, publishedAt: schema.versions.publishedAt }),
-    d.update(schema.sections).set({ published: sql`${schema.sections.draft}` }),
+    ...updates,
   ]);
   return inserted[0];
 }
