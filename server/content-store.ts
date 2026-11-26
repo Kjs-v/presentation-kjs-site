@@ -5,6 +5,7 @@
 import { and, desc, eq, sql } from 'drizzle-orm';
 import { contentSchema, contentSections, sectionKeys, type SectionKey } from '../content/content.schema.js';
 import { db, schema } from './db/client.js';
+import { fillMissing } from './fill-missing.js';
 import { HttpError, validationError } from './http.js';
 
 export const isSectionKey = (key: string): key is SectionKey => (sectionKeys as string[]).includes(key);
@@ -147,7 +148,9 @@ export async function restore(versionId: number, userId: number) {
   const d = db();
   const [old] = await d.select().from(schema.versions).where(eq(schema.versions.id, versionId));
   if (!old) throw new HttpError(404, 'That version does not exist.');
-  const parsed = contentSchema.safeParse(old.snapshot);
+  // Copies saved before the site gained a section or field lack it; fill those gaps from the live content.
+  let parsed = contentSchema.safeParse(old.snapshot);
+  if (!parsed.success) parsed = contentSchema.safeParse(fillMissing(old.snapshot, await publishedContent()));
   if (!parsed.success)
     throw new HttpError(
       409,

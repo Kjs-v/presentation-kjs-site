@@ -4,6 +4,7 @@
  */
 import { beforeAll, describe, expect, it } from 'vitest';
 import content from '../content/content.json';
+import { db, schema } from '../server/db/client';
 import { PASSWORDS, call, loginAs, resetDatabase } from './helpers';
 
 let admin = '';
@@ -184,6 +185,23 @@ describe('editing and publishing', () => {
     expect((await call('GET', '/api/content')).data.home.summary).toBe(content.home.summary);
     const after = (await call('GET', '/api/admin/versions', { cookie: editor })).data.versions;
     expect(after[0].note).toBe(`Restored version ${first.id}`);
+  });
+
+  it('restores a version saved before a section or field was added', async () => {
+    // An old copy: no supplyChain section, and the menu has no colour options yet.
+    const { supplyChain: _gone, ...old } = structuredClone(content);
+    delete (old.site.menu as Partial<typeof old.site.menu>).colour;
+    old.home.summary = 'Summary from an old version';
+    const [row] = await db()
+      .insert(schema.versions)
+      .values({ snapshot: old, note: 'Old shape' })
+      .returning({ id: schema.versions.id });
+    const res = await call('POST', `/api/admin/versions/${row.id}/restore`, { cookie: editor });
+    expect(res.status).toBe(200);
+    const live = (await call('GET', '/api/content')).data;
+    expect(live.home.summary).toBe('Summary from an old version');
+    expect(live.supplyChain).toEqual(content.supplyChain);
+    expect(live.site.menu.colour).toEqual(content.site.menu.colour);
   });
 
   it('describes every section for the admin page', async () => {

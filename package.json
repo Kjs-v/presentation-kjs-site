@@ -16,7 +16,8 @@
     "db:generate": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs generate",
     "db:migrate": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs migrate",
     "db:seed": "tsx --env-file=.env scripts/db-seed.ts",
-    "db:export": "tsx --env-file=.env scripts/db-export.ts"
+    "db:upgrade": "tsx --env-file=.env scripts/db-upgrade.ts",
+    "db:export":"tsx --env-file=.env scripts/db-export.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.1",
