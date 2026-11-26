@@ -107,6 +107,29 @@ export const siteSchema = z.object({
   menu: z.object({
     notesLabel: z.string().describe('Notes button text'),
     themeToggleLabel: z.string().describe('Colour switch label (read out by screen readers)'),
+    colour: z
+      .object({
+        whiteLabel: z.string().describe('Option that puts the site back to white'),
+        multiLabel: z.string().describe('Option that opens the colour palette'),
+        swatches: z
+          .array(
+            z.object({
+              label: z.string().describe('Colour name'),
+              color: z
+                .string()
+                .regex(/^#[0-9a-fA-F]{6}$/, 'A hex colour like #1c3a9e')
+                .describe('Background colour (hex)'),
+            }),
+          )
+          .min(1)
+          .describe('Background colours offered in the palette'),
+        customLabel: z.string().describe('Label of the "pick any colour" control'),
+        scopeQuestion: z.string().describe('Question asked after picking a colour'),
+        thisPage: z.string().describe('Answer: only this page'),
+        allPages: z.string().describe('Answer: every page'),
+        cancel: z.string().describe('Cancel button'),
+      })
+      .describe('Colour menu in the header'),
   }),
   theme: z.object({
     default: z.string().describe('Theme shown first (id of one of the palettes)'),
@@ -225,6 +248,100 @@ export const gallerySchema = z.object({
   photos: z.array(z.object({ src: mediaPath, caption: z.string() })),
 });
 
+/** Supply Chain page ("/supply-chain"): a 3D scene of the dispatch dock, then trucks driving across an India map. */
+const latLon = z.tuple([z.number().describe('Latitude'), z.number().describe('Longitude')]);
+export const supplyChainSchema = z.object({
+  eyebrow: z.string().describe('Small text above the title'),
+  title: z.string().describe('Title'),
+  intro: z.string().describe('Text under the title'),
+  steps: z
+    .array(z.string())
+    .length(3)
+    .describe('The three step labels above the scene: loading, dispatched, delivered'),
+  mapOutline: mediaPath.describe('India outline (SVG with one path; x = longitude, y = minus latitude)'),
+  origin: z.object({
+    name: z.string().describe('Plant name'),
+    city: z.string().describe('City, e.g. Hyderabad (Patancheru), Telangana'),
+    mapLabel: z.string().describe('Label next to the plant on the map'),
+    lat: z.number().describe('Latitude'),
+    lon: z.number().describe('Longitude'),
+  }),
+  destinations: z
+    .array(
+      z.object({
+        city: z.string().describe('City'),
+        region: z.string().describe('Region, e.g. North'),
+        lat: z.number().describe('Latitude'),
+        lon: z.number().describe('Longitude'),
+        via: z
+          .array(latLon)
+          .describe('Highway waypoints between the plant and the city (latitude, longitude)'),
+        labelSide: z.enum(['left', 'right', 'top']).describe('Where the city name sits next to its pin'),
+      }),
+    )
+    .min(1)
+    .describe('Cities the trucks deliver to'),
+  chapters: z
+    .array(
+      z.object({
+        kind: z
+          .enum(['loading', 'dispatch', 'region', 'delivered'])
+          .describe(
+            'loading = dock scene; dispatch = truck leaves; region = deliveries to some cities; delivered = final map',
+          ),
+        railLabel: z.string().describe('Short label on the progress bar'),
+        title: z.string().describe('Title in the side panel'),
+        caption: z.string().describe('Caption on the scene'),
+        text: z.string().describe('Text in the side panel'),
+        cities: z
+          .array(z.string())
+          .optional()
+          .describe('Region chapters: the cities delivered in this chapter'),
+        camera: z
+          .object({
+            lat: z.number().describe('Look at latitude'),
+            lon: z.number().describe('Look at longitude'),
+            distance: z.number().describe('Camera distance (bigger = further away)'),
+            turn: z.number().describe('Camera turn in radians (small numbers, e.g. -0.12)'),
+          })
+          .optional()
+          .describe('Region chapters: where the camera looks'),
+      }),
+    )
+    .min(4)
+    .describe('Chapters, in order: loading, dispatch, one or more regions, delivered'),
+  regions: z
+    .array(z.object({ label: z.string().describe('Text'), lat: z.number(), lon: z.number() }))
+    .describe('Region names shown on the final map'),
+  stats: z.array(stat).describe('Numbers shown when everything is delivered'),
+  labels: z
+    .object({
+      stage: z.string().describe('Description of the scene for screen readers'),
+      loadMeter: z.string().describe('Load meter label on the scene, e.g. Pallets'),
+      loadedTag: z.string().describe('Tag shown when the truck is sealed'),
+      chapter: z.string().describe('Word before the chapter number'),
+      loadFactor: z.string().describe('Panel row: load factor'),
+      palletsOnDock: z.string().describe('Panel row: pallets still on the dock'),
+      truckStatus: z.string().describe('Panel row: truck status'),
+      statusLoading: z.string().describe('Status while loading'),
+      statusSealed: z.string().describe('Status once doors are sealed'),
+      statusDeparted: z.string().describe('Status once the truck leaves'),
+      delivered: z.string().describe('Panel row: delivered count, and the tag under each city'),
+      onRoad: z.string().describe('Panel row: trucks on the road'),
+      distance: z.string().describe('Panel row: distance covered'),
+      km: z.string().describe('Unit after distances, e.g. km'),
+      play: z.string().describe('Play button'),
+      pause: z.string().describe('Pause button'),
+      previous: z.string().describe('Previous chapter button (screen readers)'),
+      next: z.string().describe('Next chapter button (screen readers)'),
+      replay: z.string().describe('Replay button'),
+      autoAdvance: z.string().describe('Auto-advance checkbox'),
+      note: z.string().describe('Small note under the controls'),
+      noWebgl: z.string().describe('Shown when the browser cannot draw 3D'),
+    })
+    .describe('Words used on the page'),
+});
+
 /** Slides are a "discriminated union": each `kind` has its own fields. Add a new kind here to add a new slide layout. */
 const slideBase = { id: slug, title: z.string(), summary: z.string().optional() };
 export const slideSchema = z.discriminatedUnion('kind', [
@@ -247,6 +364,7 @@ export const contentSections = z.object({
   clientPacks: z.array(clientPackSchema).describe('Client packs'),
   machinery: z.array(machinerySchema).describe('Machinery'),
   gallery: gallerySchema.describe('Gallery'),
+  supplyChain: supplyChainSchema.describe('Supply chain'),
   slides: z.array(slideSchema).describe('Presentation slides'),
 });
 
@@ -272,6 +390,17 @@ export const contentSchema = contentSections.superRefine((c, ctx) => {
   checkUnit(c.products, 'products');
   checkUnit(c.clientPacks, 'clientPacks');
   checkUnit(c.machinery, 'machinery');
+  const cities = new Set(c.supplyChain.destinations.map((d) => d.city));
+  c.supplyChain.chapters.forEach((ch, i) =>
+    (ch.cities ?? []).forEach((city, j) => {
+      if (!cities.has(city))
+        ctx.addIssue({
+          code: 'custom',
+          path: ['supplyChain', 'chapters', i, 'cities', j],
+          message: `Unknown destination "${city}"`,
+        });
+    }),
+  );
   c.slides.forEach((s, i) => {
     if (s.kind === 'products')
       s.productIds.forEach((id, j) => {
@@ -291,3 +420,4 @@ export type Product = Content['products'][number];
 export type Unit = Content['units'][number];
 export type UnitTabId = (typeof unitTabIds)[number];
 export type Slide = Content['slides'][number];
+export type SupplyChain = Content['supplyChain'];
