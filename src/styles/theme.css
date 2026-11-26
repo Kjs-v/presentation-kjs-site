@@ -610,7 +610,7 @@ main > * {
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
   gap: 32px;
   align-items: start;
-  padding-block: clamp(12px, 2.5vh, 32px) clamp(20px, 4vh, 44px);
+  padding-block: clamp(12px, 2.5vh, 32px) clamp(6px, 1.5vh, 18px);
 }
 .home-copy {
   display: flex;
@@ -634,10 +634,20 @@ main > * {
   padding: 0;
   list-style: none;
 }
+/* Four logos on the first row, the rest on the second (an invisible full-width break after the 4th). */
+.client-logos::after {
+  content: '';
+  flex-basis: 100%;
+  order: 1;
+  margin-top: -10px; /* cancels the extra row gap the break line adds */
+}
+.client-logos li:nth-child(n + 5) {
+  order: 2;
+}
 .client-logos li {
   display: grid;
   place-items: center;
-  height: clamp(60px, 4.6vw, 80px);
+  height: clamp(64px, 5vw, 88px);
   padding: 10px 16px;
   border: 1px solid var(--c-edge);
   border-radius: 14px;
@@ -649,8 +659,8 @@ main > * {
 .client-logos img {
   display: block;
   width: auto;
-  max-width: clamp(96px, 7.5vw, 140px);
-  max-height: clamp(40px, 3.3vw, 58px);
+  max-width: clamp(104px, 8.2vw, 154px);
+  max-height: clamp(44px, 3.6vw, 64px);
 }
 @keyframes client-in {
   from {
@@ -667,6 +677,11 @@ main > * {
 .home-copy .actions {
   margin-top: 0;
 }
+.home-copy .actions > * {
+  min-height: 52px;
+  padding: 12px 22px;
+  font-size: 1.08rem;
+}
 
 .pack-carousel {
   position: relative;
@@ -676,7 +691,7 @@ main > * {
 }
 .pack-stage {
   position: relative;
-  height: clamp(360px, 38vw, 580px);
+  height: clamp(340px, 33vw, 500px);
 }
 .pack-floor {
   position: absolute;

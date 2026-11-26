@@ -74,6 +74,14 @@
         "name": "Mayora",
         "logo": "/media/logos/mayora.png",
         "link": "/pitches/mayora/"
+      },
+      {
+        "name": "Continental Coffee",
+        "logo": "/media/logos/continental-coffee.png"
+      },
+      {
+        "name": "Sleepy Owl Coffee",
+        "logo": "/media/logos/sleepy-owl-coffee.png"
       }
     ],
     "theme": {
@@ -298,6 +306,11 @@
         "name": "Choki Choki XL Box",
         "brand": "Mayora",
         "image": "/media/unit-1-packs/cutouts/choki-choki-xl-box.webp"
+      },
+      {
+        "name": "Nescafé Classic Stick",
+        "brand": "Nestlé",
+        "image": "/media/unit-1-packs/cutouts/nescafe-classic-stick.webp"
       },
       {
         "name": "Nestlé Resource Fiber",
@@ -1599,7 +1612,7 @@
       "name": "AIT Coffee",
       "brand": "Other",
       "image": "/media/unit-1-packs/ait-coffee.jpg",
-      "order": 23,
+      "order": 24,
       "unit": "unit-1"
     },
     {
@@ -1607,7 +1620,7 @@
       "name": "Café Niger",
       "brand": "Other",
       "image": "/media/unit-1-packs/cafe-niger.jpg",
-      "order": 24,
+      "order": 25,
       "unit": "unit-1"
     },
     {
@@ -1615,15 +1628,15 @@
       "name": "Café Soka",
       "brand": "Other",
       "image": "/media/unit-1-packs/cafe-soka.jpg",
-      "order": 25,
+      "order": 26,
       "unit": "unit-1"
     },
     {
       "id": "continental-xtra",
       "name": "Continental Xtra",
-      "brand": "Other",
+      "brand": "Continental Coffee",
       "image": "/media/unit-1-packs/continental-xtra.jpg",
-      "order": 26,
+      "order": 23,
       "unit": "unit-1"
     },
     {
