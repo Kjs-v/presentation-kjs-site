@@ -452,6 +452,10 @@ main > * {
 .footer-company strong {
   color: var(--c-text);
 }
+/* Each line of the address (address, GSTIN, state) on its own line. */
+.footer-company p {
+  white-space: pre-line;
+}
 .footer-inner p {
   max-width: 58ch;
   font-size: 0.9rem;

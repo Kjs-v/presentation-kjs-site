@@ -82,7 +82,7 @@ export const siteSchema = z.object({
   contact: z.object({
     phone: z.string().describe('Phone'),
     email: z.string().email().describe('Email'),
-    address: z.string().describe('Address shown in the footer'),
+    address: z.string().describe('Address shown in the footer (each new line shows on its own line)'),
     mapLabel: z.string().describe('Map button text, e.g. Find us'),
     locations: z
       .array(
