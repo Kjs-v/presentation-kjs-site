@@ -3,7 +3,7 @@ import type { Content, Product } from '../content/content.schema';
 import { h } from './lib/dom';
 import { openProduct } from './widgets/product-dialog';
 
-type Stat = Content['story']['stats'][number];
+type Stat = Content['units'][number]['stats'][number];
 
 export function stats(list: Stat[]): HTMLElement {
   return h(

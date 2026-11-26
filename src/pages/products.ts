@@ -1,9 +1,8 @@
 /**
- * Products ("/products").
+ * Products, shown in the Gallery's Products tab ("/gallery/products").
  * 1. Hero (~75% of the screen): best sellers (featured: true) slowly orbiting. Hover pauses, click opens the product.
  * 2. Catalogue, as in the design reference: group filters, a large "selected product" panel, then every product card.
  */
-import type { Page } from '../lib/router';
 import type { Content, Product } from '../../content/content.schema';
 import { h } from '../lib/dom';
 import { byOrder } from '../components';
@@ -87,7 +86,7 @@ function catalog(content: Content): HTMLElement {
   return h('section', { class: 'catalog wrap' }, h('h2', {}, copy.catalogTitle), filters, stage, list);
 }
 
-export const productsPage: Page = (content) => {
+export function productsSection(content: Content): HTMLElement {
   const { productsPage: copy } = content;
   const featured = content.products.filter((p) => p.featured).sort(byOrder);
   const byId = new Map(content.products.map((p) => [p.id, p]));
@@ -99,7 +98,7 @@ export const productsPage: Page = (content) => {
       'div',
       { class: 'products-hero-copy' },
       h('p', { class: 'eyebrow' }, copy.eyebrow),
-      h('h1', {}, copy.title),
+      h('h2', { class: 'products-hero-title' }, copy.title),
       h('p', { class: 'products-hero-summary' }, copy.summary),
     ),
     orbit(
@@ -109,4 +108,4 @@ export const productsPage: Page = (content) => {
   );
 
   return h('div', { class: 'page-products' }, hero, catalog(content));
-};
+}

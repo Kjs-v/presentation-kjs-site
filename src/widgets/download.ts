@@ -1,14 +1,13 @@
 /**
  * "Download PDF" menu in the header.
  * - This page: the page on screen, laid out for paper (see the @media print rules in theme.css).
- * - Full company profile: About, every unit section, Promoter Profile and Gallery, one after another.
+ * - Full company profile: every unit section, Promoter Profile and Gallery, one after another.
  * Both use the browser's own "Save as PDF", so text stays sharp and searchable. All words come from site.menu.download.
  * The 3D supply-chain scene is saved as a still picture (canvases are swapped for an image while printing).
  */
 import type { Content } from '../../content/content.schema';
 import { h } from '../lib/dom';
 import { icon } from '../lib/icons';
-import { aboutPage } from '../pages/about';
 import { galleryPage } from '../pages/gallery';
 import { promotersPage } from '../pages/promoters';
 import { supplyChainSummary } from '../pages/supply-chain';
@@ -28,7 +27,6 @@ function profileBook(content: Content): HTMLElement {
   return h(
     'div',
     { id: 'print-book', 'aria-hidden': 'true' },
-    chapter(aboutPage(content, {})),
     ...units,
     chapter(promotersPage(content, {})),
     chapter(galleryPage(content, {})),

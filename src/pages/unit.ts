@@ -26,11 +26,11 @@ const sections: Record<UnitTabId, Section> = {
       h('div', { class: 'tile-grid' }, ...items.map((p) => productTile(p, content))),
     ]);
   },
-  customers: (unit, { clientPacks, about }) => {
+  customers: (unit, { clientPacks, site }) => {
     const list = clientPacks.filter((p) => p.unit === unit.id).sort(byOrder);
     if (!list.length) return empty('No customers added yet.');
     return [
-      h('div', { class: 'logos compact' }, ...about.partners.map(partnerLogo)),
+      h('div', { class: 'logos compact' }, ...site.partners.map(partnerLogo)),
       ...groupBy(list, (p) => p.brand).flatMap(([brand, items]) => [
         h('h3', { class: 'group-title' }, brand, h('span', {}, String(items.length))),
         h('div', { class: 'tile-grid' }, ...items.map((p) => tile(p.image, p.name))),

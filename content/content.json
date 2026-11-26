@@ -25,14 +25,6 @@
     ],
     "nav": [
       {
-        "label": "About",
-        "path": "/about"
-      },
-      {
-        "label": "Products",
-        "path": "/products"
-      },
-      {
         "label": "Unit 1",
         "path": "/unit-1"
       },
@@ -47,6 +39,29 @@
       {
         "label": "Gallery",
         "path": "/gallery"
+      }
+    ],
+    "partners": [
+      {
+        "name": "Unilever",
+        "logo": "/media/logos/unilever.png"
+      },
+      {
+        "name": "Nestlé",
+        "logo": "/media/logos/nestle.png"
+      },
+      {
+        "name": "Nestlé Health Science",
+        "logo": "/media/logos/nestle-health-science.png"
+      },
+      {
+        "name": "Dr. Reddy’s",
+        "logo": "/media/logos/dr-reddys.png"
+      },
+      {
+        "name": "Mayora",
+        "logo": "/media/logos/mayora.png",
+        "link": "/pitches/mayora/"
       }
     ],
     "theme": {
@@ -218,7 +233,7 @@
       },
       {
         "label": "View Products",
-        "path": "/products",
+        "path": "/gallery/products",
         "style": "secondary"
       }
     ],
@@ -320,51 +335,6 @@
       }
     ]
   },
-  "about": {
-    "eyebrow": "KJS India Private Limited",
-    "title": "Your Brand,",
-    "titleEmphasis": "Our Expertise",
-    "subtitle": "Food processing and contract packaging in Pashamylaram, Telangana.",
-    "image": "/media/units/unit-1.jpg",
-    "imageCaption": "Unit 1",
-    "buttons": [
-      {
-        "label": "Start presentation",
-        "path": "/show",
-        "style": "primary"
-      },
-      {
-        "label": "Explore products",
-        "path": "/products",
-        "style": "secondary"
-      }
-    ],
-    "partnersTitle": "Brand partners",
-    "partners": [
-      {
-        "name": "Unilever",
-        "logo": "/media/logos/unilever.png"
-      },
-      {
-        "name": "Nestlé",
-        "logo": "/media/logos/nestle.png"
-      },
-      {
-        "name": "Nestlé Health Science",
-        "logo": "/media/logos/nestle-health-science.png"
-      },
-      {
-        "name": "Dr. Reddy’s",
-        "logo": "/media/logos/dr-reddys.png"
-      },
-      {
-        "name": "Mayora",
-        "logo": "/media/logos/mayora.png",
-        "link": "/pitches/mayora/"
-      }
-    ],
-    "storyTitle": "Our story"
-  },
   "productsPage": {
     "eyebrow": "Our range",
     "title": "Best sellers",
@@ -373,61 +343,6 @@
     "catalogTitle": "All products",
     "allLabel": "All products",
     "viewLabel": "View product"
-  },
-  "story": {
-    "timeline": [
-      {
-        "title": "Our beginning",
-        "subtitle": "2020",
-        "body": "KJS India has operated since 2020 from IDA Pashamylaram, Telangana."
-      },
-      {
-        "title": "Growth",
-        "subtitle": "Brand partners",
-        "body": "Co-manufacturing and co-packing for Nestlé, Hindustan Unilever, Mayora and Dr. Reddy’s Laboratories."
-      },
-      {
-        "title": "Today",
-        "subtitle": "Processing and packaging",
-        "body": "Dry powder blending, confectionery ball milling, stick packs, pouch and carton packaging, and warehousing."
-      },
-      {
-        "title": "New journey",
-        "subtitle": "2025",
-        "body": "MoU signed for Unit 2, with new lines for chocolate, biscuits, wafers and cakes."
-      },
-      {
-        "title": "Future",
-        "subtitle": "Unit 2",
-        "body": "Unit 2 groundbreaking at Thogarpally, announced by Invest Telangana in May 2026: ₹651 crore planned investment on 44 acres."
-      }
-    ],
-    "stats": [
-      {
-        "value": 2,
-        "prefix": "",
-        "suffix": "",
-        "label": "Manufacturing units"
-      },
-      {
-        "value": 250,
-        "prefix": "",
-        "suffix": "+",
-        "label": "Products"
-      },
-      {
-        "value": 6,
-        "prefix": "",
-        "suffix": "",
-        "label": "Industrial ribbon blenders"
-      },
-      {
-        "value": 15,
-        "prefix": "",
-        "suffix": " days",
-        "label": "Free warehousing"
-      }
-    ]
   },
   "units": [
     {
@@ -1861,6 +1776,16 @@
     }
   ],
   "gallery": {
+    "tabs": [
+      {
+        "id": "machinery",
+        "label": "Machinery"
+      },
+      {
+        "id": "products",
+        "label": "Products"
+      }
+    ],
     "videos": [
       {
         "src": "/media/video/kjs-company-film.mp4",

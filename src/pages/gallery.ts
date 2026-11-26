@@ -1,6 +1,14 @@
+/**
+ * Gallery ("/gallery"): videos and photos, with section buttons next to the title.
+ * Each button opens one section ("/gallery/machinery", "/gallery/products").
+ * Which buttons appear (and their order) comes from gallery.tabs in content.json.
+ */
 import type { Page } from '../lib/router';
-import { h } from '../lib/dom';
-import { tile } from '../components';
+import type { Content, GalleryTabId } from '../../content/content.schema';
+import { h, routeLink } from '../lib/dom';
+import { byOrder, tile } from '../components';
+import { productsSection } from './products';
+import { notFoundPage } from './not-found';
 
 type Video = { src: string; poster: string; caption: string };
 
@@ -12,14 +20,62 @@ const player = (v: Video, large = false) =>
     h('figcaption', {}, v.caption),
   );
 
-export const galleryPage: Page = ({ gallery }) => {
+/** Videos and photos (the page without a section open). */
+function media({ gallery }: Content): HTMLElement[] {
   const [first, ...rest] = gallery.videos;
-  return h(
-    'div',
-    { class: 'page-gallery wrap padded' },
-    h('h1', {}, 'Gallery'),
-    first ? player(first, true) : null,
-    rest.length ? h('div', { class: 'video-grid' }, ...rest.map((v) => player(v))) : null,
+  return [
+    ...(first ? [player(first, true)] : []),
+    ...(rest.length ? [h('div', { class: 'video-grid' }, ...rest.map((v) => player(v)))] : []),
     h('div', { class: 'tile-grid wide' }, ...gallery.photos.map((p) => tile(p.src, p.caption))),
+  ];
+}
+
+/** Machinery from every unit, grouped by unit. */
+function machinery({ machinery, units }: Content): HTMLElement[] {
+  const groups = units
+    .map((u) => ({ unit: u, items: machinery.filter((m) => m.unit === u.id).sort(byOrder) }))
+    .filter((g) => g.items.length);
+  if (!groups.length) return [h('p', { class: 'empty' }, 'No machinery added yet.')];
+  return groups.flatMap(({ unit, items }) => [
+    h('h2', { class: 'gallery-unit-title' }, unit.title),
+    h('div', { class: 'tile-grid wide' }, ...items.map((m) => tile(m.image, m.name, m.description))),
+  ]);
+}
+
+/** One renderer per tab id. To add a section, add its id to galleryTabIds in the schema and a renderer here. */
+const sections: Record<Exclude<GalleryTabId, 'products'>, (content: Content) => HTMLElement[]> = {
+  machinery,
+};
+
+export const galleryPage: Page = (content, params) => {
+  const { tabs } = content.gallery;
+  const open = params.tab ? tabs.find((t) => t.id === params.tab) : undefined;
+  if (params.tab && !open) return notFoundPage(content, params);
+
+  const head = h(
+    'div',
+    { class: 'gallery-head' },
+    h('h1', {}, routeLink('/gallery', 'Gallery')),
+    h(
+      'nav',
+      { class: 'gallery-tabs', 'aria-label': 'Gallery sections' },
+      ...tabs.map((t) => {
+        const link = routeLink(`/gallery/${t.id}`, t.label, 'gallery-tab');
+        if (t.id === open?.id) link.setAttribute('aria-current', 'page');
+        return link;
+      }),
+    ),
   );
+
+  // Products is a full-width section of its own, so it sits below the padded title area.
+  if (open?.id === 'products')
+    return h(
+      'div',
+      { class: 'page-gallery' },
+      h('div', { class: 'wrap padded gallery-top' }, head),
+      productsSection(content),
+    );
+
+  const body = open ? sections[open.id](content) : media(content);
+  return h('div', { class: 'page-gallery wrap padded' }, head, ...body);
 };

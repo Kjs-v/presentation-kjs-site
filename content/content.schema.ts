@@ -35,7 +35,7 @@ const stat = z.object({
 
 const button = z.object({
   label: z.string().describe('Button text'),
-  path: z.union([sitePath, url]).describe('Opens page (/about) or website (https://...)'),
+  path: z.union([sitePath, url]).describe('Opens page (/gallery) or website (https://...)'),
   style: z.enum(['primary', 'secondary']).describe('Style'),
   newTab: z.boolean().optional().describe('Open in a new tab'),
 });
@@ -98,7 +98,8 @@ export const siteSchema = z.object({
     .describe('Footer links, after phone, email and map'),
   nav: z
     .array(z.object({ label: z.string().describe('Text'), path: sitePath.describe('Opens page') }))
-    .describe('Header links, in order (the company name always links to the home page)'),
+    .describe('Header links, in order (the logo always links to the home page)'),
+  partners: z.array(partner).describe('Client logos (slides and Customers sections)'),
   menu: z.object({
     notesLabel: z.string().describe('Notes button text'),
     themeToggleLabel: z.string().describe('Colour switch label (read out by screen readers)'),
@@ -172,21 +173,7 @@ export const homeSchema = z.object({
     .describe('What we do'),
 });
 
-/** About page ("/about"). */
-export const aboutSchema = z.object({
-  eyebrow: z.string().describe('Small text above the title'),
-  title: z.string().describe('Title (first line)'),
-  titleEmphasis: z.string().describe('Title (highlighted second line)'),
-  subtitle: z.string().describe('Subtitle'),
-  image: mediaPath.describe('Photo'),
-  imageCaption: z.string().describe('Photo caption'),
-  buttons: z.array(button).describe('Buttons'),
-  partnersTitle: z.string().describe('Partners heading'),
-  partners: z.array(partner).describe('Brand partner logos'),
-  storyTitle: z.string().describe('Story heading'),
-});
-
-/** Products page ("/products"): rotating best sellers on top, the full catalogue below. */
+/** Products, shown in the Gallery's Products tab ("/gallery/products"): rotating best sellers on top, the full catalogue below. */
 export const productsPageSchema = z.object({
   eyebrow: z.string().describe('Small text above the title'),
   title: z.string().describe('Title over the rotating products'),
@@ -195,11 +182,6 @@ export const productsPageSchema = z.object({
   catalogTitle: z.string().describe('Heading of the full product list'),
   allLabel: z.string().describe('Filter button that shows every group'),
   viewLabel: z.string().describe('Button that opens a product'),
-});
-
-export const storySchema = z.object({
-  timeline: z.array(titleBody.extend({ subtitle: z.string() })).describe('Timeline'),
-  stats: z.array(stat).describe('Key numbers'),
 });
 
 /** The sections a unit page can show. Add a new id here (and a renderer in src/pages/unit.ts) for a new tab type. */
@@ -262,7 +244,18 @@ export const machinerySchema = z.object({
   order: z.number().int().describe('Display order'),
 });
 
+/** The extra sections the Gallery page can show (as buttons next to its title). */
+export const galleryTabIds = ['machinery', 'products'] as const;
+
 export const gallerySchema = z.object({
+  tabs: z
+    .array(
+      z.object({
+        id: z.enum(galleryTabIds).describe('Section'),
+        label: z.string().describe('Button text'),
+      }),
+    )
+    .describe('Buttons next to the Gallery title (in order). Remove one to hide that section.'),
   videos: z
     .array(z.object({ src: mediaPath, poster: mediaPath, caption: z.string().describe('Caption') }))
     .describe('Videos (the first one is shown large)'),
@@ -408,9 +401,7 @@ export const contentSchema = z
   .object({
     site: siteSchema,
     home: homeSchema,
-    about: aboutSchema,
     productsPage: productsPageSchema,
-    story: storySchema,
     units: z.array(unitSchema),
     products: z.array(productSchema),
     clientPacks: z.array(clientPackSchema),
@@ -478,6 +469,7 @@ export type Site = Content['site'];
 export type Product = Content['products'][number];
 export type Unit = Content['units'][number];
 export type UnitTabId = (typeof unitTabIds)[number];
+export type GalleryTabId = (typeof galleryTabIds)[number];
 export type Slide = Content['slides'][number];
 export type SupplyChain = Content['supplyChain'];
 export type Certification = Content['certifications'][number];
