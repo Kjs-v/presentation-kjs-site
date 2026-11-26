@@ -5,6 +5,12 @@ export type Page = (content: Content, params: Record<string, string>) => HTMLEle
 type Route = { pattern: RegExp; keys: string[]; page: Page };
 
 const routes: Route[] = [];
+const redirects = new Map<string, string>();
+
+/** Old addresses that now live elsewhere, so saved links and bookmarks keep working. */
+export function redirect(from: string, to: string): void {
+  redirects.set(from, to);
+}
 const listeners: ((pathname: string) => void)[] = [];
 
 /** `path` may contain params, e.g. "/:unitId" or "/:unitId/:tab". */
@@ -26,7 +32,12 @@ const section = (pathname: string) => pathname.split('/')[1] ?? '';
 export function startRouter(outlet: HTMLElement, content: Content, notFound: Page): void {
   let previous = '';
   const render = () => {
-    const pathname = location.pathname.replace(/\/$/, '') || '/';
+    let pathname = location.pathname.replace(/\/$/, '') || '/';
+    const moved = redirects.get(pathname);
+    if (moved) {
+      history.replaceState(null, '', moved);
+      pathname = moved;
+    }
     let page = notFound;
     let params: Record<string, string> = {};
     for (const r of routes) {

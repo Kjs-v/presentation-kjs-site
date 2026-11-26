@@ -1,15 +1,17 @@
 /** Header and footer, built from content.site. */
-import type { Site } from '../content/content.schema';
+import type { Content, Site } from '../content/content.schema';
 import { h } from './lib/dom';
 import { icon } from './lib/icons';
 import { colourMenu } from './widgets/colour-menu';
+import { downloadMenu } from './widgets/download';
 import type { NotesPanel } from './widgets/notes';
 
 /**
- * Header: company name, page links (site.nav), and three small controls:
- * Notes, the colour menu, and Full screen (also the F key on any page; Esc exits). On narrow screens the links fold into a Menu button.
+ * Header: logo and company name, page links (site.nav), and four small controls:
+ * Notes, Download PDF, the colour menu, and Full screen (also the F key on any page; Esc exits). On narrow screens the links fold into a Menu button.
  */
-export function header(site: Site, notes: NotesPanel): HTMLElement {
+export function header(content: Content, notes: NotesPanel): HTMLElement {
+  const { site } = content;
   const nav = h(
     'nav',
     { 'aria-label': 'Main', id: 'main-nav' },
@@ -75,11 +77,11 @@ export function header(site: Site, notes: NotesPanel): HTMLElement {
     h(
       'a',
       { href: '/', 'data-route': true, class: 'wordmark' },
-      h('span', { class: 'mark', 'aria-hidden': 'true' }),
-      site.name,
+      h('span', { class: 'logo-pill' }, h('img', { src: site.logo, alt: '', class: 'logo' })),
+      h('span', { class: 'wordmark-name' }, site.name),
     ),
     nav,
-    h('div', { class: 'controls' }, notesBtn, themeBtn, fullscreen, menu),
+    h('div', { class: 'controls' }, notesBtn, downloadMenu(content), themeBtn, fullscreen, menu),
   );
 }
 

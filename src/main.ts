@@ -1,7 +1,7 @@
 import './styles/theme.css';
 import { loadContent } from './lib/content';
 import { applyPageColour, applyTheme } from './lib/theme';
-import { onRoute, route, startRouter } from './lib/router';
+import { onRoute, redirect, route, startRouter } from './lib/router';
 import { afterRoute, initEffects, introScreen } from './lib/effects';
 import { header, footer, markCurrent } from './layout';
 import { notesPanel } from './widgets/notes';
@@ -11,7 +11,7 @@ import { productsPage } from './pages/products';
 import { showPage } from './pages/show';
 import { unitPage } from './pages/unit';
 import { galleryPage } from './pages/gallery';
-import { supplyChainPage } from './pages/supply-chain';
+import { promotersPage } from './pages/promoters';
 import { notFoundPage } from './pages/not-found';
 
 // Register routes here. Fixed paths first; the "/:unitId" catch-alls last.
@@ -20,7 +20,10 @@ route('/about', aboutPage);
 route('/products', productsPage);
 route('/show', showPage);
 route('/gallery', galleryPage);
-route('/supply-chain', supplyChainPage);
+route('/promoter-profile', promotersPage);
+// Pages that moved: Supply Chain is now a section of Unit 2; Unit 1's Clients is now Customers.
+redirect('/supply-chain', '/unit-2/supply-chain');
+redirect('/unit-1/clients', '/unit-1/customers');
 route('/:unitId', unitPage);
 route('/:unitId/:tab', unitPage);
 
@@ -32,7 +35,7 @@ const app = document.getElementById('app')!;
 const main = document.createElement('main');
 const siteFooter = footer(content.site);
 const notes = notesPanel();
-app.replaceChildren(header(content.site, notes.api), main, siteFooter, notes.element);
+app.replaceChildren(header(content, notes.api), main, siteFooter, notes.element);
 
 const titles: Record<string, string> = Object.fromEntries([
   ...content.site.nav.map((n) => [n.path, n.label]),

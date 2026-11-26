@@ -34,8 +34,8 @@ npm run dev             # http://localhost:5173
 │   ├── main.ts             Entry: loads content, applies theme, registers routes
 │   ├── layout.ts           Header and footer
 │   ├── components.ts       Shared pieces: stats, cards, photo tiles
-│   ├── widgets/            notes.ts, orbit.ts (rotating products), product-dialog.ts
-│   ├── pages/              One file per page (home, about, unit, gallery, products, show)
+│   ├── widgets/            notes.ts, orbit.ts (rotating products), product-dialog.ts, colour-menu.ts, download.ts (Download PDF)
+│   ├── pages/              One file per page (home, about, unit, gallery, products, show, promoters, supply-chain)
 │   ├── lib/
 │   │   ├── content.ts      loadContent(): the ONLY way pages get content
 │   │   ├── router.ts       Small client-side router
