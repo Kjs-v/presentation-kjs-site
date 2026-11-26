@@ -14,7 +14,7 @@
 **Rules**
 
 - After go-live the database is the source of truth. `content.json` is only for seeding and fallback. Refresh it with `npm run db:export` before each deploy.
-- Backend work goes to `presentation-v` only. `main` is updated only when the owner asks.
+- Backend work goes to `presentation-v` first. Since 2026-11-27 `main` and `presentation-v` are kept the same.
 - Every step ends with a passing build and tests, a check at several screen sizes, a push, and a note in `docs/notes/<you>.md`.
 
 ## Checklist
@@ -77,7 +77,7 @@
 - [x] Vercel settings: production uses `db-02` and its own session secret; previews use the dev database (Blob token and PIN wait for phases 4 and 5)
 - [x] Migrate and seed the production database (`db-02`), and create the admins there
 - [x] API works on Vercel (preview checked: sign in, save draft, conflict check, undo, notes)
-- [ ] Merge `presentation-v` into `main` (when the owner says so) and deploy
+- [x] Merge `presentation-v` into `main` (owner's go-ahead, 2026-11-27) and deploy
 - [ ] Full check: every page at every size, login, save, publish, restore, upload, pitch PIN
 
 ### Phase 7b: Catch up with the new frontend (`main`, 2026-11-27) ✅
@@ -88,7 +88,7 @@
 - [x] Dev database upgraded
 - [x] Admin forms can now edit: links that are a page or a website, map waypoints (latitude, longitude), Marico logo captions (name → text), and the Marico PIN (type a new PIN; only its fingerprint is saved)
 - [x] Test that fails if the schema gains a field the admin forms can't edit
-- [ ] Production (`db-02`): `npm run db:upgrade -- --dry-run` then `npm run db:upgrade` with DATABASE_URL pointed at production, at go-live (owner)
+- [x] Production (`db-02`) upgraded on 2026-11-27 (dry run first; no section had admin edits, so all came from content.json)
 - [ ] Marico PIN: today it is checked in the browser against a fingerprint that is public, so a 4-digit PIN is easy to guess. Real protection = Phase 5 (server check, Marico content only sent after unlock)
 
 ### Phase 8: Admin page ✅ (at /admin)
