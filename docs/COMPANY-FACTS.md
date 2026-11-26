@@ -127,3 +127,5 @@ Items marked **(confirm)** are not verified. Don't show them to clients until th
 - The Continental Coffee logo.
 - The final best-seller list.
 - Confirmation of the items marked **(confirm)** above.
+- Certifications (placeholders on the site now): name, issuing body, validity, certificate image, and which unit each covers.
+- Promoter Profile (placeholders on the site now): names, photos, roles, profile text and key points.

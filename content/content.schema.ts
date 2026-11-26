@@ -123,6 +123,14 @@ export const siteSchema = z.object({
         cancel: z.string().describe('Cancel button'),
       })
       .describe('Colour menu in the header'),
+    download: z
+      .object({
+        label: z.string().describe('Download button text'),
+        thisPage: z.string().describe('Option: save the page on screen as PDF'),
+        fullProfile: z.string().describe('Option: save the whole company profile as one PDF'),
+        preparing: z.string().describe('Shown while the full profile is being prepared'),
+      })
+      .describe('Download as PDF menu in the header'),
   }),
   theme: z.object({
     default: z.string().describe('Theme shown first (id of one of the palettes)'),
@@ -182,7 +190,14 @@ export const storySchema = z.object({
 });
 
 /** The sections a unit page can show. Add a new id here (and a renderer in src/pages/unit.ts) for a new tab type. */
-export const unitTabIds = ['products', 'clients', 'about', 'machinery'] as const;
+export const unitTabIds = [
+  'products',
+  'customers',
+  'about',
+  'machinery',
+  'supply-chain',
+  'certifications',
+] as const;
 
 export const unitSchema = z.object({
   id: slug.describe('ID (used in the URL, e.g. unit-1)'),
@@ -241,7 +256,37 @@ export const gallerySchema = z.object({
   photos: z.array(z.object({ src: mediaPath, caption: z.string() })),
 });
 
-/** Supply Chain page ("/supply-chain"): a 3D scene of the dispatch dock, then trucks driving across an India map. */
+/** A certificate (e.g. food safety or quality), shown in the Certifications section of each unit it covers. */
+export const certificationSchema = z.object({
+  id: slug,
+  name: z.string().describe('Certificate name'),
+  issuer: z.string().describe('Issued by'),
+  description: z.string().describe('What it covers'),
+  validUntil: z.string().optional().describe('Valid until, e.g. March 2027'),
+  image: mediaPath.optional().describe('Certificate or logo image (optional)'),
+  units: z.array(slug).min(1).describe('Units it covers (unit ids)'),
+  order: z.number().int().describe('Display order'),
+});
+
+/** Promoter Profile page ("/promoter-profile"): the people behind the company. */
+export const promotersSchema = z.object({
+  eyebrow: z.string().describe('Small text above the title'),
+  title: z.string().describe('Title'),
+  intro: z.string().describe('Text under the title'),
+  people: z
+    .array(
+      z.object({
+        name: z.string().describe('Name'),
+        role: z.string().describe('Role, e.g. Managing Director'),
+        photo: mediaPath.optional().describe('Photo (optional; initials are shown without one)'),
+        bio: z.string().describe('Profile'),
+        highlights: z.array(z.string()).describe('Key points (experience, achievements)'),
+      }),
+    )
+    .describe('Promoters'),
+});
+
+/** Supply Chain (Unit 2 → Supply Chain): a 3D scene of the dispatch dock, then trucks driving across an India map. */
 const latLon = z.tuple([z.number().describe('Latitude'), z.number().describe('Longitude')]);
 export const supplyChainSchema = z.object({
   eyebrow: z.string().describe('Small text above the title'),
@@ -359,6 +404,8 @@ export const contentSchema = z
     machinery: z.array(machinerySchema),
     gallery: gallerySchema,
     supplyChain: supplyChainSchema,
+    certifications: z.array(certificationSchema),
+    promoters: promotersSchema,
     slides: z.array(slideSchema),
   })
   .superRefine((c, ctx) => {
@@ -379,6 +426,16 @@ export const contentSchema = z
     checkUnit(c.products, 'products');
     checkUnit(c.clientPacks, 'clientPacks');
     checkUnit(c.machinery, 'machinery');
+    c.certifications.forEach((cert, i) =>
+      cert.units.forEach((u, j) => {
+        if (!unitIds.has(u))
+          ctx.addIssue({
+            code: 'custom',
+            path: ['certifications', i, 'units', j],
+            message: `Unknown unit "${u}"`,
+          });
+      }),
+    );
     const cities = new Set(c.supplyChain.destinations.map((d) => d.city));
     c.supplyChain.chapters.forEach((ch, i) =>
       (ch.cities ?? []).forEach((city, j) => {
@@ -410,3 +467,4 @@ export type Unit = Content['units'][number];
 export type UnitTabId = (typeof unitTabIds)[number];
 export type Slide = Content['slides'][number];
 export type SupplyChain = Content['supplyChain'];
+export type Certification = Content['certifications'][number];

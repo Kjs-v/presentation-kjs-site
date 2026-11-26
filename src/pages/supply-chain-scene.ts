@@ -278,7 +278,7 @@ export function scene(
   /* ---------- Renderer ---------- */
   let renderer: THREE.WebGLRenderer | null = null;
   try {
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); // keeps the last frame readable for the PDF;
   } catch {
     renderer = null;
   }

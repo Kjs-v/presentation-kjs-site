@@ -40,8 +40,8 @@
         "path": "/unit-2"
       },
       {
-        "label": "Supply Chain",
-        "path": "/supply-chain"
+        "label": "Promoter Profile",
+        "path": "/promoter-profile"
       },
       {
         "label": "Gallery",
@@ -165,6 +165,12 @@
         "thisPage": "This page only",
         "allPages": "All pages",
         "cancel": "Cancel"
+      },
+      "download": {
+        "label": "Download PDF",
+        "thisPage": "This page",
+        "fullProfile": "Full company profile",
+        "preparing": "Preparing the PDF…"
       }
     }
   },
@@ -365,16 +371,16 @@
           "label": "Products"
         },
         {
-          "id": "clients",
-          "label": "Clients"
+          "id": "customers",
+          "label": "Customers"
         },
         {
           "id": "about",
           "label": "About"
         },
         {
-          "id": "machinery",
-          "label": "Machinery"
+          "id": "certifications",
+          "label": "Certifications"
         }
       ],
       "mapUrl": "https://maps.app.goo.gl/J1KAM9J2N9mt2NRMA"
@@ -421,6 +427,18 @@
         {
           "id": "about",
           "label": "About"
+        },
+        {
+          "id": "supply-chain",
+          "label": "Supply Chain"
+        },
+        {
+          "id": "machinery",
+          "label": "Machinery"
+        },
+        {
+          "id": "certifications",
+          "label": "Certifications"
         }
       ],
       "photoCaption": "Architect's render",
@@ -1661,6 +1679,78 @@
       "unit": "unit-1",
       "image": "/media/machinery/rvl-machine-detail.jpg",
       "order": 8
+    },
+    {
+      "id": "unit-2-line-1-chocolate",
+      "name": "Line 1: Chocolate",
+      "description": "Planned production line for Unit 2.",
+      "unit": "unit-2",
+      "image": "/media/machinery/unit-2/line-1-chocolate.jpg",
+      "order": 1
+    },
+    {
+      "id": "unit-2-line-2-wafer",
+      "name": "Line 2: Wafer",
+      "description": "Planned production line for Unit 2.",
+      "unit": "unit-2",
+      "image": "/media/machinery/unit-2/line-2-wafer.jpg",
+      "order": 2
+    },
+    {
+      "id": "unit-2-line-3-wafer",
+      "name": "Line 3: Wafer",
+      "description": "Planned production line for Unit 2.",
+      "unit": "unit-2",
+      "image": "/media/machinery/unit-2/line-3-wafer.jpg",
+      "order": 3
+    },
+    {
+      "id": "unit-2-line-4-biscuit-crackers",
+      "name": "Line 4: Biscuits and crackers",
+      "description": "Planned production line for Unit 2.",
+      "unit": "unit-2",
+      "image": "/media/machinery/unit-2/line-4-biscuit-crackers.jpg",
+      "order": 4
+    },
+    {
+      "id": "unit-2-line-5-soft-dough",
+      "name": "Line 5: Soft dough biscuits",
+      "description": "Planned production line for Unit 2.",
+      "unit": "unit-2",
+      "image": "/media/machinery/unit-2/line-5-soft-dough.jpg",
+      "order": 5
+    },
+    {
+      "id": "unit-2-line-6-sandwich-biscuit",
+      "name": "Line 6: Sandwich biscuits",
+      "description": "Planned production line for Unit 2.",
+      "unit": "unit-2",
+      "image": "/media/machinery/unit-2/line-6-sandwich-biscuit.jpg",
+      "order": 6
+    },
+    {
+      "id": "unit-2-line-7-candy-bar",
+      "name": "Line 7: Candy bar",
+      "description": "Planned production line for Unit 2.",
+      "unit": "unit-2",
+      "image": "/media/machinery/unit-2/line-7-candy-bar.jpg",
+      "order": 7
+    },
+    {
+      "id": "unit-2-line-8-layer-cake",
+      "name": "Line 8: Layer cake",
+      "description": "Planned production line for Unit 2.",
+      "unit": "unit-2",
+      "image": "/media/machinery/unit-2/line-8-layer-cake.jpg",
+      "order": 8
+    },
+    {
+      "id": "unit-2-line-9-cupcake",
+      "name": "Line 9: Cupcake",
+      "description": "Planned production line for Unit 2.",
+      "unit": "unit-2",
+      "image": "/media/machinery/unit-2/line-9-cupcake.jpg",
+      "order": 9
     }
   ],
   "gallery": {
@@ -1961,6 +2051,51 @@
       "note": "Use ← → keys or a clicker to step, P to pause. Distances are straight-line from Unit 1; destinations are example routes until confirmed.",
       "noWebgl": "The 3D view needs WebGL, which is turned off in this browser. The panel shows the final result."
     }
+  },
+  "certifications": [
+    {
+      "id": "certification-1",
+      "name": "Certification 1 (to be added)",
+      "issuer": "Issuing body (to be added)",
+      "description": "Placeholder: what this certificate covers will be added here.",
+      "units": ["unit-1", "unit-2"],
+      "order": 1
+    },
+    {
+      "id": "certification-2",
+      "name": "Certification 2 (to be added)",
+      "issuer": "Issuing body (to be added)",
+      "description": "Placeholder: what this certificate covers will be added here.",
+      "units": ["unit-1", "unit-2"],
+      "order": 2
+    },
+    {
+      "id": "certification-3",
+      "name": "Certification 3 (to be added)",
+      "issuer": "Issuing body (to be added)",
+      "description": "Placeholder: what this certificate covers will be added here.",
+      "units": ["unit-1", "unit-2"],
+      "order": 3
+    }
+  ],
+  "promoters": {
+    "eyebrow": "Promoter Profile",
+    "title": "The people behind KJS India",
+    "intro": "Placeholder: a short introduction to the promoters will be added here.",
+    "people": [
+      {
+        "name": "Promoter name 1 (to be added)",
+        "role": "Role (to be added)",
+        "bio": "Placeholder: profile text will be added here.",
+        "highlights": ["Highlight (to be added)", "Highlight (to be added)"]
+      },
+      {
+        "name": "Promoter name 2 (to be added)",
+        "role": "Role (to be added)",
+        "bio": "Placeholder: profile text will be added here.",
+        "highlights": ["Highlight (to be added)", "Highlight (to be added)"]
+      }
+    ]
   },
   "slides": [
     {
