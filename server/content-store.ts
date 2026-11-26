@@ -36,7 +36,10 @@ export async function sectionList() {
     .from(schema.sections)
     .leftJoin(schema.users, eq(schema.users.id, schema.sections.updatedBy));
   const order = new Map(sectionKeys.map((k, i) => [k, i]));
-  return rows.sort((a, b) => (order.get(a.key as SectionKey) ?? 99) - (order.get(b.key as SectionKey) ?? 99));
+  // Rows the site no longer has (until db:upgrade removes them) are not shown.
+  return rows
+    .filter((r) => order.has(r.key as SectionKey))
+    .sort((a, b) => order.get(a.key as SectionKey)! - order.get(b.key as SectionKey)!);
 }
 
 export async function getSection(key: SectionKey) {

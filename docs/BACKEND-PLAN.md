@@ -80,6 +80,17 @@
 - [ ] Merge `presentation-v` into `main` (when the owner says so) and deploy
 - [ ] Full check: every page at every size, login, save, publish, restore, upload, pitch PIN
 
+### Phase 7b: Catch up with the new frontend (`main`, 2026-11-27) ✅
+
+- [x] Merged `main` into `presentation-v`: Home redesign, Gallery tabs, unit tabs, certifications, promoter profile, Marico pitch, India map
+- [x] Sections are now: site, home, productsPage, units, products, clientPacks, machinery, gallery, supplyChain, certifications, promoters, marico, slides (`about` and `story` are gone)
+- [x] `npm run db:upgrade` (with `-- --dry-run` to preview): replaces sections nobody edited in the admin page with content.json, keeps admin edits and only fills new fields, adds new sections, removes old ones, and saves a history copy before and after
+- [x] Dev database upgraded
+- [x] Admin forms can now edit: links that are a page or a website, map waypoints (latitude, longitude), Marico logo captions (name → text), and the Marico PIN (type a new PIN; only its fingerprint is saved)
+- [x] Test that fails if the schema gains a field the admin forms can't edit
+- [ ] Production (`db-02`): `npm run db:upgrade -- --dry-run` then `npm run db:upgrade` with DATABASE_URL pointed at production, at go-live (owner)
+- [ ] Marico PIN: today it is checked in the browser against a fingerprint that is public, so a 4-digit PIN is easy to guess. Real protection = Phase 5 (server check, Marico content only sent after unlock)
+
 ### Phase 8: Admin page ✅ (at /admin)
 
 - [x] Login screen, including the forced password change

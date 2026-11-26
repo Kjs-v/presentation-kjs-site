@@ -660,6 +660,20 @@ textarea:focus {
 .f-item-flat > .f-field > label {
   display: none;
 }
+/* Pairs such as [latitude, longitude]: small boxes side by side, each with its own label. */
+.f-tuple > .f-control > .f-field {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+.f-item-flat .f-tuple > .f-legend {
+  display: none;
+}
+/* name → text rows (e.g. captions under client logos) */
+.f-pair > input {
+  flex: 1;
+  min-width: 0;
+}
 .f-grip {
   color: var(--a-muted);
   cursor: grab;

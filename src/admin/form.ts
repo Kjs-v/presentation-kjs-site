@@ -12,7 +12,8 @@ export type Schema = {
   type?: string | string[];
   properties?: Record<string, Schema>;
   required?: string[];
-  items?: Schema;
+  items?: Schema | Schema[]; // a list of schemas = fixed-length pair, e.g. [latitude, longitude]
+  additionalProperties?: Schema | boolean; // object with free keys (name → text)
   anyOf?: Schema[];
   enum?: string[];
   const?: string;
@@ -51,7 +52,7 @@ export function defaultFor(schema: Schema): unknown {
       return out;
     }
     case 'array':
-      return [];
+      return Array.isArray(schema.items) ? schema.items.map(defaultFor) : [];
     case 'boolean':
       return false;
     case 'number':
@@ -88,6 +89,49 @@ const datalist = (() => {
 
 // ---------- Field editors ----------
 
+async function sha256(text: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * A PIN kept only as its SHA-256 (e.g. marico.lock.pinHash). Staff type the new PIN; only its hash is saved.
+ * The number of digits must match the "Number of digits" field next to it.
+ */
+function pinHashField(get: Get, set: Set, ctx: Ctx): HTMLElement {
+  const id = `f-${ctx.path.replace(/[^a-zA-Z0-9]/g, '-')}`;
+  const input = h('input', {
+    id,
+    type: 'password',
+    inputmode: 'numeric',
+    autocomplete: 'new-password',
+    placeholder: get() ? 'PIN is set. Type digits to change it' : 'Type the PIN',
+  }) as HTMLInputElement;
+  const hint = h('small', { class: 'f-hint' });
+  input.addEventListener('input', async () => {
+    input.value = input.value.replace(/\D/g, '');
+    const digits = input.value;
+    if (!digits) {
+      hint.textContent = '';
+      return;
+    }
+    if (digits.length < 4) {
+      hint.textContent = 'At least 4 digits.';
+      return;
+    }
+    set(await sha256(digits));
+    hint.textContent = `New ${digits.length}-digit PIN set. Make "Number of digits" match, then save. Write the PIN down: it can't be shown again.`;
+    ctx.changed();
+  });
+  return h(
+    'div',
+    { class: 'f-field', 'data-path': ctx.path },
+    h('label', { for: id }, 'PIN'),
+    h('div', { class: 'f-control' }, input),
+    hint,
+  );
+}
+
 function stringField(
   key: string,
   schema: Schema,
@@ -96,6 +140,7 @@ function stringField(
   ctx: Ctx,
   optional: boolean,
 ): HTMLElement {
+  if (key === 'pinHash') return pinHashField(get, set, ctx);
   const id = `f-${ctx.path.replace(/[^a-zA-Z0-9]/g, '-')}`;
   const value = (get() as string | undefined) ?? '';
   const isMedia = Boolean(schema.pattern && MEDIA.test(schema.pattern));
@@ -258,8 +303,94 @@ function variantFor(schema: Schema, value: unknown): Schema {
   return schema.anyOf.find((s) => s.properties?.kind?.const === kind) ?? schema.anyOf[0];
 }
 
+/** A fixed-length pair or group shown side by side, e.g. a waypoint [latitude, longitude]. */
+function tupleField(key: string, schema: Schema, get: Get, set: Set, ctx: Ctx): HTMLElement {
+  const parts = schema.items as Schema[];
+  let a = get();
+  if (!Array.isArray(a)) {
+    a = parts.map(defaultFor);
+    set(a);
+  }
+  const arr = a as unknown[];
+  return h(
+    'div',
+    { class: 'f-field f-tuple', 'data-path': ctx.path },
+    h('span', { class: 'f-legend' }, labelOf(key, schema)),
+    h(
+      'div',
+      { class: 'f-control' },
+      ...parts.map((part, i) =>
+        field(
+          part.description ?? String(i + 1),
+          part,
+          () => arr[i],
+          (v) => (arr[i] = v),
+          {
+            path: `${ctx.path}.${i}`,
+            changed: ctx.changed,
+          },
+          false,
+        ),
+      ),
+    ),
+  );
+}
+
+/** An object with free keys and text values, e.g. captions by client name. Edited as name → text rows. */
+function recordField(
+  key: string,
+  schema: Schema,
+  get: Get,
+  set: Set,
+  ctx: Ctx,
+  optional: boolean,
+): HTMLElement {
+  const rows = Object.entries((get() as Record<string, string> | undefined) ?? {});
+  const list = h('div', { class: 'f-list' });
+  const save = () => {
+    const out = Object.fromEntries(rows.filter(([k]) => k.trim()).map(([k, v]) => [k.trim(), v]));
+    set(optional && !Object.keys(out).length ? undefined : out);
+    ctx.changed();
+  };
+  const draw = () =>
+    list.replaceChildren(
+      ...rows.map((row, i) => {
+        const k = h('input', { type: 'text', value: row[0], placeholder: 'Name', 'aria-label': 'Name' });
+        const v = h('input', { type: 'text', value: row[1], placeholder: 'Text', 'aria-label': 'Text' });
+        k.addEventListener('input', () => ((row[0] = k.value), save()));
+        v.addEventListener('input', () => ((row[1] = v.value), save()));
+        const remove = h('button', { type: 'button', class: 'f-icon f-danger', title: 'Remove' }, '✕');
+        remove.addEventListener('click', () => (rows.splice(i, 1), save(), draw()));
+        return h('div', { class: 'f-item f-item-flat f-pair' }, k, h('span', {}, '→'), v, remove);
+      }),
+    );
+  const add = h('button', { type: 'button', class: 'f-add' }, '+ Add');
+  add.addEventListener('click', () => {
+    rows.push(['', '']);
+    draw();
+    (list.lastElementChild?.querySelector('input') as HTMLInputElement | null)?.focus();
+  });
+  draw();
+  return h(
+    'div',
+    { class: 'f-field f-array', 'data-path': ctx.path },
+    h(
+      'div',
+      { class: 'f-array-head' },
+      h(
+        'span',
+        { class: 'f-legend' },
+        labelOf(key, schema),
+        optional ? h('span', { class: 'f-optional' }, ' (optional)') : null,
+      ),
+    ),
+    list,
+    h('div', { class: 'f-array-foot' }, add),
+  );
+}
+
 function arrayField(key: string, schema: Schema, get: Get, set: Set, ctx: Ctx): HTMLElement {
-  const items = schema.items ?? {};
+  const items = (schema.items ?? {}) as Schema;
   const list = h('div', { class: 'f-list' });
   const search = h('input', { type: 'search', class: 'f-search', placeholder: 'Search this list…' });
   const count = h('span', { class: 'f-count' });
@@ -424,8 +555,16 @@ export function field(
   optional: boolean,
 ): HTMLElement {
   const types = Array.isArray(schema.type) ? schema.type : [schema.type];
-  if (schema.anyOf && !types[0]) return objectGroup(key, variantFor(schema, get()), get, set, ctx);
+  if (schema.anyOf && !types[0]) {
+    // Either/or plain values (e.g. a page path or a web link): one text box that accepts both.
+    if (schema.anyOf.every((s) => s.type === 'string'))
+      return stringField(key, { type: 'string', description: schema.description }, get, set, ctx, optional);
+    return objectGroup(key, variantFor(schema, get()), get, set, ctx);
+  }
+  if (types.includes('array') && Array.isArray(schema.items)) return tupleField(key, schema, get, set, ctx);
   if (types.includes('array')) return arrayField(key, schema, get, set, ctx);
+  if (types.includes('object') && !schema.properties && schema.additionalProperties)
+    return recordField(key, schema, get, set, ctx, optional);
   if (types.includes('object')) return objectGroup(key, schema, get, set, ctx);
   if (types.includes('boolean')) return booleanField(key, schema, get, set, ctx);
   if (types.includes('number') || types.includes('integer'))
