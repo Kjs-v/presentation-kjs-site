@@ -2,6 +2,7 @@
  * Gallery ("/gallery"): videos and photos, with section buttons next to the title.
  * Each button opens one section ("/gallery/machinery", "/gallery/products").
  * Which buttons appear (and their order) comes from gallery.tabs in content.json.
+ * An open section has a ✕ button that goes back to "/gallery" without reloading (sections fade in).
  */
 import type { Page } from '../lib/router';
 import type { Content, GalleryTabId } from '../../content/content.schema';
@@ -42,13 +43,23 @@ function machinery({ machinery, units }: Content): HTMLElement[] {
   ]);
 }
 
+/** ✕: back to the plain gallery, scrolling up smoothly (the router swaps the content in place). */
+function closeButton(label: string): HTMLAnchorElement {
+  const link = routeLink('/gallery', '', 'gallery-close');
+  link.setAttribute('aria-label', label);
+  link.title = label;
+  link.append(h('span', { 'aria-hidden': 'true' }, '✕'));
+  link.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  return link;
+}
+
 /** One renderer per tab id. To add a section, add its id to galleryTabIds in the schema and a renderer here. */
 const sections: Record<Exclude<GalleryTabId, 'products'>, (content: Content) => HTMLElement[]> = {
   machinery,
 };
 
 export const galleryPage: Page = (content, params) => {
-  const { tabs } = content.gallery;
+  const { tabs, closeLabel } = content.gallery;
   const open = params.tab ? tabs.find((t) => t.id === params.tab) : undefined;
   if (params.tab && !open) return notFoundPage(content, params);
 
@@ -64,6 +75,7 @@ export const galleryPage: Page = (content, params) => {
         if (t.id === open?.id) link.setAttribute('aria-current', 'page');
         return link;
       }),
+      open ? closeButton(`${closeLabel} ${open.label}`) : null,
     ),
   );
 
@@ -73,9 +85,9 @@ export const galleryPage: Page = (content, params) => {
       'div',
       { class: 'page-gallery' },
       h('div', { class: 'wrap padded gallery-top' }, head),
-      productsSection(content),
+      h('div', { class: 'gallery-body' }, productsSection(content)),
     );
 
   const body = open ? sections[open.id](content) : media(content);
-  return h('div', { class: 'page-gallery wrap padded' }, head, ...body);
+  return h('div', { class: 'page-gallery wrap padded' }, head, h('div', { class: 'gallery-body' }, ...body));
 };

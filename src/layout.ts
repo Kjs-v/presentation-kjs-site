@@ -111,7 +111,9 @@ export function footer(site: Site): HTMLElement {
       return h(
         'a',
         { href: l.url, ...external, class: 'f-link f-logo', 'aria-label': l.label },
-        h('img', { src: site.logo, alt: l.label }),
+        // Dark lettering on light themes, white lettering on the dark (royal) theme.
+        h('img', { src: site.logoOnLight, alt: l.label, class: 'logo-on-light' }),
+        h('img', { src: site.logo, alt: '', class: 'logo-on-dark' }),
       );
     return h(
       'a',

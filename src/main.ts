@@ -5,6 +5,7 @@ import { onRoute, redirect, route, startRouter } from './lib/router';
 import { afterRoute, initEffects, introScreen } from './lib/effects';
 import { header, footer, markCurrent } from './layout';
 import { notesPanel } from './widgets/notes';
+import { pageArrows } from './widgets/page-arrows';
 import { homePage } from './pages/home';
 import { showPage } from './pages/show';
 import { unitPage } from './pages/unit';
@@ -35,7 +36,8 @@ const app = document.getElementById('app')!;
 const main = document.createElement('main');
 const siteFooter = footer(content.site);
 const notes = notesPanel();
-app.replaceChildren(header(content, notes.api), main, siteFooter, notes.element);
+const arrows = pageArrows(content.site);
+app.replaceChildren(header(content, notes.api), main, siteFooter, notes.element, arrows.element);
 
 const titles: Record<string, string> = Object.fromEntries([
   ...content.site.nav.map((n) => [n.path, n.label]),
@@ -45,6 +47,7 @@ onRoute((pathname) => {
   afterRoute();
   applyPageColour(pathname);
   markCurrent(pathname);
+  arrows.update(pathname);
   // The footer is hidden on the full-screen pages (home and slides), as in the design reference.
   siteFooter.hidden = pathname === '/' || pathname === '/show';
   const sectionPath = '/' + (pathname.split('/')[1] ?? '');

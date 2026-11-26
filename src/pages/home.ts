@@ -1,6 +1,6 @@
 /**
  * Home ("/"): "Trusted by global leaders" with client logos and buttons, a circle of packs that
- * keeps turning (front half only), the key figures, then "What we do". All text and images come
+ * keeps turning (front half only), then the key figures. All text and images come
  * from content.home.
  */
 import type { Page } from '../lib/router';
@@ -169,28 +169,4 @@ export const homePage: Page = ({ home }) =>
       ),
     ),
     figures(home.stats),
-    h(
-      'section',
-      { class: 'light-section' },
-      h(
-        'div',
-        { class: 'wrap' },
-        h('h2', {}, home.capabilitiesTitle),
-        h(
-          'div',
-          { class: 'capability-list' },
-          ...home.capabilities.map((c) =>
-            h(
-              'article',
-              {},
-              h('h3', {}, c.title),
-              h('p', {}, c.body),
-              c.link
-                ? h('a', { href: c.link.url, target: '_blank', rel: 'noopener noreferrer' }, c.link.label)
-                : null,
-            ),
-          ),
-        ),
-      ),
-    ),
   );

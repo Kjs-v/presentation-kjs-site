@@ -76,7 +76,8 @@ const partner = z.object({
 export const siteSchema = z.object({
   name: z.string().describe('Company name'),
   tagline: z.string().describe('Tagline'),
-  logo: mediaPath.describe('Logo'),
+  logo: mediaPath.describe('Logo (white lettering, for dark backgrounds)'),
+  logoOnLight: mediaPath.describe('Logo with dark lettering, for white backgrounds (footer)'),
   icon: mediaPath.describe('Round logo mark shown alone in the header'),
   contact: z.object({
     phone: z.string().describe('Phone'),
@@ -134,6 +135,12 @@ export const siteSchema = z.object({
         preparing: z.string().describe('Shown while the full profile is being prepared'),
       })
       .describe('Download as PDF menu in the header'),
+    pager: z
+      .object({
+        previous: z.string().describe('Read out for the left arrow, e.g. Previous page'),
+        next: z.string().describe('Read out for the right arrow, e.g. Next page'),
+      })
+      .describe('Faint arrows at the left and right screen edges that go through the header pages in order'),
   }),
   theme: z.object({
     default: z.string().describe('Theme shown first (id of one of the palettes)'),
@@ -147,7 +154,7 @@ export const siteSchema = z.object({
   }),
 });
 
-/** Home page ("/"): client logos and rotating packs, key figures, then "What we do". */
+/** Home page ("/"): client logos and rotating packs, then key figures. */
 export const homeSchema = z.object({
   intro: z.boolean().describe('Show loading intro on first visit'),
   title: z.string().describe('Big title, e.g. Trusted by global leaders'),
@@ -167,10 +174,6 @@ export const homeSchema = z.object({
     .min(3)
     .describe('Packs that turn in a circle next to the title'),
   stats: z.array(stat).describe('Key figures under the top section'),
-  capabilitiesTitle: z.string().describe('"What we do" heading'),
-  capabilities: z
-    .array(titleBody.extend({ link: z.object({ label: z.string(), url }).optional() }))
-    .describe('What we do'),
 });
 
 /** Products, shown in the Gallery's Products tab ("/gallery/products"): rotating best sellers on top, the full catalogue below. */
@@ -256,6 +259,7 @@ export const gallerySchema = z.object({
       }),
     )
     .describe('Buttons next to the Gallery title (in order). Remove one to hide that section.'),
+  closeLabel: z.string().describe('Read out for the ✕ button that closes an open section'),
   videos: z
     .array(z.object({ src: mediaPath, poster: mediaPath, caption: z.string().describe('Caption') }))
     .describe('Videos (the first one is shown large)'),
