@@ -35,7 +35,7 @@ npm run dev             # http://localhost:5173
 │   ├── layout.ts           Header and footer
 │   ├── components.ts       Shared pieces: stats, cards, photo tiles
 │   ├── widgets/            notes.ts, orbit.ts (rotating products), product-dialog.ts, colour-menu.ts, download.ts (Download PDF)
-│   ├── pages/              One file per page (home, about, unit, gallery, products, show, promoters, supply-chain)
+│   ├── pages/              One file per page (home, about, unit, gallery, products, show, promoters, supply-chain, marico + marico-film)
 │   ├── lib/
 │   │   ├── content.ts      loadContent(): the ONLY way pages get content
 │   │   ├── router.ts       Small client-side router

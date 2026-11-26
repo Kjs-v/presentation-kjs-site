@@ -422,6 +422,169 @@ export const supplyChainSchema = z.object({
     .describe('Words used on the page'),
 });
 
+/**
+ * Marico pitch ("/marico"): a PIN screen, then an animated 16:9 film, scene by scene, with PDF / PowerPoint download.
+ * Each scene `kind` has its own animation (src/pages/marico-film.ts); the words and numbers come from here.
+ */
+const filmCaption = {
+  rail: z.string().describe('Short name on the progress bar and in the controls'),
+  seconds: z.number().min(3).max(60).describe('How long the scene plays before moving on (seconds)'),
+  eyebrow: z.string().optional().describe('Small text above the caption title, e.g. 01 · Investment'),
+  title: z.string().optional().describe('Caption title (bottom left of the film)'),
+  line: z.string().optional().describe('Caption text under the title'),
+  stats: z
+    .array(
+      z.object({ value: z.string().describe('Value, e.g. ₹160 Cr+'), label: z.string().describe('Label') }),
+    )
+    .optional()
+    .describe('Figures in the caption'),
+};
+const filmSceneSchema = z.discriminatedUnion('kind', [
+  z.object({
+    ...filmCaption,
+    kind: z.literal('title'),
+    eyebrow: z.string().describe('Small text above the headline'),
+    headline: z.string().describe('Big headline'),
+    subtitle: z.string().describe('Text under the headline'),
+  }),
+  z.object({
+    ...filmCaption,
+    kind: z.literal('machinery'),
+    groups: z
+      .array(
+        z.object({
+          count: z.number().int().min(1).max(60).describe('How many'),
+          label: z.string().describe('Label'),
+        }),
+      )
+      .length(4)
+      .describe('In order: packaging lines, ball mills, premixing systems, blenders'),
+  }),
+  z.object({
+    ...filmCaption,
+    kind: z.literal('range'),
+    items: z
+      .array(
+        z.object({
+          name: z.string().describe('Name'),
+          icon: z.enum(['coffee', 'nutrition', 'confectionery', 'dry', 'wet']).describe('Picture'),
+        }),
+      )
+      .min(1)
+      .max(6)
+      .describe('Product families'),
+  }),
+  z.object({
+    ...filmCaption,
+    kind: z.literal('products'),
+    heading: z.string().describe('Heading over the turning packs'),
+    rotationSeconds: z.number().min(10).max(600).describe('Seconds for one full turn (bigger = slower)'),
+  }),
+  z.object({
+    ...filmCaption,
+    kind: z.literal('packaging'),
+    readoutLabel: z.string().describe('Small label over the weight readout, e.g. PACK SIZE'),
+    rangeLabel: z.string().describe('Readout shown once the scale is full, e.g. 0.4 – 25 kg'),
+    minGrams: z.number().positive().describe('Left end of the scale (grams)'),
+    maxGrams: z.number().positive().describe('Right end of the scale (grams)'),
+    packs: z
+      .array(
+        z.object({
+          label: z.string().describe('Label'),
+          grams: z.number().positive().describe('Where it sits on the scale (grams)'),
+          shape: z.enum(['stick', 'bar', 'jar', 'tin', 'bulk']).describe('Picture'),
+        }),
+      )
+      .min(1)
+      .describe('Pack formats on the scale'),
+  }),
+  z.object({
+    ...filmCaption,
+    kind: z.literal('steps'),
+    steps: z
+      .array(z.string())
+      .length(5)
+      .describe('In order: production, quality, packaging, warehousing, dispatch'),
+  }),
+  z.object({
+    ...filmCaption,
+    kind: z.literal('clients'),
+    first: z
+      .array(z.string())
+      .min(1)
+      .max(3)
+      .describe('Clients shown first, on the right (names from Client logos)'),
+    more: z.array(z.string()).max(3).describe('Clients added next, on the left (names from Client logos)'),
+    captions: z
+      .record(z.string(), z.string())
+      .optional()
+      .describe('Optional: name to print under a logo, by client name (e.g. Unilever → Hindustan Unilever)'),
+  }),
+  z.object({
+    ...filmCaption,
+    kind: z.literal('handover'),
+    makerLabel: z.string().describe('Under the KJS factory, e.g. Manufacturing'),
+    partnerName: z.string().describe('Partner name on its card, e.g. MARICO'),
+    partnerLabel: z.string().describe('Under the partner card, e.g. Distribution network'),
+    partnerLogo: mediaPath.optional().describe('Optional: partner logo, shown instead of the name'),
+    channels: z
+      .array(z.object({ name: z.string().describe('Name'), sub: z.string().describe('Small text under it') }))
+      .length(2)
+      .describe('In order: Modern Trade (supermarket picture), General Trade (shop picture)'),
+    shopSign: z.string().describe('Sign on the supermarket picture'),
+  }),
+  z.object({
+    ...filmCaption,
+    kind: z.literal('map'),
+    originLabel: z.string().describe('Label next to the plant on the map'),
+    counters: z
+      .array(
+        z.object({
+          value: z.number().describe('Number counted up to'),
+          suffix: z.string().optional().describe('After the number, e.g. +'),
+          label: z.string().describe('Label'),
+        }),
+      )
+      .max(3)
+      .describe('Numbers counting up beside the map (cities, regions, km)'),
+    note: z.string().optional().describe('Small note in the corner, e.g. Routes are illustrative'),
+  }),
+]);
+export const maricoSchema = z.object({
+  pageTitle: z.string().describe('Browser tab title'),
+  lock: z.object({
+    title: z.string().describe('Title on the PIN screen'),
+    text: z.string().describe('Text on the PIN screen'),
+    error: z.string().describe('Shown after a wrong PIN'),
+    pinLength: z.number().int().min(4).max(8).describe('Number of digits'),
+    pinHash: z
+      .string()
+      .regex(/^[0-9a-f]{64}$/, 'A SHA-256 hash (64 hex characters)')
+      .describe('SHA-256 of the PIN (never the PIN itself)'),
+  }),
+  labels: z
+    .object({
+      stage: z.string().describe('Description of the film for screen readers'),
+      back: z.string().describe('Back button'),
+      next: z.string().describe('Next button'),
+      play: z.string().describe('Play button'),
+      pause: z.string().describe('Pause button'),
+      restart: z.string().describe('Restart button'),
+      fullScreen: z.string().describe('Full screen button'),
+      exitFullScreen: z.string().describe('Exit full screen button'),
+      autoAdvance: z.string().describe('Auto-advance checkbox'),
+      scene: z.string().describe('Word before the scene number, e.g. Scene'),
+      of: z.string().describe('Word between scene numbers, e.g. of'),
+      downloadPdf: z.string().describe('Download as PDF button'),
+      downloadPpt: z.string().describe('Download as PowerPoint button'),
+      preparing: z.string().describe('Shown while a download is being made'),
+      downloadFailed: z.string().describe('Shown on the button for a few seconds if a download fails'),
+      fileName: z.string().describe('Downloaded file name, without .pdf / .pptx'),
+    })
+    .describe('Words used on the page'),
+  scenes: z.array(filmSceneSchema).min(1).describe('Scenes, in order'),
+});
+
 /** Slides are a "discriminated union": each `kind` has its own fields. Add a new kind here to add a new slide layout. */
 const slideBase = { id: slug, title: z.string(), summary: z.string().optional() };
 export const slideSchema = z.discriminatedUnion('kind', [
@@ -444,6 +607,7 @@ export const contentSchema = z
     supplyChain: supplyChainSchema,
     certifications: z.array(certificationSchema),
     promoters: promotersSchema,
+    marico: maricoSchema,
     slides: z.array(slideSchema),
   })
   .superRefine((c, ctx) => {
@@ -496,6 +660,20 @@ export const contentSchema = z
           });
       }),
     );
+    const partnerNames = new Set(c.site.partners.map((p) => p.name));
+    c.marico.scenes.forEach((s, i) => {
+      if (s.kind !== 'clients') return;
+      (['first', 'more'] as const).forEach((key) =>
+        s[key].forEach((name, j) => {
+          if (!partnerNames.has(name))
+            ctx.addIssue({
+              code: 'custom',
+              path: ['marico', 'scenes', i, key, j],
+              message: `No client logo named "${name}"`,
+            });
+        }),
+      );
+    });
     c.slides.forEach((s, i) => {
       if (s.kind === 'products')
         s.productIds.forEach((id, j) => {
@@ -517,4 +695,6 @@ export type UnitTabId = (typeof unitTabIds)[number];
 export type GalleryTabId = (typeof galleryTabIds)[number];
 export type Slide = Content['slides'][number];
 export type SupplyChain = Content['supplyChain'];
+export type Marico = Content['marico'];
+export type FilmScene = Marico['scenes'][number];
 export type Certification = Content['certifications'][number];

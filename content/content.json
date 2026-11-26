@@ -51,6 +51,10 @@
       {
         "label": "Gallery",
         "path": "/gallery"
+      },
+      {
+        "label": "Marico",
+        "path": "/marico"
       }
     ],
     "partners": [
@@ -1871,14 +1875,14 @@
     ]
   },
   "supplyChain": {
-    "eyebrow": "From Unit 1, Pashamylaram",
+    "eyebrow": "From our plant near Hyderabad",
     "title": "Supply Chain",
     "intro": "Orders are loaded at our dock near Hyderabad and dispatched by road to every part of India.",
     "steps": ["Loading at the plant", "Dispatched across India", "Delivered"],
     "mapOutline": "/media/maps/india-outline.svg",
     "origin": {
-      "name": "KJS India, Unit 1",
-      "city": "Hyderabad (Patancheru), Telangana",
+      "name": "KJS India",
+      "city": "Hyderabad, Telangana",
       "mapLabel": "Hyderabad",
       "lat": 17.53,
       "lon": 78.27
@@ -1993,7 +1997,7 @@
         "speed": 2.2,
         "title": "Loading at the plant",
         "caption": "Loading at the plant",
-        "text": "Pallets of finished cartons go from the staging area straight into the truck at the Unit 1 dispatch dock."
+        "text": "Pallets of finished cartons go from the staging area straight into the truck at our dispatch dock."
       },
       {
         "kind": "dispatch",
@@ -2001,7 +2005,7 @@
         "speed": 2.2,
         "title": "Sealed and on the road",
         "caption": "Dispatched across India",
-        "text": "Doors sealed, load confirmed. The truck leaves Pashamylaram for the national highway network."
+        "text": "Doors sealed, load confirmed. The truck leaves the plant for the national highway network."
       },
       {
         "kind": "region",
@@ -2071,7 +2075,7 @@
       },
       {
         "label": "EAST",
-        "lat": 18.0,
+        "lat": 18,
         "lon": 88.2
       },
       {
@@ -2163,6 +2167,236 @@
         "role": "Role (to be added)",
         "bio": "Placeholder: profile text will be added here.",
         "highlights": ["Highlight (to be added)", "Highlight (to be added)"]
+      }
+    ]
+  },
+  "marico": {
+    "pageTitle": "Marico",
+    "lock": {
+      "title": "KJS India × Marico",
+      "text": "Enter the 4-digit code to open the presentation.",
+      "error": "That code is not right. Please try again.",
+      "pinLength": 4,
+      "pinHash": "c7f4f146491d27eed1cd4d422c9b3fec37006c606b17dabbfebef85845f3cbc1"
+    },
+    "labels": {
+      "stage": "Animated presentation: KJS India's machinery, products and packaging, handed to Marico's Modern Trade and General Trade network across India.",
+      "back": "‹ Back",
+      "next": "Next ›",
+      "play": "Play",
+      "pause": "Pause",
+      "restart": "Restart",
+      "fullScreen": "Full screen",
+      "exitFullScreen": "Exit full screen",
+      "autoAdvance": "Auto-advance",
+      "scene": "Scene",
+      "of": "of",
+      "downloadPdf": "Download PDF",
+      "downloadPpt": "Download PowerPoint",
+      "preparing": "Preparing…",
+      "downloadFailed": "Download failed. Please try again.",
+      "fileName": "KJS-India-x-Marico"
+    },
+    "scenes": [
+      {
+        "kind": "title",
+        "rail": "Title",
+        "seconds": 7,
+        "eyebrow": "Trusted Co-Manufacturing Partner",
+        "headline": "We Manufacture, You Deliver.",
+        "subtitle": "Prepared for Marico"
+      },
+      {
+        "kind": "machinery",
+        "rail": "Investment",
+        "seconds": 12,
+        "eyebrow": "01 · Investment",
+        "title": "₹160 crore+ in new machinery",
+        "line": "New manufacturing assets at KJS India, Hyderabad, built for scale.",
+        "stats": [
+          {
+            "value": "₹160 Cr+",
+            "label": "machinery investment"
+          }
+        ],
+        "groups": [
+          {
+            "count": 40,
+            "label": "packaging lines"
+          },
+          {
+            "count": 8,
+            "label": "ball mills"
+          },
+          {
+            "count": 4,
+            "label": "premixing systems"
+          },
+          {
+            "count": 10,
+            "label": "blenders"
+          }
+        ]
+      },
+      {
+        "kind": "range",
+        "rail": "Range",
+        "seconds": 10,
+        "eyebrow": "02 · Product range",
+        "title": "Five product families, one plant",
+        "line": "Coffee, nutrition, confectionery, and dry and wet products.",
+        "items": [
+          {
+            "name": "Coffee",
+            "icon": "coffee"
+          },
+          {
+            "name": "Nutrition",
+            "icon": "nutrition"
+          },
+          {
+            "name": "Confectionery",
+            "icon": "confectionery"
+          },
+          {
+            "name": "Dry products",
+            "icon": "dry"
+          },
+          {
+            "name": "Wet products",
+            "icon": "wet"
+          }
+        ]
+      },
+      {
+        "kind": "products",
+        "rail": "Products",
+        "seconds": 14,
+        "eyebrow": "03 · Our products",
+        "title": "Packs we make every day",
+        "line": "A few of our best sellers. Point at a pack to stop the turn and see its name.",
+        "heading": "Our best sellers",
+        "rotationSeconds": 40
+      },
+      {
+        "kind": "packaging",
+        "rail": "Packaging",
+        "seconds": 11,
+        "eyebrow": "04 · Packaging",
+        "title": "From 0.4 g to 25 kg",
+        "line": "Stick packs, wafer bars, jars, tins and bulk, from single-serve to large packs.",
+        "stats": [
+          {
+            "value": "0.4 g",
+            "label": "smallest pack"
+          },
+          {
+            "value": "25 kg",
+            "label": "largest pack"
+          }
+        ],
+        "readoutLabel": "PACK SIZE",
+        "rangeLabel": "0.4 – 25 kg",
+        "minGrams": 0.4,
+        "maxGrams": 25000,
+        "packs": [
+          {
+            "label": "Stick packs",
+            "grams": 2,
+            "shape": "stick"
+          },
+          {
+            "label": "Wafer bars",
+            "grams": 20,
+            "shape": "bar"
+          },
+          {
+            "label": "Jars",
+            "grams": 250,
+            "shape": "jar"
+          },
+          {
+            "label": "Tins",
+            "grams": 1500,
+            "shape": "tin"
+          },
+          {
+            "label": "Bulk",
+            "grams": 25000,
+            "shape": "bulk"
+          }
+        ]
+      },
+      {
+        "kind": "steps",
+        "rail": "End-to-end",
+        "seconds": 12,
+        "eyebrow": "05 · End-to-end",
+        "title": "Every step, under one roof",
+        "line": "Production, quality, packaging, warehousing and dispatch, all run by KJS India.",
+        "steps": ["Production", "Quality", "Packaging", "Warehousing", "Dispatch"]
+      },
+      {
+        "kind": "clients",
+        "rail": "Proven",
+        "seconds": 11,
+        "eyebrow": "06 · Proven",
+        "title": "Already manufacturing for leading brands",
+        "line": "KJS India makes products today for Nestlé, Hindustan Unilever, Mayora and more.",
+        "first": ["Nestlé", "Unilever", "Mayora"],
+        "more": ["Dr. Reddy’s", "Continental Coffee", "Sleepy Owl Coffee"],
+        "captions": {
+          "Unilever": "Hindustan Unilever"
+        }
+      },
+      {
+        "kind": "handover",
+        "rail": "Partnership",
+        "seconds": 11,
+        "eyebrow": "07 · The partnership",
+        "title": "KJS makes it. Marico takes it to market.",
+        "line": "KJS India as the manufacturing backbone. Marico's existing Modern Trade and General Trade network for distribution.",
+        "makerLabel": "Manufacturing",
+        "partnerName": "MARICO",
+        "partnerLabel": "Distribution network",
+        "shopSign": "SUPERMARKET",
+        "channels": [
+          {
+            "name": "Modern Trade",
+            "sub": "Supermarkets and chains"
+          },
+          {
+            "name": "General Trade",
+            "sub": "Neighbourhood stores"
+          }
+        ]
+      },
+      {
+        "kind": "map",
+        "rail": "India",
+        "seconds": 13,
+        "eyebrow": "08 · Across India",
+        "title": "From KJS to shelves across India",
+        "line": "Dispatched by road from Hyderabad into Marico's network in every region.",
+        "originLabel": "KJS India, Hyderabad",
+        "counters": [
+          {
+            "value": 8,
+            "suffix": "+",
+            "label": "cities reached"
+          },
+          {
+            "value": 5,
+            "suffix": "+",
+            "label": "regions"
+          },
+          {
+            "value": 7685,
+            "suffix": "+",
+            "label": "km of routes"
+          }
+        ],
+        "note": "Routes are illustrative"
       }
     ]
   },

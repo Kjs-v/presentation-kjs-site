@@ -1,6 +1,6 @@
 /**
  * Supply Chain section (Unit 2 → Supply Chain, "/unit-2/supply-chain"; the old "/supply-chain" redirects there).
- * A real-time 3D scene (Three.js): a forklift loads the last pallets into a KJS truck at the Unit 1 dock,
+ * A real-time 3D scene (Three.js): a forklift loads the last pallets into a KJS truck at the dispatch dock,
  * the truck drives off, then trucks travel from Hyderabad to every destination on an India map, chapter by chapter.
  * All words, cities, routes and numbers come from content.supplyChain. The India outline is an SVG in /media/maps/.
  * The scene stops itself (and frees the GPU) when the section is left.

@@ -11,6 +11,7 @@ import { showPage } from './pages/show';
 import { unitPage } from './pages/unit';
 import { galleryPage } from './pages/gallery';
 import { promotersPage } from './pages/promoters';
+import { maricoPage } from './pages/marico';
 import { notFoundPage } from './pages/not-found';
 
 // Register routes here. Fixed paths first; the "/:unitId" catch-alls last.
@@ -19,6 +20,10 @@ route('/show', showPage);
 route('/gallery', galleryPage);
 route('/gallery/:tab', galleryPage);
 route('/promoter-profile', promotersPage);
+route('/marico', maricoPage);
+// Each unit opens on its main section: Unit 1 on Customers, Unit 2 on Products.
+redirect('/unit-1', '/unit-1/customers');
+redirect('/unit-2', '/unit-2/products');
 // Pages that moved: Supply Chain is now a section of Unit 2; Unit 1's Clients is now Customers;
 // Products is now a Gallery tab; the About page was removed.
 redirect('/products', '/gallery/products');
@@ -42,6 +47,7 @@ app.replaceChildren(header(content, notes.api), main, siteFooter, notes.element,
 const titles: Record<string, string> = Object.fromEntries([
   ...content.site.nav.map((n) => [n.path, n.label]),
   ['/show', 'Presentation'],
+  ['/marico', content.marico.pageTitle],
 ]);
 onRoute((pathname) => {
   afterRoute();
