@@ -1,38 +1,56 @@
 /**
- * Supply Chain ("/supply-chain").
- * A real-time 3D scene (Three.js): a forklift loads the last pallets into a KJS truck at the Unit 1 dock,
+ * Supply Chain section (Unit 2 → Supply Chain, "/unit-2/supply-chain"; the old "/supply-chain" redirects there).
+ * A real-time 3D scene (Three.js): a forklift loads the last pallets into a KJS truck at the dispatch dock,
  * the truck drives off, then trucks travel from Hyderabad to every destination on an India map, chapter by chapter.
  * All words, cities, routes and numbers come from content.supplyChain. The India outline is an SVG in /media/maps/.
- * The scene stops itself (and frees the GPU) when the page is left.
+ * The scene stops itself (and frees the GPU) when the section is left.
  */
-import type { Page } from '../lib/router';
+import type { Content } from '../../content/content.schema';
 import { h } from '../lib/dom';
 
-export const supplyChainPage: Page = (content) => {
-  const sc = content.supplyChain;
+function head(sc: Content['supplyChain']) {
   const steps = h(
     'ol',
     { class: 'sc-steps' },
     ...sc.steps.map((s, i) => h('li', {}, h('b', {}, String(i + 1)), s)),
   );
-  const body = h('div', { class: 'sc-body' });
-  const root = h(
+  const el = h(
     'div',
-    { class: 'page-supply-chain wrap padded' },
+    { class: 'sc-head' },
     h(
       'div',
-      { class: 'sc-head' },
-      h(
-        'div',
-        {},
-        h('p', { class: 'eyebrow' }, sc.eyebrow),
-        h('h1', {}, sc.title),
-        h('p', { class: 'lead' }, sc.intro),
-      ),
-      steps,
+      {},
+      h('p', { class: 'eyebrow' }, sc.eyebrow),
+      h('h2', { class: 'sc-title' }, sc.title),
+      h('p', { class: 'lead' }, sc.intro),
     ),
-    body,
+    steps,
   );
+  return { el, steps };
+}
+
+/** Without the 3D scene: title, steps and the list of destinations. Used in the full-profile PDF. */
+export function supplyChainSummary(content: Content): HTMLElement {
+  const sc = content.supplyChain;
+  return h(
+    'div',
+    { class: 'page-supply-chain' },
+    head(sc).el,
+    h(
+      'p',
+      { class: 'sc-print-route' },
+      h('strong', {}, sc.origin.name),
+      ' → ',
+      sc.destinations.map((d) => d.city).join(' · '),
+    ),
+  );
+}
+
+export function supplyChainSection(content: Content): HTMLElement {
+  const sc = content.supplyChain;
+  const { el, steps } = head(sc);
+  const body = h('div', { class: 'sc-body' });
+  const root = h('div', { class: 'page-supply-chain' }, el, body);
 
   let stop: (() => void) | null = null;
   let left = false;
@@ -45,7 +63,7 @@ export const supplyChainPage: Page = (content) => {
     });
   };
   mount();
-  // The router has no "leave" hook, so watch for the page leaving the document.
+  // The router has no "leave" hook, so watch for the section leaving the document.
   const watch = () => {
     if (!root.isConnected && root.dataset.started) {
       left = true;
@@ -58,4 +76,4 @@ export const supplyChainPage: Page = (content) => {
   };
   requestAnimationFrame(watch);
   return root;
-};
+}

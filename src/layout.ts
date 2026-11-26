@@ -1,15 +1,17 @@
 /** Header and footer, built from content.site. */
-import type { Site } from '../content/content.schema';
+import type { Content, Site } from '../content/content.schema';
 import { h } from './lib/dom';
 import { icon } from './lib/icons';
 import { colourMenu } from './widgets/colour-menu';
+import { downloadMenu } from './widgets/download';
 import type { NotesPanel } from './widgets/notes';
 
 /**
- * Header: company name, page links (site.nav), and three small controls:
- * Notes, the colour menu, and Full screen (also the F key on any page; Esc exits). On narrow screens the links fold into a Menu button.
+ * Header: the round logo mark (site.icon), page links (site.nav), and four small controls:
+ * Notes, Download PDF, the colour menu, and Full screen (also the F key on any page; Esc exits). On narrow screens the links fold into a Menu button.
  */
-export function header(site: Site, notes: NotesPanel): HTMLElement {
+export function header(content: Content, notes: NotesPanel): HTMLElement {
+  const { site } = content;
   const nav = h(
     'nav',
     { 'aria-label': 'Main', id: 'main-nav' },
@@ -74,12 +76,11 @@ export function header(site: Site, notes: NotesPanel): HTMLElement {
     { class: 'topbar' },
     h(
       'a',
-      { href: '/', 'data-route': true, class: 'wordmark' },
-      h('span', { class: 'mark', 'aria-hidden': 'true' }),
-      site.name,
+      { href: '/', 'data-route': true, class: 'wordmark', 'aria-label': `${site.name} home` },
+      h('img', { src: site.icon, alt: '', class: 'brand-mark' }),
     ),
     nav,
-    h('div', { class: 'controls' }, notesBtn, themeBtn, fullscreen, menu),
+    h('div', { class: 'controls' }, notesBtn, downloadMenu(content), themeBtn, fullscreen, menu),
   );
 }
 
@@ -91,6 +92,52 @@ export function markCurrent(pathname: string): void {
     if (active) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   });
+}
+
+/**
+ * "Find us": hovering (or clicking, on touch screens) opens a small list of the locations
+ * in content.site.contact.locations; each one opens its Google Maps link in a new tab.
+ */
+function findUs(contact: Site['contact']): HTMLElement {
+  const button = h(
+    'button',
+    { type: 'button', class: 'f-link', 'aria-expanded': 'false', 'aria-haspopup': 'true' },
+    icon('mapPin', 'icon-map'),
+    contact.mapLabel,
+  );
+  const menu = h(
+    'div',
+    { class: 'find-menu' },
+    ...contact.locations.map((l) =>
+      h(
+        'a',
+        { href: l.mapUrl, target: '_blank', rel: 'noopener noreferrer', class: 'find-place' },
+        h('strong', {}, l.label),
+        h('span', {}, l.address),
+      ),
+    ),
+  );
+  const root = h('div', { class: 'find-us' }, button, menu);
+  const set = (open: boolean) => {
+    root.classList.toggle('open', open);
+    button.setAttribute('aria-expanded', String(open));
+  };
+  button.addEventListener('click', () => set(!root.classList.contains('open')));
+  root.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && set(true));
+  root.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && set(false));
+  root.addEventListener('focusout', (e) => {
+    if (!root.contains(e.relatedTarget as Node | null)) set(false);
+  });
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      set(false);
+      button.focus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!root.contains(e.target as Node)) set(false);
+  });
+  return root;
 }
 
 /** Footer: address, then phone, email, map, KJS website (logo) and LinkedIn, all from content.site. */
@@ -110,7 +157,9 @@ export function footer(site: Site): HTMLElement {
       return h(
         'a',
         { href: l.url, ...external, class: 'f-link f-logo', 'aria-label': l.label },
-        h('img', { src: site.logo, alt: l.label }),
+        // Dark lettering on light themes, white lettering on the dark (royal) theme.
+        h('img', { src: site.logoOnLight, alt: l.label, class: 'logo-on-light' }),
+        h('img', { src: site.logo, alt: '', class: 'logo-on-dark' }),
       );
     return h(
       'a',
@@ -132,17 +181,12 @@ export function footer(site: Site): HTMLElement {
         { class: 'footer-links' },
         h(
           'a',
-          { href: `tel:${contact.phone.replace(/s/g, '')}`, class: 'f-link' },
+          { href: `tel:${contact.phone.replace(/\s/g, '')}`, class: 'f-link' },
           icon('phone'),
           contact.phone,
         ),
         h('a', { href: `mailto:${contact.email}`, class: 'f-link' }, icon('mail'), contact.email),
-        h(
-          'a',
-          { href: contact.mapUrl, ...external, class: 'f-link' },
-          icon('mapPin', 'icon-map'),
-          contact.mapLabel,
-        ),
+        findUs(contact),
         ...site.links.map(siteLink),
         top,
       ),

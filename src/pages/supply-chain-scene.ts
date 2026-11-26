@@ -40,18 +40,26 @@ function haversine(a: { lat: number; lon: number }, b: { lat: number; lon: numbe
   return Math.round(2 * R * Math.asin(Math.sqrt(x)));
 }
 
-/** Reads the outline SVG (one path of M/L points, x = longitude, y = -latitude). */
-async function loadOutline(src: string): Promise<LatLon[]> {
+/**
+ * Reads the outline SVG: one path of M/L points (x = longitude, y = -latitude).
+ * Each M starts a new ring (mainland first, then islands).
+ */
+async function loadOutline(src: string): Promise<LatLon[][]> {
   const text = await (await fetch(src)).text();
   const d = text.match(/\sd="([^"]+)"/)?.[1] ?? '';
   return d
-    .split(/[MLZ]/i)
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((pair) => {
-      const [x, y] = pair.split(/[ ,]+/).map(Number);
-      return [-y, x] as LatLon;
-    });
+    .split(/M/i)
+    .map((ring) =>
+      ring
+        .split(/[LZ]/i)
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map((pair) => {
+          const [x, y] = pair.split(/[ ,]+/).map(Number);
+          return [-y, x] as LatLon;
+        }),
+    )
+    .filter((ring) => ring.length > 2);
 }
 
 /** Builds the stage + side panel inside `host` and runs the scene. Returns a cleanup function. */
@@ -133,7 +141,7 @@ export function scene(
       replayBtn,
       h('label', { class: 'sc-toggle' }, autoBox, ` ${L.autoAdvance}`),
     ),
-    h('p', { class: 'sc-note' }, L.note),
+    L.note ? h('p', { class: 'sc-note' }, L.note) : null,
   );
   host.append(stage, panel);
 
@@ -278,7 +286,7 @@ export function scene(
   /* ---------- Renderer ---------- */
   let renderer: THREE.WebGLRenderer | null = null;
   try {
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); // keeps the last frame readable for the PDF;
   } catch {
     renderer = null;
   }
@@ -549,15 +557,15 @@ export function scene(
     dark: M({ color: 0x23272f, roughness: 0.85 }),
     beacon: M({ color: 0xff9a1f, emissive: 0xff7a00, roughness: 0.3 }),
     lamp: new THREE.MeshBasicMaterial({ color: 0xfff0d2 }),
-    landTop: M({ color: 0xffffff, roughness: 0.9 }),
-    landSide: M({ color: BRAND, roughness: 0.5 }),
+    landTop: M({ color: 0xf7f9fe, roughness: 0.92 }),
+    landSide: M({ color: BRAND, roughness: 0.65, metalness: 0.05 }),
     disk: M({ color: BRAND, roughness: 0.5 }),
     pin: M({ color: ACCENT, emissive: 0x6b4500, roughness: 0.35 }),
     route: new THREE.MeshBasicMaterial({ color: lin(BRAND) }),
     track: new THREE.MeshBasicMaterial({
       color: lin(BRAND),
       transparent: true,
-      opacity: 0.12,
+      opacity: 0.14,
       depthWrite: false,
     }),
     miniTrailer: M({ color: ACCENT, roughness: 0.4 }),
@@ -965,26 +973,34 @@ export function scene(
   mapG.visible = false;
   world.add(mapG);
   const SX = 0.95,
-    TOP = 0.72,
-    RY = TOP + 0.08;
+    TOP = 0.52,
+    RY = TOP + 0.05;
   const mp = (lat: number, lon: number, y: number) => new THREE.Vector3((lon - 82) * SX, y, -(lat - 22));
   const LON_A = 68,
     LON_B = 97.5,
-    LAT_A = 8,
+    LAT_A = 6.5, // down to Great Nicobar
     LAT_B = 37.2;
   type P2 = (lat: number, lon: number) => [number, number];
-  const trace = (g: CanvasRenderingContext2D, pts: LatLon[], P: P2) => {
-    g.beginPath();
+  const trace = (g: CanvasRenderingContext2D, pts: LatLon[], P: P2, fresh = true) => {
+    if (fresh) g.beginPath();
     pts.forEach(([la, lo], i) => {
       const [x, y] = P(la, lo);
       if (i) g.lineTo(x, y);
       else g.moveTo(x, y);
     });
   };
+  /** All rings (mainland + islands) as one closed canvas path. */
+  const traceRings = (g: CanvasRenderingContext2D, rings: LatLon[][], P: P2) => {
+    g.beginPath();
+    rings.forEach((r) => {
+      trace(g, r, P, false);
+      g.closePath();
+    });
+  };
   const OC: LatLon = [ORIGIN.lat, ORIGIN.lon];
   const corridors: LatLon[][] = DESTS.map((d) => [OC, ...(d.via as LatLon[]), [d.lat, d.lon]]);
 
-  function landTex(outline: LatLon[]) {
+  function landTex(outline: LatLon[][]) {
     const W = 1024,
       H = 1024;
     const c = document.createElement('canvas');
@@ -995,32 +1011,36 @@ export function scene(
       ((lon - LON_A) / (LON_B - LON_A)) * W,
       ((LAT_B - lat) / (LAT_B - LAT_A)) * H,
     ];
-    g.fillStyle = '#ffffff';
+    g.fillStyle = '#f6f8fd';
     g.fillRect(0, 0, W, H);
     g.save();
-    trace(g, outline, P);
-    g.closePath();
+    traceRings(g, outline, P);
     g.clip();
-    g.fillStyle = '#ffffff';
+    g.fillStyle = '#f6f8fd';
     g.fillRect(0, 0, W, H);
     const brand = new THREE.Color(BRAND);
     const rgba = (a: number) =>
       `rgba(${Math.round(brand.r * 255)}, ${Math.round(brand.g * 255)}, ${Math.round(brand.b * 255)}, ${a})`;
-    g.fillStyle = rgba(0.3);
-    for (let lat = LAT_A; lat <= LAT_B; lat += 0.42)
-      for (let lon = LON_A; lon <= LON_B; lon += 0.42) {
+    g.fillStyle = rgba(0.22);
+    for (let lat = LAT_A; lat <= LAT_B; lat += 0.48)
+      for (let lon = LON_A; lon <= LON_B; lon += 0.48) {
         const [x, y] = P(lat, lon);
         g.beginPath();
-        g.arc(x, y, 2.2, 0, Math.PI * 2);
+        g.arc(x, y, 2.4, 0, Math.PI * 2);
         g.fill();
       }
     g.lineJoin = g.lineCap = 'round';
-    g.strokeStyle = rgba(0.28);
-    g.lineWidth = 2.4;
+    g.strokeStyle = rgba(0.18);
+    g.lineWidth = 2.0;
     corridors.forEach((r) => {
       trace(g, r, P);
       g.stroke();
     });
+    // Crisp inner border stroke along the coastline
+    traceRings(g, outline, P);
+    g.strokeStyle = rgba(0.42);
+    g.lineWidth = 5;
+    g.stroke();
     g.restore();
     const t = new THREE.CanvasTexture(c);
     t.encoding = THREE.sRGBEncoding;
@@ -1033,46 +1053,74 @@ export function scene(
     return t;
   }
 
+  const seaTex = canvasTex(512, 512, (g, w, hgt) => {
+    const gr = g.createRadialGradient(w / 2, hgt / 2, 30, w / 2, hgt / 2, w * 0.52);
+    gr.addColorStop(0, '#dbe7fa');
+    gr.addColorStop(0.55, '#c6d8f4');
+    gr.addColorStop(1, '#aec5ea');
+    g.fillStyle = gr;
+    g.fillRect(0, 0, w, hgt);
+    g.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+    g.lineWidth = 1;
+    for (let k = 0; k <= w; k += 32) {
+      g.beginPath();
+      g.moveTo(k, 0);
+      g.lineTo(k, hgt);
+      g.stroke();
+      g.beginPath();
+      g.moveTo(0, k);
+      g.lineTo(w, k);
+      g.stroke();
+    }
+  });
   const sea = mk(
-    new THREE.PlaneGeometry(160, 160),
-    new THREE.MeshBasicMaterial({ color: lin('#9fbbe8') }),
+    new THREE.PlaneGeometry(240, 240),
+    new THREE.MeshBasicMaterial({ map: seaTex }),
     mapG,
     0,
-    -0.05,
+    -0.02,
     0,
     false,
     false,
   );
   sea.rotation.x = -Math.PI / 2;
-  const grid = new THREE.GridHelper(120, 60, 0xcfdcf3, 0xcfdcf3);
-  const gridMat = grid.material as THREE.Material;
-  gridMat.transparent = true;
-  gridMat.opacity = 0.35;
-  gridMat.depthWrite = false;
-  grid.position.y = -0.03;
-  mapG.add(grid);
+  const seaShadow = mk(
+    new THREE.PlaneGeometry(120, 120),
+    new THREE.ShadowMaterial({ opacity: 0.16 }),
+    mapG,
+    0,
+    -0.01,
+    0,
+    false,
+    true,
+  );
+  seaShadow.rotation.x = -Math.PI / 2;
 
-  function buildLand(outline: LatLon[]) {
-    const shape = new THREE.Shape();
-    outline.forEach(([la, lo], i) =>
-      i ? shape.lineTo((lo - 82) * SX, la - 22) : shape.moveTo((lo - 82) * SX, la - 22),
-    );
-    const landGeo = new THREE.ExtrudeGeometry(shape, {
-      depth: 0.6,
-      bevelEnabled: true,
-      bevelThickness: 0.1,
-      bevelSize: 0.1,
-      bevelSegments: 3,
+  function buildLand(outline: LatLon[][]) {
+    const shapes = outline.map((ring) => {
+      const shape = new THREE.Shape();
+      ring.forEach(([la, lo], i) =>
+        i ? shape.lineTo((lo - 82) * SX, la - 22) : shape.moveTo((lo - 82) * SX, la - 22),
+      );
+      return shape;
+    });
+    const landGeo = new THREE.ExtrudeGeometry(shapes, {
+      depth: TOP,
+      bevelEnabled: false,
     });
     landGeo.rotateX(-Math.PI / 2);
     mat.landTop.map = landTex(outline);
     mat.landTop.needsUpdate = true;
     mk(landGeo, [mat.landTop, mat.landSide], mapG, 0, 0, 0, true, true);
-    const rim = new THREE.LineLoop(
-      new THREE.BufferGeometry().setFromPoints(outline.map(([la, lo]) => mp(la, lo, TOP + 0.03))),
-      new THREE.LineBasicMaterial({ color: lin(BRAND), transparent: true, opacity: 0.35 }),
+    const rimMat = new THREE.LineBasicMaterial({ color: lin(BRAND), transparent: true, opacity: 0.55 });
+    outline.forEach((ring) =>
+      mapG.add(
+        new THREE.LineLoop(
+          new THREE.BufferGeometry().setFromPoints(ring.map(([la, lo]) => mp(la, lo, TOP + 0.014))),
+          rimMat,
+        ),
+      ),
     );
-    mapG.add(rim);
   }
 
   const flowTex = canvasTex(
@@ -1093,14 +1141,14 @@ export function scene(
   );
 
   const oPos = mp(ORIGIN.lat, ORIGIN.lon, TOP);
-  box(0.9, 0.45, 0.7, mat.navy, mapG, oPos.x, TOP + 0.22, oPos.z);
+  box(0.8, 0.38, 0.65, mat.navy, mapG, oPos.x, TOP + 0.19, oPos.z);
   const rings = [0, 1].map(() => {
     const m = mk(
-      new THREE.RingGeometry(0.5, 0.62, 48),
+      new THREE.RingGeometry(0.45, 0.56, 48),
       fadeMat(ACCENT),
       mapG,
       oPos.x,
-      TOP + 0.03,
+      TOP + 0.025,
       oPos.z,
       false,
       false,
@@ -1114,22 +1162,33 @@ export function scene(
     box(0.3, 0.3, 0.95, mat.miniTrailer, g, 0, 0.24, -0.12);
     box(0.3, 0.32, 0.28, mat.cab, g, 0, 0.22, 0.52);
     box(0.32, 0.08, 1.35, mat.rubber, g, 0, 0.06, 0.05);
-    g.scale.setScalar(1.45);
+    g.scale.setScalar(1.35);
     g.visible = false;
     mapG.add(g);
     return g;
   }
-  const SIDE = { left: 'l', right: 'r', top: 't' } as const;
-  type Side = 'l' | 'r' | 't' | 'c';
+  const SIDE = { left: 'l', right: 'r', top: 't', bottom: 'b' } as const;
+  type Side = 'l' | 'r' | 't' | 'b' | 'c';
+  const leadersSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  leadersSvg.setAttribute('class', 'sc-leaders');
+  leadersSvg.setAttribute('aria-hidden', 'true');
+  labelsEl.append(leadersSvg);
+  const mkLeader = () => {
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    leadersSvg.append(l);
+    return l;
+  };
+
   const routes = DESTS.map((d, i) => {
-    const end = mp(d.lat, d.lon, RY);
-    const pts = corridors[i].map(([la, lo]) => mp(la, lo, RY));
+    const ry = RY + i * 0.005;
+    const end = mp(d.lat, d.lon, ry);
+    const pts = corridors[i].map(([la, lo]) => mp(la, lo, ry));
     const curve = new THREE.CatmullRomCurve3(pts, false, 'centripetal');
     const len = curve.getLength();
     const SEG = 200;
-    mk(new THREE.TubeGeometry(curve, SEG, 0.04, 8, false), mat.track, mapG, 0, 0, 0, false, false);
+    mk(new THREE.TubeGeometry(curve, SEG, 0.032, 8, false), mat.track, mapG, 0, 0, 0, false, false);
     const core = mk(
-      new THREE.TubeGeometry(curve, SEG, 0.055, 8, false),
+      new THREE.TubeGeometry(curve, SEG, 0.048, 8, false),
       mat.route,
       mapG,
       0,
@@ -1144,7 +1203,7 @@ export function scene(
     ft.repeat.set(Math.max(2, Math.round(len * 0.45)), 1);
     textures.push(ft);
     const flow = mk(
-      new THREE.TubeGeometry(curve, SEG, 0.075, 8, false),
+      new THREE.TubeGeometry(curve, SEG, 0.064, 8, false),
       new THREE.MeshBasicMaterial({ map: ft, color: lin(ACCENT), transparent: true, depthWrite: false }),
       mapG,
       0,
@@ -1156,19 +1215,19 @@ export function scene(
     const tubes = [core, flow];
     const count = core.geometry.index?.count ?? 0;
     tubes.forEach((t) => t.geometry.setDrawRange(0, 0));
-    mk(new THREE.CylinderGeometry(0.24, 0.24, 0.06, 28), mat.disk, mapG, end.x, TOP + 0.03, end.z);
+    mk(new THREE.CylinderGeometry(0.2, 0.2, 0.05, 28), mat.disk, mapG, end.x, TOP + 0.025, end.z);
     const pin = new THREE.Group();
     pin.position.set(end.x, TOP, end.z);
-    mk(new THREE.CylinderGeometry(0.035, 0.035, 0.9, 8), mat.pin, pin, 0, 0.45, 0);
-    mk(new THREE.SphereGeometry(0.2, 20, 16), mat.pin, pin, 0, 0.95, 0);
+    mk(new THREE.CylinderGeometry(0.028, 0.028, 0.72, 8), mat.pin, pin, 0, 0.36, 0);
+    mk(new THREE.SphereGeometry(0.155, 20, 16), mat.pin, pin, 0, 0.76, 0);
     pin.scale.setScalar(0.001);
     mapG.add(pin);
     const halo = mk(
-      new THREE.RingGeometry(0.3, 0.4, 48),
+      new THREE.RingGeometry(0.26, 0.35, 48),
       fadeMat(BRAND),
       mapG,
       end.x,
-      TOP + 0.05,
+      TOP + 0.04,
       end.z,
       false,
       false,
@@ -1187,8 +1246,9 @@ export function scene(
       flowTex: ft,
       truck: miniTruck(),
       lbl,
+      leader: mkLeader(),
       side,
-      anchor: new THREE.Vector3(end.x, TOP + (side === 't' ? 1.3 : 0.95), end.z),
+      anchor: new THREE.Vector3(end.x, TOP + (side === 't' ? 0.96 : 0.76), end.z),
       u: 0,
       state: 'wait' as 'wait' | 'road' | 'done',
     };
@@ -1201,18 +1261,19 @@ export function scene(
     ORIGIN.mapLabel,
   );
   labelsEl.append(originLbl);
-  const originAnchor = new THREE.Vector3(oPos.x, TOP + 0.95, oPos.z);
+  const originLeader = mkLeader();
+  const originAnchor = new THREE.Vector3(oPos.x, TOP + 0.65, oPos.z);
   const regionEls = sc.regions.map((r) => {
     const e = h('span', { class: 'sc-region' }, r.label);
     labelsEl.append(e);
-    return { e, v: mp(r.lat, r.lon, TOP + 0.2) };
+    return { e, v: mp(r.lat, r.lon, TOP + 0.1) };
   });
   labelsEl.hidden = true;
 
   const mapBg = canvasTex(16, 256, (g, w, hgt) => {
     const gr = g.createLinearGradient(0, 0, 0, hgt);
-    gr.addColorStop(0, '#eef3fc');
-    gr.addColorStop(1, '#bccff0');
+    gr.addColorStop(0, '#eef4fd');
+    gr.addColorStop(1, '#d5e2f7');
     g.fillStyle = gr;
     g.fillRect(0, 0, w, hgt);
   });
@@ -1220,7 +1281,7 @@ export function scene(
   // The outline is a media file; the map is finished once it arrives.
   const outlineReady = loadOutline(sc.mapOutline)
     .then((o) => {
-      if (alive && o.length > 2) buildLand(o);
+      if (alive && o.length) buildLand(o);
     })
     .catch(() => {});
 
@@ -1248,27 +1309,105 @@ export function scene(
     camera.lookAt(MC);
   }
   const proj = new THREE.Vector3();
-  function placeLabel(el: HTMLElement, v: THREE.Vector3, side: Side) {
+  function placeRegion(el: HTMLElement, v: THREE.Vector3) {
     proj.copy(v).project(camera);
     const w = stage.clientWidth,
       hgt = stage.clientHeight;
-    const off =
-      side === 'c'
-        ? 'translate(-50%, -50%)'
-        : side === 'l'
-          ? 'translate(calc(-100% - 12px), -50%)'
-          : side === 'r'
-            ? 'translate(12px, -50%)'
-            : 'translate(-50%, calc(-100% - 8px))';
-    el.style.transform = `translate(${((proj.x + 1) / 2) * w}px, ${((1 - proj.y) / 2) * hgt}px) ${off}`;
+    el.style.transform = `translate(${((proj.x + 1) / 2) * w}px, ${((1 - proj.y) / 2) * hgt}px) translate(-50%, -50%)`;
     el.style.visibility = proj.z < 1 ? 'visible' : 'hidden';
+  }
+  type LabelBox = {
+    el: HTMLElement;
+    leader: SVGLineElement;
+    px: number;
+    py: number;
+    x: number;
+    y: number;
+    bw: number;
+    bh: number;
+    ok: boolean;
+  };
+  function layoutLabels() {
+    const w = stage.clientWidth,
+      hgt = stage.clientHeight;
+    if (!w || !hgt) return;
+    const minX = 10,
+      maxX = w - 10,
+      minY = 48,
+      maxY = hgt - 68;
+    const items: { el: HTMLElement; leader: SVGLineElement; v: THREE.Vector3; side: Side }[] = [
+      { el: originLbl, leader: originLeader, v: originAnchor, side: 't' },
+      ...routes.map((r) => ({ el: r.lbl, leader: r.leader, v: r.anchor, side: r.side })),
+    ];
+    const boxes: LabelBox[] = items.map(({ el, leader, v, side }) => {
+      proj.copy(v).project(camera);
+      const ok = proj.z < 1;
+      const px = ((proj.x + 1) / 2) * w;
+      const py = ((1 - proj.y) / 2) * hgt;
+      const bw = el.offsetWidth || 80;
+      const bh = el.offsetHeight || 26;
+      const gap = 12;
+      let x = px - bw / 2;
+      let y = py - bh / 2;
+      if (side === 'l') x = px - bw - gap;
+      else if (side === 'r') x = px + gap;
+      else if (side === 't') y = py - bh - 10;
+      else if (side === 'b') y = py + 12;
+      x = Math.max(minX, Math.min(maxX - bw, x));
+      y = Math.max(minY, Math.min(maxY - bh, y));
+      return { el, leader, px, py, x, y, bw, bh, ok };
+    });
+    // Resolve any 2D screen-space overlaps between label cards.
+    const pad = 6;
+    for (let iter = 0; iter < 6; iter++) {
+      for (let i = 0; i < boxes.length; i++) {
+        for (let j = i + 1; j < boxes.length; j++) {
+          const a = boxes[i],
+            b = boxes[j];
+          if (!a.ok || !b.ok) continue;
+          const ox = Math.min(a.x + a.bw, b.x + b.bw) + pad - Math.max(a.x, b.x);
+          const oy = Math.min(a.y + a.bh, b.y + b.bh) + pad - Math.max(a.y, b.y);
+          if (ox > 0 && oy > 0) {
+            if (oy <= ox) {
+              const s = (a.y + a.bh / 2 <= b.y + b.bh / 2 ? -1 : 1) * (oy / 2);
+              a.y += s;
+              b.y -= s;
+            } else {
+              const s = (a.x + a.bw / 2 <= b.x + b.bw / 2 ? -1 : 1) * (ox / 2);
+              a.x += s;
+              b.x -= s;
+            }
+            a.x = Math.max(minX, Math.min(maxX - a.bw, a.x));
+            a.y = Math.max(minY, Math.min(maxY - a.bh, a.y));
+            b.x = Math.max(minX, Math.min(maxX - b.bw, b.x));
+            b.y = Math.max(minY, Math.min(maxY - b.bh, b.y));
+          }
+        }
+      }
+    }
+    boxes.forEach((b) => {
+      b.el.style.transform = `translate(${Math.round(b.x)}px, ${Math.round(b.y)}px)`;
+      b.el.style.visibility = b.ok ? 'visible' : 'hidden';
+      if (!b.ok) {
+        b.leader.style.visibility = 'hidden';
+        return;
+      }
+      const cx = Math.max(b.x, Math.min(b.x + b.bw, b.px));
+      const cy = Math.max(b.y, Math.min(b.y + b.bh, b.py));
+      const dist = Math.hypot(cx - b.px, cy - b.py);
+      b.leader.style.visibility = dist > 4 ? 'visible' : 'hidden';
+      b.leader.setAttribute('x1', b.px.toFixed(1));
+      b.leader.setAttribute('y1', b.py.toFixed(1));
+      b.leader.setAttribute('x2', cx.toFixed(1));
+      b.leader.setAttribute('y2', cy.toFixed(1));
+    });
   }
   let raf = 0;
   function frame(now: number) {
     if (!alive) return;
     const realDt = lastReal ? Math.min(100, now - lastReal) : 0;
     lastReal = now;
-    if (!S.paused) clock += realDt;
+    if (!S.paused) clock += realDt * (CH[S.ch].speed ?? 1);
     const active = tweens.splice(0);
     for (const tw of active) {
       const t = clamp01((clock - tw.t0) / tw.ms);
@@ -1296,9 +1435,8 @@ export function scene(
           r.flowTex.offset.x -= dt * 0.7;
         });
       }
-      routes.forEach((r) => placeLabel(r.lbl, r.anchor, r.side));
-      placeLabel(originLbl, originAnchor, 't');
-      regionEls.forEach((r) => placeLabel(r.e, r.v, 'c'));
+      layoutLabels();
+      regionEls.forEach((r) => placeRegion(r.e, r.v));
     }
     lastFrame = now;
     updatePanel();
@@ -1375,18 +1513,18 @@ export function scene(
     mode = 'map';
     dockG.visible = false;
     mapG.visible = true;
-    world.fog = null;
+    world.fog = new THREE.Fog(0xd5e2f7, 72, 140);
     world.background = mapBg;
-    R3.toneMappingExposure = 1.12;
-    sun.position.set(-16, 36, 12);
+    R3.toneMappingExposure = 1.0;
+    sun.position.set(-14, 38, 16);
     sun.target.position.set(0, 0, 0);
-    sun.intensity = 0.95;
+    sun.intensity = 0.72;
     sun.color.set(0xffffff);
     Object.assign(sun.shadow.camera, { left: -26, right: 26, top: 26, bottom: -26 });
     sun.shadow.camera.updateProjectionMatrix();
     hemi.color.set(0xffffff);
     hemi.groundColor.set(0xb8c6e0);
-    hemi.intensity = 0.9;
+    hemi.intensity = 0.88;
     labelsEl.hidden = false;
     loadMeter.hidden = true;
     loadedTag.classList.remove('show');
@@ -1409,7 +1547,7 @@ export function scene(
       (r.halo.material as THREE.MeshBasicMaterial).opacity = 0.75 * (1 - t);
     });
     doneLabel(r);
-    void tween(700, (t) => r.truck.scale.setScalar(1.45 * (1 - t) + 0.001)).then(
+    void tween(700, (t) => r.truck.scale.setScalar(1.35 * (1 - t) + 0.001)).then(
       () => (r.truck.visible = false),
     );
   }
@@ -1422,7 +1560,7 @@ export function scene(
   function resetRoute(r: Route) {
     setRoute(r, 0, 'wait');
     r.truck.visible = false;
-    r.truck.scale.setScalar(1.45);
+    r.truck.scale.setScalar(1.35);
     r.pin.scale.setScalar(0.001);
     (r.halo.material as THREE.MeshBasicMaterial).opacity = 0;
     r.lbl.classList.remove('done');
@@ -1434,7 +1572,7 @@ export function scene(
     r.pin.scale.setScalar(1);
     doneLabel(r);
   }
-  const FULLCAM = { c: [22.8, 82.84] as LatLon, R: 40, phi: 0.72, th: 0.12 };
+  const FULLCAM = { c: [20.4, 82.4] as LatLon, R: 47, phi: 0.5, th: 0.06 };
   function camTo(c: LatLon, R: number, phi: number, th: number, ms: number, ok: () => boolean) {
     const s0 = { x: MC.x, z: MC.z, R: cam.R, phi: cam.phi, th: cam.th };
     const tgt = mp(c[0], c[1], 0);
@@ -1483,7 +1621,7 @@ export function scene(
     }
     const c = CH[i];
     const cm = c.camera ?? { lat: FULLCAM.c[0], lon: FULLCAM.c[1], distance: FULLCAM.R, turn: FULLCAM.th };
-    await camTo([cm.lat, cm.lon], cm.distance, 0.74, cm.turn, fromDock ? 3000 : 1600, ok);
+    await camTo([cm.lat, cm.lon], cm.distance, 0.54, cm.turn, fromDock ? 3000 : 1600, ok);
     if (!ok()) return;
     const list = routes.filter((r) => chOf[r.d.city] === i);
     await Promise.all(
@@ -1496,7 +1634,7 @@ export function scene(
         }
         r.state = 'road';
         r.truck.visible = true;
-        r.truck.scale.setScalar(1.45);
+        r.truck.scale.setScalar(1.35);
         await tween(2400 + r.d.km * 1.9, (t) => {
           if (!ok()) return;
           const u = ease(t);

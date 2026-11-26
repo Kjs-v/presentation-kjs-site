@@ -128,10 +128,13 @@ describe('editing and publishing', () => {
     const home = (await call('GET', '/api/admin/sections/home', { cookie: editor })).data;
     const res = await call('PUT', '/api/admin/sections/home', {
       cookie: editor,
-      body: { data: { ...home.draft, image: 'https://evil.example/x.png' }, version: home.version },
+      body: {
+        data: { ...home.draft, clients: [{ name: 'Bad', logo: 'https://evil.example/x.png' }] },
+        version: home.version,
+      },
     });
     expect(res.status).toBe(400);
-    expect(res.data.details[0].path).toBe('home.image');
+    expect(res.data.details[0].path).toBe('home.clients.0.logo');
   });
 
   it('protects against two people saving the same section', async () => {
@@ -226,15 +229,22 @@ describe('media', () => {
 
   it('refuses to delete a file that content still uses', async () => {
     const [file] = (await call('GET', '/api/admin/media', { cookie: editor })).data.media;
-    const about = (await call('GET', '/api/admin/sections/about', { cookie: editor })).data;
-    await call('PUT', '/api/admin/sections/about', {
+    const promoters = (await call('GET', '/api/admin/sections/promoters', { cookie: editor })).data;
+    const saved = await call('PUT', '/api/admin/sections/promoters', {
       cookie: editor,
-      body: { data: { ...about.draft, image: url }, version: about.version },
+      body: {
+        data: {
+          ...promoters.draft,
+          people: [{ ...promoters.draft.people[0], photo: url }, ...promoters.draft.people.slice(1)],
+        },
+        version: promoters.version,
+      },
     });
+    expect(saved.status).toBe(200);
     const blocked = await call('DELETE', `/api/admin/media/${file.id}`, { cookie: editor });
     expect(blocked.status).toBe(409);
-    expect(blocked.data.details.usedIn).toEqual(['about']);
-    await call('POST', '/api/admin/sections/about/discard', { cookie: editor });
+    expect(blocked.data.details.usedIn).toEqual(['promoters']);
+    await call('POST', '/api/admin/sections/promoters/discard', { cookie: editor });
     expect((await call('DELETE', `/api/admin/media/${file.id}`, { cookie: editor })).status).toBe(200);
   });
 

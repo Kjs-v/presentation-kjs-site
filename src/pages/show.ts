@@ -21,7 +21,7 @@ function renderSlide(slide: Slide, content: Content): HTMLElement {
         'section',
         { class: 'slide wrap' },
         ...head,
-        h('div', { class: 'logos' }, ...content.about.partners.map(partnerLogo)),
+        h('div', { class: 'logos' }, ...content.site.partners.map(partnerLogo)),
       );
     case 'products': {
       const picked = slide.productIds.map((id) => content.products.find((p) => p.id === id)!);

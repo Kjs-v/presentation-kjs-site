@@ -4,31 +4,68 @@
  * Which buttons appear (and their order) comes from unit.tabs in content.json.
  */
 import type { Page } from '../lib/router';
-import type { Content, Unit, UnitTabId } from '../../content/content.schema';
+import type { Certification, Content, Unit, UnitTabId } from '../../content/content.schema';
+import { icon } from '../lib/icons';
 import { h } from '../lib/dom';
 import { byOrder, cards, groupBy, productTile, stats, tile, partnerLogo } from '../components';
 import { notFoundPage } from './not-found';
+import { supplyChainSection } from './supply-chain';
 
 type Section = (unit: Unit, content: Content) => HTMLElement[];
 
 const empty = (text: string) => [h('p', { class: 'empty' }, text)];
+
+/**
+ * unit.productPacks: a grid of client packs showing one row, with a button that opens the rest.
+ * The row length follows the grid's column count, so it stays one row at any screen width.
+ */
+function packShowcase(pp: NonNullable<Unit['productPacks']>, content: Content): HTMLElement[] {
+  const byId = new Map(content.clientPacks.map((p) => [p.id, p]));
+  const tiles = pp.packs.map((id) => byId.get(id)!).map((p) => tile(p.image, p.name));
+  const grid = h('div', { class: 'tile-grid' }, ...tiles);
+  const toggle = h('button', { type: 'button', class: 'secondary show-all', 'aria-expanded': 'false' });
+  let open = false;
+  const layout = () => {
+    const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean).length || 1;
+    // A class, not `hidden`, so the PDF (print) still shows every pack.
+    tiles.forEach((t, i) => t.classList.toggle('folded', !open && i >= cols));
+    toggle.hidden = tiles.length <= cols;
+    toggle.textContent = open ? pp.showLessLabel : `${pp.showAllLabel} (${tiles.length})`;
+    toggle.setAttribute('aria-expanded', String(open));
+  };
+  toggle.addEventListener('click', () => {
+    open = !open;
+    layout();
+    if (!open) grid.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+  new ResizeObserver(layout).observe(grid);
+  layout();
+  return [
+    h('h3', { class: 'group-title' }, pp.title, h('span', {}, String(tiles.length))),
+    grid,
+    h('div', { class: 'actions show-all-row' }, toggle),
+  ];
+}
 
 /** One renderer per tab id. To add a new kind of section, add its id to unitTabIds in the schema and a renderer here. */
 const sections: Record<UnitTabId, Section> = {
   products: (unit, content) => {
     const { products } = content;
     const list = products.filter((p) => p.unit === unit.id).sort(byOrder);
-    if (!list.length) return empty('No products added yet.');
-    return groupBy(list, (p) => p.group).flatMap(([group, items]) => [
-      h('h3', { class: 'group-title' }, group, h('span', {}, String(items.length))),
-      h('div', { class: 'tile-grid' }, ...items.map((p) => productTile(p, content))),
-    ]);
+    const showcase = unit.productPacks ? packShowcase(unit.productPacks, content) : [];
+    if (!list.length) return showcase.length ? showcase : empty('No products added yet.');
+    return showcase.concat(
+      groupBy(list, (p) => p.group).flatMap(([group, items]) => [
+        h('h3', { class: 'group-title' }, group, h('span', {}, String(items.length))),
+        h('div', { class: 'tile-grid' }, ...items.map((p) => productTile(p, content))),
+      ]),
+    );
   },
-  clients: (unit, { clientPacks, about }) => {
+  customers: (unit, { clientPacks, site }) => {
     const list = clientPacks.filter((p) => p.unit === unit.id).sort(byOrder);
-    if (!list.length) return empty('No clients added yet.');
+    if (!list.length) return empty('No customers added yet.');
     return [
-      h('div', { class: 'logos compact' }, ...about.partners.map(partnerLogo)),
+      h('div', { class: 'logos compact' }, ...site.partners.map(partnerLogo)),
       ...groupBy(list, (p) => p.brand).flatMap(([brand, items]) => [
         h('h3', { class: 'group-title' }, brand, h('span', {}, String(items.length))),
         h('div', { class: 'tile-grid' }, ...items.map((p) => tile(p.image, p.name))),
@@ -56,12 +93,52 @@ const sections: Record<UnitTabId, Section> = {
     if (!list.length) return empty('No machinery added yet.');
     return [h('div', { class: 'tile-grid wide' }, ...list.map((m) => tile(m.image, m.name, m.description)))];
   },
+  'supply-chain': (_unit, content) => [supplyChainSection(content)],
+  certifications: (unit, { certifications }) => {
+    const list = certifications.filter((c) => c.units.includes(unit.id)).sort(byOrder);
+    if (!list.length) return empty('No certifications added yet.');
+    return [h('div', { class: 'cert-grid' }, ...list.map(certCard))];
+  },
 };
+
+function certCard(c: Certification): HTMLElement {
+  return h(
+    'article',
+    { class: 'cert-card' },
+    c.image
+      ? h('img', { src: c.image, alt: c.name, class: 'cert-image', loading: 'lazy' })
+      : h('div', { class: 'cert-image cert-placeholder', 'aria-hidden': 'true' }, icon('award')),
+    h(
+      'div',
+      { class: 'cert-text' },
+      h('h3', {}, c.name),
+      h('p', { class: 'cert-issuer' }, c.issuer),
+      h('p', {}, c.description),
+      c.validUntil ? h('p', { class: 'cert-valid' }, `Valid until ${c.validUntil}`) : null,
+    ),
+  );
+}
+
+/** One section of a unit, below the photo. Also used to build the full-profile PDF. */
+export function unitPanel(unit: Unit, tab: Unit['tabs'][number], content: Content): HTMLElement {
+  return h(
+    'section',
+    { class: 'unit-panel', id: 'unit-panel' },
+    h(
+      'div',
+      { class: 'wrap' },
+      // Supply Chain brings its own heading (content.supplyChain.title).
+      tab.id === 'supply-chain' ? null : h('h2', {}, tab.label),
+      ...sections[tab.id](unit, content),
+    ),
+  );
+}
 
 export const unitPage: Page = (content, params) => {
   const unit = content.units.find((u) => u.id === params.unitId);
   if (!unit) return notFoundPage(content, params);
-  const active = unit.tabs.find((t) => t.id === params.tab);
+  // A tab with a url opens that site instead, so it never shows a section here.
+  const active = unit.tabs.find((t) => t.id === params.tab && !t.url);
   if (params.tab && !active) return notFoundPage(content, params);
 
   const tabs = h(
@@ -71,8 +148,9 @@ export const unitPage: Page = (content, params) => {
       const link = h(
         'a',
         {
-          href: `/${unit.id}/${t.id}`,
-          'data-route': true,
+          ...(t.url
+            ? { href: t.url, target: '_blank', rel: 'noopener noreferrer' }
+            : { href: `/${unit.id}/${t.id}`, 'data-route': true }),
           class: 'unit-tab',
           'aria-current': t.id === active?.id ? 'page' : undefined,
         },
@@ -92,13 +170,7 @@ export const unitPage: Page = (content, params) => {
     tabs,
   );
 
-  const panel = active
-    ? h(
-        'section',
-        { class: 'unit-panel', id: 'unit-panel' },
-        h('div', { class: 'wrap' }, h('h2', {}, active.label), ...sections[active.id](unit, content)),
-      )
-    : null;
+  const panel = active ? unitPanel(unit, active, content) : null;
 
   return h('div', { class: 'page-unit' }, stage, panel);
 };
