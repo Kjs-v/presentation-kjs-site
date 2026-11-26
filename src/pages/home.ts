@@ -9,7 +9,8 @@ import { h, buttonLink } from '../lib/dom';
 
 type Pack = Content['home']['packs'][number];
 
-const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+const reducedMotion = () => motionQuery.matches;
 
 /** One full turn of the circle takes this long (ms). */
 const TURN_MS = 37500;
@@ -45,8 +46,9 @@ function packCarousel(packs: Pack[]): HTMLElement {
   let width = 0;
   let height = 0;
 
-  root.addEventListener('mouseenter', () => (paused = true));
-  root.addEventListener('mouseleave', () => (paused = false));
+  // Pause only for a mouse: on touch screens a tap would leave it paused for good.
+  root.addEventListener('pointerenter', (e) => (paused = e.pointerType === 'mouse'));
+  root.addEventListener('pointerleave', () => (paused = false));
   prev.addEventListener('click', () => (target = (target ?? Math.round(pos)) - 1));
   next.addEventListener('click', () => (target = (target ?? Math.round(pos)) + 1));
 
@@ -54,7 +56,8 @@ function packCarousel(packs: Pack[]): HTMLElement {
     width = stage.clientWidth;
     height = stage.clientHeight;
   };
-  new ResizeObserver(measure).observe(stage);
+  const sizes = new ResizeObserver(measure);
+  sizes.observe(stage);
 
   /** Places from the front, between -n/2 and n/2. */
   const fromFront = (v: number) => {
@@ -66,7 +69,10 @@ function packCarousel(packs: Pack[]): HTMLElement {
     max - ((max - min) * Math.min(Math.abs(d), steps)) / steps;
 
   const frame = (now: number) => {
-    if (!root.isConnected && last) return; // page changed: stop
+    if (!root.isConnected && last) {
+      sizes.disconnect(); // page changed: stop
+      return;
+    }
     const dt = last ? Math.min(now - last, 100) : 0;
     last = now;
     if (target !== null) {

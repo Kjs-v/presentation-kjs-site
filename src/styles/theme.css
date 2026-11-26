@@ -619,6 +619,8 @@ main > * {
 
 .pack-carousel {
   position: relative;
+  /* Keeps the packs' stacking inside the carousel, so they never cover the header or its menus. */
+  isolation: isolate;
   min-width: 0;
 }
 .pack-stage {
