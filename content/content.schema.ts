@@ -330,7 +330,9 @@ export const supplyChainSchema = z.object({
     .array(z.string())
     .length(3)
     .describe('The three step labels above the scene: loading, dispatched, delivered'),
-  mapOutline: mediaPath.describe('India outline (SVG with one path; x = longitude, y = minus latitude)'),
+  mapOutline: mediaPath.describe(
+    'India outline (SVG with one path; mainland first, then each island as its own M…Z part; x = longitude, y = minus latitude)',
+  ),
   origin: z.object({
     name: z.string().describe('Plant name'),
     city: z.string().describe('City, e.g. Hyderabad (Patancheru), Telangana'),

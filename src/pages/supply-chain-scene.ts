@@ -40,18 +40,26 @@ function haversine(a: { lat: number; lon: number }, b: { lat: number; lon: numbe
   return Math.round(2 * R * Math.asin(Math.sqrt(x)));
 }
 
-/** Reads the outline SVG (one path of M/L points, x = longitude, y = -latitude). */
-async function loadOutline(src: string): Promise<LatLon[]> {
+/**
+ * Reads the outline SVG: one path of M/L points (x = longitude, y = -latitude).
+ * Each M starts a new ring (mainland first, then islands).
+ */
+async function loadOutline(src: string): Promise<LatLon[][]> {
   const text = await (await fetch(src)).text();
   const d = text.match(/\sd="([^"]+)"/)?.[1] ?? '';
   return d
-    .split(/[MLZ]/i)
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((pair) => {
-      const [x, y] = pair.split(/[ ,]+/).map(Number);
-      return [-y, x] as LatLon;
-    });
+    .split(/M/i)
+    .map((ring) =>
+      ring
+        .split(/[LZ]/i)
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map((pair) => {
+          const [x, y] = pair.split(/[ ,]+/).map(Number);
+          return [-y, x] as LatLon;
+        }),
+    )
+    .filter((ring) => ring.length > 2);
 }
 
 /** Builds the stage + side panel inside `host` and runs the scene. Returns a cleanup function. */
@@ -970,21 +978,29 @@ export function scene(
   const mp = (lat: number, lon: number, y: number) => new THREE.Vector3((lon - 82) * SX, y, -(lat - 22));
   const LON_A = 68,
     LON_B = 97.5,
-    LAT_A = 8,
+    LAT_A = 6.5, // down to Great Nicobar
     LAT_B = 37.2;
   type P2 = (lat: number, lon: number) => [number, number];
-  const trace = (g: CanvasRenderingContext2D, pts: LatLon[], P: P2) => {
-    g.beginPath();
+  const trace = (g: CanvasRenderingContext2D, pts: LatLon[], P: P2, fresh = true) => {
+    if (fresh) g.beginPath();
     pts.forEach(([la, lo], i) => {
       const [x, y] = P(la, lo);
       if (i) g.lineTo(x, y);
       else g.moveTo(x, y);
     });
   };
+  /** All rings (mainland + islands) as one closed canvas path. */
+  const traceRings = (g: CanvasRenderingContext2D, rings: LatLon[][], P: P2) => {
+    g.beginPath();
+    rings.forEach((r) => {
+      trace(g, r, P, false);
+      g.closePath();
+    });
+  };
   const OC: LatLon = [ORIGIN.lat, ORIGIN.lon];
   const corridors: LatLon[][] = DESTS.map((d) => [OC, ...(d.via as LatLon[]), [d.lat, d.lon]]);
 
-  function landTex(outline: LatLon[]) {
+  function landTex(outline: LatLon[][]) {
     const W = 1024,
       H = 1024;
     const c = document.createElement('canvas');
@@ -998,8 +1014,7 @@ export function scene(
     g.fillStyle = '#f6f8fd';
     g.fillRect(0, 0, W, H);
     g.save();
-    trace(g, outline, P);
-    g.closePath();
+    traceRings(g, outline, P);
     g.clip();
     g.fillStyle = '#f6f8fd';
     g.fillRect(0, 0, W, H);
@@ -1022,8 +1037,7 @@ export function scene(
       g.stroke();
     });
     // Crisp inner border stroke along the coastline
-    trace(g, outline, P);
-    g.closePath();
+    traceRings(g, outline, P);
     g.strokeStyle = rgba(0.42);
     g.lineWidth = 5;
     g.stroke();
@@ -1082,12 +1096,15 @@ export function scene(
   );
   seaShadow.rotation.x = -Math.PI / 2;
 
-  function buildLand(outline: LatLon[]) {
-    const shape = new THREE.Shape();
-    outline.forEach(([la, lo], i) =>
-      i ? shape.lineTo((lo - 82) * SX, la - 22) : shape.moveTo((lo - 82) * SX, la - 22),
-    );
-    const landGeo = new THREE.ExtrudeGeometry(shape, {
+  function buildLand(outline: LatLon[][]) {
+    const shapes = outline.map((ring) => {
+      const shape = new THREE.Shape();
+      ring.forEach(([la, lo], i) =>
+        i ? shape.lineTo((lo - 82) * SX, la - 22) : shape.moveTo((lo - 82) * SX, la - 22),
+      );
+      return shape;
+    });
+    const landGeo = new THREE.ExtrudeGeometry(shapes, {
       depth: TOP,
       bevelEnabled: false,
     });
@@ -1095,11 +1112,15 @@ export function scene(
     mat.landTop.map = landTex(outline);
     mat.landTop.needsUpdate = true;
     mk(landGeo, [mat.landTop, mat.landSide], mapG, 0, 0, 0, true, true);
-    const rim = new THREE.LineLoop(
-      new THREE.BufferGeometry().setFromPoints(outline.map(([la, lo]) => mp(la, lo, TOP + 0.014))),
-      new THREE.LineBasicMaterial({ color: lin(BRAND), transparent: true, opacity: 0.55 }),
+    const rimMat = new THREE.LineBasicMaterial({ color: lin(BRAND), transparent: true, opacity: 0.55 });
+    outline.forEach((ring) =>
+      mapG.add(
+        new THREE.LineLoop(
+          new THREE.BufferGeometry().setFromPoints(ring.map(([la, lo]) => mp(la, lo, TOP + 0.014))),
+          rimMat,
+        ),
+      ),
     );
-    mapG.add(rim);
   }
 
   const flowTex = canvasTex(
@@ -1260,7 +1281,7 @@ export function scene(
   // The outline is a media file; the map is finished once it arrives.
   const outlineReady = loadOutline(sc.mapOutline)
     .then((o) => {
-      if (alive && o.length > 2) buildLand(o);
+      if (alive && o.length) buildLand(o);
     })
     .catch(() => {});
 
