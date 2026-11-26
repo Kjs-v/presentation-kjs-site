@@ -82,9 +82,18 @@ export const siteSchema = z.object({
   contact: z.object({
     phone: z.string().describe('Phone'),
     email: z.string().email().describe('Email'),
-    address: z.string().describe('Address'),
-    mapUrl: url.describe('Google Maps link'),
-    mapLabel: z.string().describe('Map link text, e.g. Find us'),
+    address: z.string().describe('Address shown in the footer'),
+    mapLabel: z.string().describe('Map button text, e.g. Find us'),
+    locations: z
+      .array(
+        z.object({
+          label: z.string().describe('Name, e.g. Unit 1'),
+          address: z.string().describe('Full address'),
+          mapUrl: url.describe('Google Maps link'),
+        }),
+      )
+      .min(1)
+      .describe('Places offered by the Find us button (each opens its map)'),
   }),
   links: z
     .array(
@@ -207,7 +216,13 @@ export const unitSchema = z.object({
   mapUrl: url.optional().describe('Google Maps link to this unit'),
   tabs: z
     .array(
-      z.object({ id: z.enum(unitTabIds).describe('Section'), label: z.string().describe('Button text') }),
+      z.object({
+        id: z.enum(unitTabIds).describe('Section'),
+        label: z.string().describe('Button text'),
+        url: url
+          .optional()
+          .describe('Optional: open this web address in a new tab instead of showing the section'),
+      }),
     )
     .describe('Buttons over the photo (in order). Remove one to hide that section.'),
   stats: z.array(stat).describe('Key numbers (About section)'),
@@ -340,6 +355,12 @@ export const supplyChainSchema = z.object({
             'loading = dock scene; dispatch = truck leaves; region = deliveries to some cities; delivered = final map',
           ),
         railLabel: z.string().describe('Short label on the progress bar'),
+        speed: z
+          .number()
+          .min(0.25)
+          .max(5)
+          .optional()
+          .describe('Playback speed of this chapter (1 = normal, 2.2 = 2.2 times faster)'),
         title: z.string().describe('Title in the side panel'),
         caption: z.string().describe('Caption on the scene'),
         text: z.string().describe('Text in the side panel'),
@@ -386,7 +407,7 @@ export const supplyChainSchema = z.object({
       next: z.string().describe('Next chapter button (screen readers)'),
       replay: z.string().describe('Replay button'),
       autoAdvance: z.string().describe('Auto-advance checkbox'),
-      note: z.string().describe('Small note under the controls'),
+      note: z.string().optional().describe('Small note under the controls (optional)'),
       noWebgl: z.string().describe('Shown when the browser cannot draw 3D'),
     })
     .describe('Words used on the page'),

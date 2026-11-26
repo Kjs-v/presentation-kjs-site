@@ -9,8 +9,19 @@
       "phone": "+91 97037 35666",
       "email": "contact@kjsindia.com",
       "address": "Plot No. 1 & 2, Phase III, IDA Pashamylaram, Patancheru (M), Sangareddy (D), Hyderabad, Telangana 502307, India",
-      "mapUrl": "https://www.google.com/maps?cid=8562519224063906718",
-      "mapLabel": "Find us"
+      "mapLabel": "Find us",
+      "locations": [
+        {
+          "label": "Unit 1",
+          "address": "Plot No. 1 & 2, Phase III, IDA Pashamylaram, Patancheru (M), Sangareddy (D), Hyderabad, Telangana 502307, India",
+          "mapUrl": "https://www.google.com/maps?cid=8562519224063906718"
+        },
+        {
+          "label": "Unit 2",
+          "address": "KJS India Pvt. Ltd., Survey No. 418, Near Aliabad Gate, Kondapur (M), Sangareddy (D), Telangana 502306, India",
+          "mapUrl": "https://maps.app.goo.gl/GwRwJjr43Kw8SSiF9"
+        }
+      ]
     },
     "links": [
       {
@@ -375,20 +386,17 @@
       ],
       "tabs": [
         {
-          "id": "products",
-          "label": "Products"
-        },
-        {
           "id": "customers",
           "label": "Customers"
         },
         {
-          "id": "about",
-          "label": "About"
+          "id": "products",
+          "label": "Products"
         },
         {
-          "id": "certifications",
-          "label": "Certifications"
+          "id": "about",
+          "label": "About",
+          "url": "https://kjsindia.com/"
         }
       ],
       "mapUrl": "https://maps.app.goo.gl/J1KAM9J2N9mt2NRMA"
@@ -443,10 +451,6 @@
         {
           "id": "machinery",
           "label": "Machinery"
-        },
-        {
-          "id": "certifications",
-          "label": "Certifications"
         }
       ],
       "photoCaption": "Architect's render",
@@ -1830,7 +1834,7 @@
     "origin": {
       "name": "KJS India, Unit 1",
       "city": "Hyderabad (Patancheru), Telangana",
-      "mapLabel": "Unit 1 · Hyderabad",
+      "mapLabel": "Hyderabad",
       "lat": 17.53,
       "lon": 78.27
     },
@@ -1941,6 +1945,7 @@
       {
         "kind": "loading",
         "railLabel": "Dock",
+        "speed": 2.2,
         "title": "Loading at the plant",
         "caption": "Loading at the plant",
         "text": "Pallets of finished cartons go from the staging area straight into the truck at the Unit 1 dispatch dock."
@@ -1948,6 +1953,7 @@
       {
         "kind": "dispatch",
         "railLabel": "Dispatch",
+        "speed": 2.2,
         "title": "Sealed and on the road",
         "caption": "Dispatched across India",
         "text": "Doors sealed, load confirmed. The truck leaves Pashamylaram for the national highway network."
@@ -2067,7 +2073,6 @@
       "next": "Next chapter",
       "replay": "Replay",
       "autoAdvance": "Auto-advance",
-      "note": "Use ← → keys or a clicker to step, P to pause. Distances are straight-line from Unit 1; destinations are example routes until confirmed.",
       "noWebgl": "The 3D view needs WebGL, which is turned off in this browser. The panel shows the final result."
     }
   },

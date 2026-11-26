@@ -489,6 +489,58 @@ main > * {
   flex: none;
   color: var(--c-eyebrow);
 }
+.find-us {
+  position: relative;
+}
+.find-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  z-index: 40;
+  display: grid;
+  gap: 6px;
+  width: min(340px, calc(100vw - 32px));
+  padding: 8px;
+  border: 1px solid var(--c-edge);
+  border-radius: 14px;
+  background: var(--c-bg);
+  box-shadow: 0 18px 40px -18px var(--c-shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 6px);
+  transition:
+    opacity 0.18s,
+    transform 0.18s,
+    visibility 0.18s;
+}
+/* Invisible bridge so the mouse can move from the button to the list without closing it. */
+.find-menu::after {
+  content: '';
+  position: absolute;
+  inset: 100% 0 -10px;
+}
+.find-us.open .find-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+.find-place {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--c-text);
+  text-decoration: none;
+}
+.find-place:hover,
+.find-place:focus-visible {
+  background: var(--c-surface);
+}
+.find-place span {
+  font-size: 0.82rem;
+  color: var(--c-muted);
+  line-height: 1.35;
+}
 .f-link .icon-map {
   color: #ea4335;
 }
@@ -555,10 +607,10 @@ main > * {
 .home-hero-grid {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
   gap: 32px;
-  align-items: center;
-  padding-block: clamp(28px, 6vh, 64px) clamp(20px, 4vh, 44px);
+  align-items: start;
+  padding-block: clamp(12px, 2.5vh, 32px) clamp(20px, 4vh, 44px);
 }
 .home-copy {
   display: flex;
@@ -624,7 +676,7 @@ main > * {
 }
 .pack-stage {
   position: relative;
-  height: clamp(380px, 44vw, 640px);
+  height: clamp(360px, 38vw, 580px);
 }
 .pack-floor {
   position: absolute;
@@ -643,7 +695,7 @@ main > * {
   --pw: clamp(90px, 13vw, 200px);
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 46%;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -1689,10 +1741,10 @@ main > * {
 }
 .sc-body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 330px);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 370px);
   gap: 18px;
   margin-top: 22px;
-  align-items: start;
+  align-items: stretch;
 }
 .sc-stage {
   position: relative;
@@ -1941,8 +1993,9 @@ main > * {
 .sc-panel {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 20px;
+  gap: 16px;
+  padding: 24px;
+  font-size: 1.06rem;
   border: 1px solid var(--c-edge);
   border-radius: 16px;
   background: var(--c-bg);
@@ -1975,6 +2028,8 @@ main > * {
 }
 .sc-chap-text {
   color: var(--c-muted);
+  font-size: clamp(15px, 1.15vw, 19px);
+  line-height: 1.5;
 }
 .sc-swap {
   animation: sc-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
@@ -1993,7 +2048,7 @@ main > * {
   justify-content: space-between;
   align-items: baseline;
   gap: 12px;
-  padding: 10px 0;
+  padding: 14px 0;
   border-bottom: 1px solid var(--c-edge);
 }
 .sc-live .row.block {
@@ -2005,7 +2060,7 @@ main > * {
   align-items: baseline;
 }
 .sc-live .k {
-  font-size: 0.74rem;
+  font-size: 0.84rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2013,7 +2068,7 @@ main > * {
 }
 .sc-live .v {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-variant-numeric: tabular-nums;
 }
 .sc-live .v em {
@@ -2132,6 +2187,9 @@ main > * {
   width: 16px;
   height: 16px;
   accent-color: var(--c-accent);
+}
+.sc-panel .sc-controls {
+  margin-top: auto;
 }
 .sc-note {
   font-size: 0.78rem;

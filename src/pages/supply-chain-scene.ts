@@ -133,7 +133,7 @@ export function scene(
       replayBtn,
       h('label', { class: 'sc-toggle' }, autoBox, ` ${L.autoAdvance}`),
     ),
-    h('p', { class: 'sc-note' }, L.note),
+    L.note ? h('p', { class: 'sc-note' }, L.note) : null,
   );
   host.append(stage, panel);
 
@@ -1386,7 +1386,7 @@ export function scene(
     if (!alive) return;
     const realDt = lastReal ? Math.min(100, now - lastReal) : 0;
     lastReal = now;
-    if (!S.paused) clock += realDt;
+    if (!S.paused) clock += realDt * (CH[S.ch].speed ?? 1);
     const active = tweens.splice(0);
     for (const tw of active) {
       const t = clamp01((clock - tw.t0) / tw.ms);

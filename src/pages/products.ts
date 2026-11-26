@@ -12,7 +12,7 @@ import { openProduct, productSpecs } from '../widgets/product-dialog';
 function catalog(content: Content): HTMLElement {
   const { productsPage: copy } = content;
   const products = [...content.products].sort(byOrder);
-  let selected: Product = products.find((p) => p.featured) ?? products[0];
+  let selected: Product = products[0];
   let group = copy.allLabel;
 
   const filters = h('div', { class: 'catalog-filters', role: 'group', 'aria-label': 'Filter by group' });
@@ -76,6 +76,9 @@ function catalog(content: Content): HTMLElement {
     button.addEventListener('click', () => {
       group = g;
       filters.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      // The large panel always shows the first product of the list below.
+      selected = g === copy.allLabel ? products[0] : products.find((p) => p.group === g)!;
+      drawStage();
       drawList();
     });
     filters.append(button);

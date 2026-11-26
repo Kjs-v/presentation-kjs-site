@@ -102,7 +102,8 @@ export function unitPanel(unit: Unit, tab: Unit['tabs'][number], content: Conten
 export const unitPage: Page = (content, params) => {
   const unit = content.units.find((u) => u.id === params.unitId);
   if (!unit) return notFoundPage(content, params);
-  const active = unit.tabs.find((t) => t.id === params.tab);
+  // A tab with a url opens that site instead, so it never shows a section here.
+  const active = unit.tabs.find((t) => t.id === params.tab && !t.url);
   if (params.tab && !active) return notFoundPage(content, params);
 
   const tabs = h(
@@ -112,8 +113,9 @@ export const unitPage: Page = (content, params) => {
       const link = h(
         'a',
         {
-          href: `/${unit.id}/${t.id}`,
-          'data-route': true,
+          ...(t.url
+            ? { href: t.url, target: '_blank', rel: 'noopener noreferrer' }
+            : { href: `/${unit.id}/${t.id}`, 'data-route': true }),
           class: 'unit-tab',
           'aria-current': t.id === active?.id ? 'page' : undefined,
         },

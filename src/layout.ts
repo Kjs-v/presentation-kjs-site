@@ -94,6 +94,52 @@ export function markCurrent(pathname: string): void {
   });
 }
 
+/**
+ * "Find us": hovering (or clicking, on touch screens) opens a small list of the locations
+ * in content.site.contact.locations; each one opens its Google Maps link in a new tab.
+ */
+function findUs(contact: Site['contact']): HTMLElement {
+  const button = h(
+    'button',
+    { type: 'button', class: 'f-link', 'aria-expanded': 'false', 'aria-haspopup': 'true' },
+    icon('mapPin', 'icon-map'),
+    contact.mapLabel,
+  );
+  const menu = h(
+    'div',
+    { class: 'find-menu' },
+    ...contact.locations.map((l) =>
+      h(
+        'a',
+        { href: l.mapUrl, target: '_blank', rel: 'noopener noreferrer', class: 'find-place' },
+        h('strong', {}, l.label),
+        h('span', {}, l.address),
+      ),
+    ),
+  );
+  const root = h('div', { class: 'find-us' }, button, menu);
+  const set = (open: boolean) => {
+    root.classList.toggle('open', open);
+    button.setAttribute('aria-expanded', String(open));
+  };
+  button.addEventListener('click', () => set(!root.classList.contains('open')));
+  root.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && set(true));
+  root.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && set(false));
+  root.addEventListener('focusout', (e) => {
+    if (!root.contains(e.relatedTarget as Node | null)) set(false);
+  });
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      set(false);
+      button.focus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!root.contains(e.target as Node)) set(false);
+  });
+  return root;
+}
+
 /** Footer: address, then phone, email, map, KJS website (logo) and LinkedIn, all from content.site. */
 export function footer(site: Site): HTMLElement {
   const { contact } = site;
@@ -135,17 +181,12 @@ export function footer(site: Site): HTMLElement {
         { class: 'footer-links' },
         h(
           'a',
-          { href: `tel:${contact.phone.replace(/s/g, '')}`, class: 'f-link' },
+          { href: `tel:${contact.phone.replace(/\s/g, '')}`, class: 'f-link' },
           icon('phone'),
           contact.phone,
         ),
         h('a', { href: `mailto:${contact.email}`, class: 'f-link' }, icon('mail'), contact.email),
-        h(
-          'a',
-          { href: contact.mapUrl, ...external, class: 'f-link' },
-          icon('mapPin', 'icon-map'),
-          contact.mapLabel,
-        ),
+        findUs(contact),
         ...site.links.map(siteLink),
         top,
       ),
