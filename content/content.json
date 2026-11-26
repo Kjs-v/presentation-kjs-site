@@ -3,6 +3,7 @@
     "name": "KJS India Pvt. Ltd.",
     "tagline": "Your Brand, Our Expertise",
     "logo": "/media/logos/kjs-india.png",
+    "icon": "/media/logos/kjs-icon.png",
     "contact": {
       "phone": "+91 97037 35666",
       "email": "contact@kjsindia.com",
@@ -176,21 +177,127 @@
   },
   "home": {
     "intro": true,
-    "eyebrow": "Your Brand, Our Expertise",
-    "title": "KJS India Pvt. Ltd.",
-    "summary": "Food processing and contract packaging in Telangana.",
-    "image": "/media/units/unit-1.jpg",
-    "imageCaption": "Unit 1 · Pashamylaram",
+    "title": "Trusted by global leaders",
+    "clients": [
+      {
+        "name": "Nestlé",
+        "logo": "/media/logos/nestle.png"
+      },
+      {
+        "name": "Unilever",
+        "logo": "/media/logos/unilever.png"
+      },
+      {
+        "name": "Mayora",
+        "logo": "/media/logos/mayora.png"
+      },
+      {
+        "name": "Dr. Reddy’s",
+        "logo": "/media/logos/dr-reddys.png"
+      },
+      {
+        "name": "Nestlé Health Science",
+        "logo": "/media/logos/nestle-health-science.png"
+      },
+      {
+        "name": "Continental Coffee",
+        "logo": "/media/logos/continental-coffee.png"
+      },
+      {
+        "name": "Sleepy Owl Coffee",
+        "logo": "/media/logos/sleepy-owl-coffee.jpg"
+      }
+    ],
+    "summary": "KJS India is your reliable partner for high-quality manufactured products.",
     "buttons": [
       {
-        "label": "Explore Our World",
-        "path": "/show",
-        "style": "primary"
+        "label": "Explore Our Capabilities",
+        "path": "https://kjsindia.com/",
+        "style": "primary",
+        "newTab": true
       },
       {
         "label": "View Products",
         "path": "/products",
         "style": "secondary"
+      }
+    ],
+    "packs": [
+      {
+        "name": "Nescafé Sunrise",
+        "brand": "Nestlé",
+        "image": "/media/unit-1-packs/cutouts/nescafe-sunrise.webp"
+      },
+      {
+        "name": "Horlicks Jar",
+        "brand": "Unilever",
+        "image": "/media/unit-1-packs/cutouts/horlicks-jar.webp"
+      },
+      {
+        "name": "Choki Choki Jar",
+        "brand": "Mayora",
+        "image": "/media/unit-1-packs/cutouts/choki-choki-jar.webp"
+      },
+      {
+        "name": "Nescafé Classic Pouch",
+        "brand": "Nestlé",
+        "image": "/media/unit-1-packs/cutouts/nescafe-classic-pouch.webp"
+      },
+      {
+        "name": "Boost Jar",
+        "brand": "Unilever",
+        "image": "/media/unit-1-packs/cutouts/boost-jar.webp"
+      },
+      {
+        "name": "Continental Xtra",
+        "brand": "Continental Coffee",
+        "image": "/media/unit-1-packs/cutouts/continental-xtra.webp"
+      },
+      {
+        "name": "Nescafé All in 1 Cup",
+        "brand": "Nestlé",
+        "image": "/media/unit-1-packs/cutouts/nescafe-all-in-1-cup.webp"
+      },
+      {
+        "name": "Junior Horlicks",
+        "brand": "Unilever",
+        "image": "/media/unit-1-packs/cutouts/junior-horlicks.webp"
+      },
+      {
+        "name": "Choki Choki XL Box",
+        "brand": "Mayora",
+        "image": "/media/unit-1-packs/cutouts/choki-choki-xl-box.webp"
+      },
+      {
+        "name": "Nestlé Resource Fiber",
+        "brand": "Nestlé",
+        "image": "/media/unit-1-packs/cutouts/nestle-resource-fiber.webp"
+      },
+      {
+        "name": "Horlicks Super Foods Jar",
+        "brand": "Unilever",
+        "image": "/media/unit-1-packs/cutouts/horlicks-super-foods-jar.webp"
+      },
+      {
+        "name": "Nescafé All in 1 Frappe",
+        "brand": "Nestlé",
+        "image": "/media/unit-1-packs/cutouts/nescafe-all-in-1-frappe.webp"
+      }
+    ],
+    "stats": [
+      {
+        "value": 400,
+        "suffix": "+",
+        "label": "Tons per day capacity"
+      },
+      {
+        "value": 100,
+        "suffix": "+",
+        "label": "Packaging stations"
+      },
+      {
+        "value": "2020",
+        "label": "Year established"
       }
     ],
     "capabilitiesTitle": "What we do",

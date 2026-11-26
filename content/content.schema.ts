@@ -35,8 +35,9 @@ const stat = z.object({
 
 const button = z.object({
   label: z.string().describe('Button text'),
-  path: sitePath.describe('Opens page'),
+  path: z.union([sitePath, url]).describe('Opens page (/about) or website (https://...)'),
   style: z.enum(['primary', 'secondary']).describe('Style'),
+  newTab: z.boolean().optional().describe('Open in a new tab'),
 });
 /** One colour theme. Values are CSS colours (hex), or a CSS gradient where the name says so. */
 const palette = z.object({
@@ -76,6 +77,7 @@ export const siteSchema = z.object({
   name: z.string().describe('Company name'),
   tagline: z.string().describe('Tagline'),
   logo: mediaPath.describe('Logo'),
+  icon: mediaPath.describe('Round logo mark shown alone in the header'),
   contact: z.object({
     phone: z.string().describe('Phone'),
     email: z.string().email().describe('Email'),
@@ -144,15 +146,26 @@ export const siteSchema = z.object({
   }),
 });
 
-/** Home page ("/"): full-screen hero with the animated company name, then "What we do". */
+/** Home page ("/"): client logos and rotating packs, key figures, then "What we do". */
 export const homeSchema = z.object({
   intro: z.boolean().describe('Show loading intro on first visit'),
-  eyebrow: z.string().describe('Small text above the title'),
-  title: z.string().describe('Big animated title'),
-  summary: z.string().describe('Text under the title'),
-  image: mediaPath.describe('Background photo'),
-  imageCaption: z.string().describe('Photo caption'),
+  title: z.string().describe('Big title, e.g. Trusted by global leaders'),
+  clients: z
+    .array(z.object({ name: z.string().describe('Client name'), logo: mediaPath.describe('Logo') }))
+    .describe('Client logos under the title, in order'),
+  summary: z.string().describe('Text under the logos'),
   buttons: z.array(button).describe('Buttons'),
+  packs: z
+    .array(
+      z.object({
+        name: z.string().describe('Product name'),
+        brand: z.string().describe('Client'),
+        image: mediaPath.describe('Pack photo with a see-through background'),
+      }),
+    )
+    .min(3)
+    .describe('Packs that turn in a circle next to the title'),
+  stats: z.array(stat).describe('Key figures under the top section'),
   capabilitiesTitle: z.string().describe('"What we do" heading'),
   capabilities: z
     .array(titleBody.extend({ link: z.object({ label: z.string(), url }).optional() }))

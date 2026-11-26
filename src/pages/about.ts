@@ -1,6 +1,6 @@
 /** About ("/about"): company hero, brand partners, key numbers and the story timeline. */
 import type { Page } from '../lib/router';
-import { h, routeLink } from '../lib/dom';
+import { h, buttonLink } from '../lib/dom';
 import { stats, partnerLogo } from '../components';
 
 export const aboutPage: Page = ({ about, story }) =>
@@ -19,11 +19,7 @@ export const aboutPage: Page = ({ about, story }) =>
           h('p', { class: 'eyebrow' }, about.eyebrow),
           h('h1', {}, about.title, h('em', {}, about.titleEmphasis)),
           h('p', { class: 'lead' }, about.subtitle),
-          h(
-            'div',
-            { class: 'actions' },
-            ...about.buttons.map((b) => routeLink(b.path, b.label, `${b.style} cta`)),
-          ),
+          h('div', { class: 'actions' }, ...about.buttons.map((b) => buttonLink(b))),
         ),
         h(
           'figure',

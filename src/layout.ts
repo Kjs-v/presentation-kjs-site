@@ -7,7 +7,7 @@ import { downloadMenu } from './widgets/download';
 import type { NotesPanel } from './widgets/notes';
 
 /**
- * Header: logo and company name, page links (site.nav), and four small controls:
+ * Header: the round logo mark (site.icon), page links (site.nav), and four small controls:
  * Notes, Download PDF, the colour menu, and Full screen (also the F key on any page; Esc exits). On narrow screens the links fold into a Menu button.
  */
 export function header(content: Content, notes: NotesPanel): HTMLElement {
@@ -76,9 +76,8 @@ export function header(content: Content, notes: NotesPanel): HTMLElement {
     { class: 'topbar' },
     h(
       'a',
-      { href: '/', 'data-route': true, class: 'wordmark' },
-      h('span', { class: 'logo-pill' }, h('img', { src: site.logo, alt: '', class: 'logo' })),
-      h('span', { class: 'wordmark-name' }, site.name),
+      { href: '/', 'data-route': true, class: 'wordmark', 'aria-label': `${site.name} home` },
+      h('img', { src: site.icon, alt: '', class: 'brand-mark' }),
     ),
     nav,
     h('div', { class: 'controls' }, notesBtn, downloadMenu(content), themeBtn, fullscreen, menu),
